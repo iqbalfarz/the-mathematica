@@ -1,0 +1,92 @@
+act: 10
+title: "How a Model Learns"
+music: minimal
+scenes:
+- id: s1001
+  cls: S1001Loss
+  title: "Measuring wrongness"
+  loops: {open: [L8]}
+  beats:
+  - id: b1
+    say: "We've talked about running a model. But where do all those billions of weights come from in the first place? Nobody writes them by hand."
+    pause: 0.4
+    visual: "The tower of layers, weights shown as a field of amber dots with random values."
+  - id: b2
+    say: "They start as random numbers. And a model with random weights, asked to continue the cat sat on the, will guess nonsense."
+    pause: 0.4
+    visual: "Prompt 'the cat sat on the' → probability bars nearly flat; 'mat' has 2%."
+  - id: b3
+    say: "But we know the right answer. Mat. So we can measure how wrong the model was. The standard measure is the negative log of the probability it gave the right answer. It's called the loss. [[MATH]]"
+    pause: 0.4
+    visual: "Formula L = −log p(mat); with p = 0.02, L ≈ 3.9."
+  - id: b4
+    say: "Confident and right, the loss is near zero. Confident and wrong, it's huge. Now the entire goal of training fits in one sentence. Make that number smaller."
+    pause: 0.8
+    visual: "Curve −log p over p from 0 to 1; a dot slides from left (high loss) to right (near zero)."
+- id: s1002
+  cls: S1002GradientDescent
+  title: "Walking downhill"
+  loops: {}
+  beats:
+  - id: b1
+    say: "Picture just one weight. Change it a little, and the loss goes up or down. Plot that, and you get a landscape. [[MATH]]"
+    pause: 0.4
+    visual: "A 1D loss curve over weight w with a ball on its slope."
+  - id: b2
+    say: "The slope at our current position tells us which way is downhill. That slope is called the gradient."
+    pause: 0.4
+    visual: "Tangent line at the ball; an arrow along −gradient."
+  - id: b3
+    say: "So we take a small step downhill. New weight equals old weight, minus a small step size times the gradient. Then measure again. Step again."
+    pause: 0.4
+    visual: "w ← w − η ∇L. The ball steps down the curve in several small hops, settling near the minimum."
+  - id: b4
+    say: "A real model does this for every one of its weights at once, in a landscape with billions of dimensions. The algorithm that finds all those slopes efficiently, by working backwards from the loss through every layer, is called backpropagation."
+    pause: 0.4
+    visual: "The 1D curve morphs into a 3D-looking contour surface; gradient arrows ripple back down through the layer tower."
+  - id: b5
+    say: "And the backward pass costs roughly twice as much as the forward pass. So training costs about six operations per parameter, per token. [[GEN-004]]"
+    pause: 0.8
+    visual: "Forward arrow '2', backward arrow '4', total '≈ 6 FLOPs × active params × tokens'."
+- id: s1003
+  cls: S1003TheLoop
+  title: "The loop"
+  loops: {}
+  beats:
+  - id: b1
+    say: "So training is a loop. Take a batch of text. Run it forward. Measure the loss. Run backwards to get gradients. Nudge every weight. Repeat."
+    pause: 0.4
+    visual: "Circular diagram: BATCH → FORWARD → LOSS → BACKWARD → UPDATE → (back to BATCH), spinning."
+  - id: b2
+    say: "How big a batch? For V4.1 Flash, the paper reports about a hundred million tokens in every single step. [[V41-012]]"
+    pause: 0.3
+    visual: "Batch card: 100.6M tokens per step."
+  - id: b3
+    say: "And it trained on 45 trillion tokens in total. [[V41-012]] Divide one by the other, and that's roughly 450 thousand turns of this loop. [[DER-003]]"
+    pause: 0.4
+    visual: "45T ÷ 100.6M ≈ 447K steps; the loop counter spins up."
+  - id: b4
+    say: "Every turn involving all the walls at once. Compute for the forward and backward passes. Memory for the weights and the optimizer. And communication, because thousands of GPUs have to agree on the update."
+    pause: 0.8
+    visual: "The three pillars light in sequence around the loop."
+- id: s1004
+  cls: S1004TrainingV3
+  title: "What V3's training took"
+  loops: {close: [L8]}
+  beats:
+  - id: b1
+    say: "Now we can read DeepSeek V3's training numbers with understanding, instead of awe."
+    pause: 0.4
+    visual: "A clean ledger panel titled 'DeepSeek-V3 training (reported)'."
+  - id: b2
+    say: "37 billion active parameters. 14.8 trillion tokens. [[V3-001]] [[V3-002]] Plug them into the rule of thumb, six times parameters times tokens, and you get roughly three times ten to the twenty-four operations. That's our estimate, not a figure from DeepSeek. [[DER-001]]"
+    pause: 0.4
+    visual: "6 × 37×10⁹ × 14.8×10¹² ≈ 3.3×10²⁴; tag 'our estimate'."
+  - id: b3
+    say: "DeepSeek reports that each trillion tokens took 180 thousand H800 GPU hours. About three point seven days, on their cluster of 2,048 GPUs. [[V3-004]]"
+    pause: 0.4
+    visual: "Row: '180K GPU-hours per trillion tokens ≈ 3.7 days on 2,048 H800s'."
+  - id: b4
+    say: "And the whole run, pre-training, context extension and post-training, added up to 2.788 million GPU hours. [[V3-003]]"
+    pause: 0.8
+    visual: "Stacked bar: pre-training 2.664M + extension + post-training = 2.788M GPU-hours."

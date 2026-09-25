@@ -1,0 +1,12 @@
+[project]
+name = "deepseek-documentary"
+version = "1.0.0"
+description = "First-principles documentary on DeepSeek: research, script, Kokoro narration, Manim scenes, cloud rendering."
+requires-python = ">=3.10"
+dependencies = [
+  "manim==0.21.0", "kokoro-onnx==0.6.1", "onnxruntime==1.30.0", "numpy==2.4.6",
+  "scipy==1.17.1", "soundfile==0.14.0", "PyYAML==6.0.3",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]

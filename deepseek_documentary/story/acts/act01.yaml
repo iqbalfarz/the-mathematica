@@ -1,0 +1,87 @@
+act: 1
+title: "The Impossible Constraint"
+music: tension
+scenes:
+- id: s0101
+  cls: S0101ColdOpen
+  title: "Buy more GPUs"
+  loops: {open: []}
+  beats:
+  - id: b1
+    say: "For years, the race to build better AI looked almost embarrassingly simple."
+    pause: 0.6
+    visual: "Black. A single small GPU block fades in at centre and hums."
+    sfx: hum
+  - id: b2
+    say: "Want a smarter model? Buy more GPUs."
+    pause: 0.4
+    visual: "The block multiplies into a row, then a grid of dozens."
+  - id: b3
+    say: "Want it smarter still? Build a bigger data centre. Spend more money."
+    pause: 0.4
+    visual: "Grid explodes to hundreds of blocks; camera pulls back; a pulse of light sweeps across them."
+    sfx: pulse
+  - id: b4
+    say: "Better intelligence, it seemed, was mostly a shopping problem."
+    pause: 1.0
+    visual: "The wall of GPUs glows steadily. A thin price-tag label ticks upward."
+- id: s0102
+  cls: S0102RulesChanged
+  title: "Then the rules changed"
+  loops: {open: []}
+  beats:
+  - id: b1
+    say: "Then the rules changed."
+    pause: 0.8
+    visual: "CUT TO BLACK. Silence. A timeline line draws across the screen."
+    sfx: impact
+  - id: b2
+    say: "In October 2022, the United States restricted exports of the most powerful AI chips, like NVIDIA's A100 and H100, to China. [[EXP-001]]"
+    pause: 0.4
+    visual: "Marker 'Oct 2022'. Chip cards A100 and H100 slide in, then receive a red 'restricted' bar."
+  - id: b3
+    say: "NVIDIA answered with China versions, the A800 and the H800. Nearly the same chips, but with slower connections between them. [[EXP-002]]"
+    pause: 0.4
+    visual: "Cards A800 and H800 appear under the timeline, their link-lines drawn thinner."
+  - id: b4
+    say: "A year later, in October 2023, the rules were tightened again, and the H800 itself was restricted. [[EXP-003]]"
+    pause: 0.4
+    visual: "Marker 'Oct 2023'. H800 and A800 receive red bars."
+  - id: b5
+    say: "And by April 2025, even the H20, a chip built specifically for the Chinese market, needed a US export licence. [[EXP-004]]"
+    pause: 1.0
+    visual: "Marker 'Apr 2025'. H20 card appears and is flagged 'licence required'. Source line fades in at bottom."
+- id: s0103
+  cls: S0103TheQuestion
+  title: "What if you can't buy your way out?"
+  loops: {open: [L1, L9]}
+  beats:
+  - id: b1
+    say: "In the middle of all this, a Chinese lab called DeepSeek published a model called DeepSeek V3."
+    pause: 0.3
+    visual: "Timeline shrinks to the top. A clean model card 'DeepSeek-V3 · Dec 2024' fades in."
+  - id: b2
+    say: "They reported training it on a cluster of 2,048 H800s, the very chip that had been designed to sit just under the line. [[V3-004]]"
+    pause: 0.4
+    visual: "The card fills: 2,048 H800 GPUs. A small grid of 2,048 dots materialises beside it."
+  - id: b3
+    say: "The full training run, they said, took about 2.8 million GPU hours. [[V3-003]] And, by their own benchmarks, the model it produced was comparable to leading closed models. [[V3-012]]"
+    pause: 0.6
+    visual: "Line '2.788M H800 GPU-hours (reported)'. Tag 'reported by DeepSeek' in small caps."
+  - id: b4
+    say: "People called it impossible. It wasn't. But it was surprising. And the reason it was surprising is the whole story."
+    pause: 0.8
+    visual: "The word IMPOSSIBLE appears large, then is crossed and replaced by SURPRISING."
+  - id: b5
+    say: "Because the real question isn't how many chips they had. It's this. What do you do when you can't simply buy your way out of a problem?"
+    pause: 1.0
+    visual: "Everything clears. The central question types itself onto the screen and stays."
+  - id: b6
+    say: "Less than two years later, DeepSeek published another paper, about a different wall entirely. Memory. They got one number down to 890 bytes. [[V41-003]] By the end of this video, you'll know exactly what that number measures, and why it matters."
+    pause: 0.6
+    visual: "Question moves to top as a small persistent title. Big '890 bytes' appears with a '?' — then shrinks into the corner."
+  - id: b7
+    say: "But to get there, we have to start at the very bottom. With a single multiplication."
+    pause: 1.2
+    visual: "Everything collapses into a single glowing dot at the centre."
+    sfx: whoosh

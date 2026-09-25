@@ -1,0 +1,11 @@
+# Open loops (genuine unanswered questions) and where each is paid off.
+# Validated by docu.validation.story_validation against scene `loops` fields.
+L1: {question: "How do you compete when you can't simply buy more compute?", opened: s0103, payoff: s1202}
+L2: {question: "What does 'compute' actually mean?", opened: s0201, payoff: s0204}
+L3: {question: "Why aren't more GPUs enough?", opened: s0302, payoff: s0702}
+L4: {question: "What does 'it' refer to, and how can a machine know?", opened: s0401, payoff: s0405}
+L5: {question: "Does a model need all of itself for every token?", opened: s0502, payoff: s0604}
+L6: {question: "Where do experts live, and how do tokens reach them?", opened: s0604, payoff: s0703}
+L7: {question: "How small can a memory of the past be?", opened: s0802, payoff: s0906}
+L8: {question: "Where do the weights come from? How was V3 trained?", opened: s1001, payoff: s1004}
+L9: {question: "What does '890 bytes' measure?", opened: s0103, payoff: s0906}

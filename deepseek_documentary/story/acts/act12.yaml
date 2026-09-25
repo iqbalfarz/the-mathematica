@@ -1,0 +1,54 @@
+act: 12
+title: "The Whole Machine"
+music: resolution
+scenes:
+- id: s1201
+  cls: S1201WholeMachine
+  title: "See it all at once"
+  loops: {}
+  beats:
+  - id: b1
+    say: "Let's zoom out and look at the whole machine, one last time."
+    pause: 0.4
+    visual: "Camera pulls back to an empty dark stage."
+  - id: b2
+    say: "Text becomes tokens. Tokens become vectors. Attention lets them borrow meaning from each other. A router sends each one to a handful of experts. The output becomes a guess about the next token."
+    pause: 0.4
+    visual: "Pipeline builds left to right: DATA → TOKENS → EMBEDDINGS → ATTENTION → ROUTER → EXPERTS → OUTPUT, reusing each icon from earlier acts."
+  - id: b3
+    say: "The guess is scored. The loss flows backwards. Every weight moves a tiny step. And the loop begins again. Hundreds of thousands of times. [[DER-003]]"
+    pause: 0.4
+    visual: "A return path: OUTPUT → LOSS → GRADIENTS → UPDATE loops back to the start."
+  - id: b4
+    say: "And over all of it, the three walls. Compute, wherever numbers multiply. Memory, wherever numbers wait. Communication, wherever numbers travel."
+    pause: 0.8
+    visual: "Coloured overlays: COMPUTE glows on attention/experts, MEMORY on the KV cache and weights, COMMUNICATION on the router→experts links."
+- id: s1202
+  cls: S1202TheAnswer
+  title: "What you do when you can't buy your way out"
+  loops: {close: [L1]}
+  beats:
+  - id: b1
+    say: "So, back to the question we started with. What do you do when you can't simply buy your way out?"
+    pause: 0.6
+    visual: "The central question from Act 1 returns to centre."
+  - id: b2
+    say: "You stop treating intelligence as a shopping problem, and start treating it as a physics problem. Where do the numbers go? How long do they wait? How far do they travel? How many bits do they really need?"
+    pause: 0.5
+    visual: "The four questions appear one by one under the pillars."
+  - id: b3
+    say: "The constraint didn't make the problem easier. But it may have made understanding it more valuable. When you can't add more, you have to waste less."
+    pause: 0.8
+    visual: "The GPU wall from the opening returns — thinner, but every block lit and busy."
+  - id: b4
+    say: "And that leaves one question open. Everything in this story was about fitting the mathematics to hardware that already existed. DeepSeek even chose its four-bit format so it would work across many kinds of chips. [[V41-016]]"
+    pause: 0.5
+    visual: "A chip outline and an equation outline sit side by side, separate."
+  - id: b5
+    say: "So what happens when the algorithms and the hardware start being designed together, each one shaped around the other?"
+    pause: 1.0
+    visual: "The chip and the equation slide together and interlock."
+  - id: b6
+    say: "That's a story for another time."
+    pause: 2.5
+    visual: "Fade to title card: 'DeepSeek Did the Impossible — The First-Principles Story of How'. Sources note."

@@ -1,0 +1,76 @@
+act: 7
+title: "The Communication Problem"
+music: tension
+scenes:
+- id: s0701
+  cls: S0701Islands
+  title: "Experts on islands"
+  loops: {}
+  beats:
+  - id: b1
+    say: "Remember, a model like V3 is far too big for one GPU. So the experts are spread out. A few here, a few there, across many GPUs, across many machines."
+    pause: 0.4
+    visual: "Four GPU islands, each hosting a cluster of expert squares."
+  - id: b2
+    say: "Now follow a single token. The router says: you need expert 12, expert 97, and expert 200. And they're on three different GPUs."
+    pause: 0.4
+    visual: "A token on island 1; router marks three experts on islands 2, 3, 4; dotted paths appear."
+  - id: b3
+    say: "So the token's vector has to be sent there. Computed. And the results sent back. Dispatch, then combine."
+    pause: 0.3
+    visual: "Token copies fly out along the paths, experts flash, results fly back and merge."
+  - id: b4
+    say: "Now do that for every token in a batch, at every expert layer. Every GPU is sending to every other GPU, all at once. Engineers call it all to all communication."
+    pause: 0.8
+    visual: "Dozens of tokens; paths from every island to every island form a dense web."
+    sfx: whoosh
+- id: s0702
+  cls: S0702WaitingGPUs
+  title: "The cost of waiting"
+  loops: {close: [L3]}
+  beats:
+  - id: b1
+    say: "Let's draw what one GPU's time looks like. Compute. Then wait for tokens to arrive. Compute. Wait for results to come back."
+    pause: 0.4
+    visual: "A horizontal timeline: orange compute blocks alternating with violet communication blocks, with grey idle gaps."
+  - id: b2
+    say: "Those grey gaps are the GPU doing nothing, while its numbers are stuck in the wires. And the narrower the wire, the longer the gaps."
+    pause: 0.4
+    visual: "Communication blocks stretch; idle gaps widen."
+  - id: b3
+    say: "Now you can see why the H800's narrower links mattered. MoE saves compute, but it spends communication. And communication was exactly the resource the export rules had squeezed. [[EXP-005]]"
+    pause: 0.4
+    visual: "Label 'H800: narrower links'; the violet blocks swell further. The legend's COMMUNICATION pillar glows."
+  - id: b4
+    say: "That's the answer to the question from earlier. Why aren't more GPUs enough? Because every GPU you add is another island, and islands have to talk. Past a point, you're not limited by how fast you can think. You're limited by how fast you can talk."
+    pause: 1.0
+    visual: "Island count grows 4 → 16; link web thickens; utilisation meter drops."
+- id: s0703
+  cls: S0703Overlap
+  title: "Hiding the wait"
+  loops: {close: [L6]}
+  beats:
+  - id: b1
+    say: "DeepSeek's answer for V3 wasn't a faster wire. It was a smarter schedule."
+    pause: 0.4
+    visual: "Timeline from before returns."
+  - id: b2
+    say: "The idea is simple to say and very hard to build. While one batch of tokens is travelling, compute on a different batch. Keep the engine busy while the mail is in the post."
+    pause: 0.4
+    visual: "Two interleaved timelines slide together so communication of batch A overlaps compute of batch B; idle gaps vanish."
+  - id: b3
+    say: "They called their pipeline schedule DualPipe, and wrote custom communication code so that computation and communication overlap almost completely. [[V3-011]]"
+    pause: 0.4
+    visual: "Label 'DualPipe (DeepSeek-V3)'; the overlapped timeline is solid orange with violet underneath."
+  - id: b4
+    say: "Then they attacked the size of the mail itself. Numbers in a computer take up space. A common format uses 16 bits for each one. V3 trained with much of its maths in just 8 bits. [[V3-006]]"
+    pause: 0.4
+    visual: "A 16-bit box of cells shrinks to an 8-bit box; label 'FP8'."
+  - id: b5
+    say: "Half the bits means half the bytes to store, half the bytes to move, and faster arithmetic on hardware built for it. DeepSeek says V3 was the first to prove this works at such a scale. [[V3-006]]"
+    pause: 0.5
+    visual: "Tokens in the pipe shrink to half size; twice as many fit through the same pipe."
+  - id: b6
+    say: "It's a pattern worth noticing. Not more hardware. A better understanding of where the time was actually going."
+    pause: 1.0
+    visual: "The three-pillar legend: COMPUTE and COMMUNICATION pillars get a checkmark tick."

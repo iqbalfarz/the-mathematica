@@ -1,0 +1,120 @@
+# Cloud rendering for deepseek_documentary/. Runs entirely on GitHub-hosted runners:
+# start it from the Actions tab (or `gh workflow run`), close the laptop, download
+# the artifacts later. Scenes are cached per shard, so re-runs only render what changed.
+name: Render documentary
+
+on:
+  workflow_dispatch:
+    inputs:
+      quality:
+        description: "preview | 1080p | 1440p | 4k | 8k"
+        default: preview
+        required: true
+      shards:
+        description: "parallel render jobs (8 for 1080p/4k, 16 for 8k)"
+        default: "8"
+        required: true
+      voice_provider:
+        description: "kokoro (default) or cloned"
+        default: kokoro
+        required: true
+
+concurrency:
+  group: render-${{ inputs.quality }}
+  cancel-in-progress: false
+
+env:
+  PYTHONPATH: ${{ github.workspace }}/deepseek_documentary/src
+  KOKORO_MODEL_DIR: ${{ github.workspace }}/deepseek_documentary/models
+  VOICE_PROVIDER: ${{ inputs.voice_provider }}
+
+defaults:
+  run:
+    working-directory: deepseek_documentary
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      shards: ${{ steps.m.outputs.shards }}
+    steps:
+      - id: m
+        run: echo "shards=$(python3 -c "import json;print(json.dumps(list(range(1,${{ inputs.shards }}+1))))")" >> "$GITHUB_OUTPUT"
+        working-directory: .
+
+  voice:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-docu
+      - uses: actions/cache@v4
+        with:
+          path: deepseek_documentary/build/audio
+          key: voice-${{ inputs.voice_provider }}-${{ hashFiles('deepseek_documentary/story/acts/*.yaml', 'deepseek_documentary/config/voice.yaml', 'deepseek_documentary/src/docu/narration/**') }}
+          restore-keys: voice-${{ inputs.voice_provider }}-
+      - run: python -m docu.narration.generate_voice
+      - uses: actions/upload-artifact@v4
+        with:
+          name: narration
+          path: deepseek_documentary/build/audio
+          retention-days: 30
+
+  render:
+    needs: [plan, voice]
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: ${{ fromJson(needs.plan.outputs.shards) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-docu
+      - uses: actions/download-artifact@v4
+        with: {name: narration, path: deepseek_documentary/build/audio}
+      - uses: actions/cache@v4
+        with:
+          path: deepseek_documentary/build/scenes/${{ inputs.quality }}
+          key: scenes-${{ inputs.quality }}-${{ matrix.shard }}of${{ inputs.shards }}-${{ github.sha }}
+          restore-keys: scenes-${{ inputs.quality }}-${{ matrix.shard }}of${{ inputs.shards }}-
+      - name: Render shard (retries failed scenes once)
+        run: python -m docu.rendering.render --quality ${{ inputs.quality }} --shard ${{ matrix.shard }}/${{ inputs.shards }} --workers 2 --retries 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: scenes-${{ matrix.shard }}
+          path: |
+            deepseek_documentary/build/scenes/${{ inputs.quality }}/*.mp4
+            deepseek_documentary/build/scenes/${{ inputs.quality }}/*.json
+            deepseek_documentary/build/scenes/${{ inputs.quality }}/*.key
+            deepseek_documentary/build/logs
+          retention-days: 14
+
+  compose:
+    needs: render
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-docu
+      - uses: actions/download-artifact@v4
+        with: {name: narration, path: deepseek_documentary/build/audio}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: scenes-*
+          merge-multiple: true
+          path: deepseek_documentary/build/scenes/${{ inputs.quality }}
+      - run: python -m docu.rendering.compose --quality ${{ inputs.quality }}
+      - run: python -m docu.validation.report --quality ${{ inputs.quality }}
+      - run: python -m docu.docs --quality ${{ inputs.quality }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: documentary-${{ inputs.quality }}
+          path: |
+            deepseek_documentary/output/**/*.mp4
+            deepseek_documentary/output/**/*.srt
+            deepseek_documentary/output/**/*.txt
+            deepseek_documentary/output/**/*.json
+            deepseek_documentary/output/**/*.md
+          retention-days: 30

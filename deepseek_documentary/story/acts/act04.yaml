@@ -1,0 +1,168 @@
+act: 4
+title: "Inside a Transformer"
+music: minimal
+scenes:
+- id: s0401
+  cls: S0401TheSentence
+  title: "What does 'it' mean?"
+  loops: {open: [L4]}
+  beats:
+  - id: b1
+    say: "So we know the hardware. But what is all that multiplication actually for? Let's open up a language model and look."
+    pause: 0.4
+    visual: "Camera flies into the GPU block; the grid dissolves into darkness."
+    sfx: whoosh
+  - id: b2
+    say: "Here's a sentence. The animal didn't cross the street because it was tired."
+    pause: 0.6
+    visual: "The sentence types across the screen."
+  - id: b3
+    say: "Question. What does it refer to? The animal, or the street?"
+    pause: 0.8
+    visual: "'it' highlights; two arcs reach tentatively to 'animal' and 'street'."
+  - id: b4
+    say: "You knew instantly. The animal. Streets don't get tired. But notice how you knew. You looked at other words in the sentence and pulled their meaning into this one."
+    pause: 0.4
+    visual: "Arc to 'animal' strengthens, to 'street' fades; 'tired' glows as the clue."
+  - id: b5
+    say: "A model has to do the same thing, with nothing but numbers. So first, the text becomes pieces. Tokens."
+    pause: 0.6
+    visual: "The sentence splits into rounded token blocks with small gaps; the token colour is established."
+- id: s0402
+  cls: S0402Embeddings
+  title: "Words as arrows"
+  loops: {}
+  beats:
+  - id: b1
+    say: "Each token is then swapped for a list of numbers. A vector. We call it an embedding."
+    pause: 0.4
+    visual: "Token 'animal' drops down; a column of 6 numbers unrolls beneath it."
+  - id: b2
+    say: "Real models use thousands of numbers per token. We'll draw just two, so we can see them as an arrow on a page."
+    pause: 0.3
+    visual: "The column compresses into a 2D arrow on a small plane."
+  - id: b3
+    say: "These numbers are learned. During training, words that behave alike drift near each other. Animal lands near dog. Street lands near road. Tired lands near sleepy."
+    pause: 0.5
+    visual: "Plane fills with labelled arrows clustering: animal/dog/cat; street/road; tired/sleepy."
+  - id: b4
+    say: "Meaning, in a model, is a direction. And that means we can measure how related two words are with the operation we already know. The dot product."
+    pause: 0.8
+    visual: "Two arrows animal and dog; the angle between them is shaded; 'a · b' appears."
+- id: s0403
+  cls: S0403QueryKeyValue
+  title: "Questions and advertisements"
+  loops: {}
+  beats:
+  - id: b1
+    say: "Here's the trick at the heart of every modern language model. Each token makes three new vectors from its embedding, each by multiplying with its own learned matrix."
+    pause: 0.4
+    visual: "Token 'it' with its embedding; three arrows fan out to vectors labelled Q, K, V, each via a small matrix W_Q, W_K, W_V."
+  - id: b2
+    say: "A query. What am I looking for? For it, something like: which noun am I talking about?"
+    pause: 0.3
+    visual: "Q vector highlights with a speech-bubble paraphrase 'which noun am I?'"
+  - id: b3
+    say: "A key. What do I have to offer? Every token advertises itself. Animal says: I'm a living thing, a noun."
+    pause: 0.3
+    visual: "Every token shows a small K tag; 'animal' K bubble: 'living noun'."
+  - id: b4
+    say: "And a value. If you do pay attention to me, here's the information I'll hand over."
+    pause: 0.4
+    visual: "V tags appear beneath each token as small filled bars."
+  - id: b5
+    say: "To decide where it should look, we take its query, and dot it with the key of every word so far. A model that writes left to right can only look back. A big result means a good match."
+    pause: 0.4
+    visual: "Q of 'it' sweeps across all K's; score numbers pop above each earlier token: animal highest, street next; later tokens are masked."
+  - id: b6
+    say: "Do this for every token at once, and those dot products form a grid. Query times key transpose. Q K transpose. [[GEN-001]]"
+    pause: 0.8
+    visual: "Scores assemble into an n×n grid (heatmap), upper triangle masked (causal); QKᵀ writes beside it."
+- id: s0404
+  cls: S0404Softmax
+  title: "Scores into attention"
+  loops: {}
+  beats:
+  - id: b1
+    say: "But raw scores are awkward. They can be negative, and they don't add up to anything in particular. We want percentages. How much attention should go where. [[MATH]]"
+    pause: 0.4
+    visual: "Row of scores for 'it' shown as bars, some negative."
+  - id: b2
+    say: "So we do two things. First, raise e to the power of each score. Everything becomes positive, and big scores become much bigger."
+    pause: 0.4
+    visual: "Each bar transforms through e^x: all positive, the 'animal' bar dominates."
+  - id: b3
+    say: "Then divide each by the total. Now they add up to one. This is called softmax."
+    pause: 0.4
+    visual: "Bars normalise into a stacked 100% bar; formula softmax(s_i) = e^{s_i} / Σ e^{s_j}."
+  - id: b4
+    say: "One more small detail. Before the softmax, the scores are divided by the square root of the vector length. Long vectors produce huge dot products, and this keeps the softmax from becoming too sharp to learn."
+    pause: 0.4
+    visual: "QKᵀ becomes QKᵀ/√d inside softmax(...)."
+  - id: b5
+    say: "And here's the result. It sends most of its attention to animal. The model has worked out what you worked out."
+    pause: 0.8
+    visual: "Attention arcs from 'it' drawn with thickness = weight; the arc to 'animal' thickest."
+- id: s0405
+  cls: S0405WeightedValues
+  title: "Borrowing meaning"
+  loops: {close: [L4]}
+  beats:
+  - id: b1
+    say: "Now it collects its reward. Take each token's value vector, scale it by its attention weight, and add them all up."
+    pause: 0.4
+    visual: "Value bars shrink or grow by weight and fly into 'it', summing into a new vector."
+  - id: b2
+    say: "The new vector for it is no longer just it. It now carries a large dose of animal."
+    pause: 0.4
+    visual: "The 'it' embedding arrow rotates toward the 'animal' cluster on the 2D plane."
+  - id: b3
+    say: "Put together, the whole mechanism fits on one line. Attention of Q, K and V equals softmax of Q K transpose over root d, times V. [[GEN-001]]"
+    pause: 0.6
+    visual: "Full equation Attention(Q,K,V) = softmax(QKᵀ/√d)V assembles from the pieces already on screen."
+  - id: b4
+    say: "Look at it again, though. Three matrix multiplications to make Q, K and V. One to compare everything with everything. One more to blend the values. It's our old friend, multiply and add, all the way down."
+    pause: 0.8
+    visual: "Each matmul in the equation flashes compute-orange in turn."
+- id: s0406
+  cls: S0406HeadsAndFFN
+  title: "Many heads, then thinking"
+  loops: {}
+  beats:
+  - id: b1
+    say: "One attention pattern can only capture one kind of relationship at a time. So models run many in parallel, each with its own Q, K and V matrices. They're called heads."
+    pause: 0.4
+    visual: "The single attention heatmap splits into 4 smaller heatmaps with different patterns (pronouns, neighbours, verbs, punctuation)."
+  - id: b2
+    say: "One head might track pronouns. Another, which word came just before. Another, subject and verb. Nobody tells them to. They specialise on their own."
+    pause: 0.4
+    visual: "Each head gets a tentative caption; captions marked 'illustrative'."
+  - id: b3
+    say: "After attention comes the second half of each block. A feed-forward network. Two big matrices applied to each token on its own. If attention is where tokens talk to each other, this is where each token thinks it over."
+    pause: 0.4
+    visual: "Block diagram: [Attention] → [Feed-forward]; inside FFN a wide matrix expands then contracts the vector."
+  - id: b4
+    say: "And in large models, most of the parameters live right here, in these feed-forward matrices. [[GEN-005]] Remember that. It's about to become important."
+    pause: 0.8
+    visual: "A parameter-share bar: FFN takes the large majority; label 'most parameters live here' (general rule of thumb)."
+- id: s0407
+  cls: S0407TheStack
+  title: "Stack, and predict"
+  loops: {}
+  beats:
+  - id: b1
+    say: "Attention, then feed-forward. That's one block. Now stack them. Dozens of times."
+    pause: 0.3
+    visual: "The block duplicates upwards into a tall tower of layers."
+  - id: b2
+    say: "At the top, the final vector is compared against every token in the vocabulary, and turned, with softmax again, into a probability for what comes next."
+    pause: 0.4
+    visual: "Top of tower emits a probability bar chart over candidate next tokens: 'and' 0.41, '.' 0.22, 'so' 0.12..."
+  - id: b3
+    say: "Pick one. Add it to the text. Run the whole thing again. That's how every chatbot you've ever used writes. One token at a time."
+    pause: 0.4
+    visual: "Chosen token flies back to the input sequence; tower pulses again."
+  - id: b4
+    say: "That's a Transformer. And now we can see the problem coming."
+    pause: 1.0
+    visual: "Camera pulls back; the tower sits small in the frame."

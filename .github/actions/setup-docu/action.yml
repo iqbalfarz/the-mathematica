@@ -1,0 +1,20 @@
+name: Set up documentary toolchain
+description: System packages (ffmpeg, LaTeX, espeak-ng, cairo/pango, fonts) + Python deps + Kokoro weights
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+        cache: pip
+        cache-dependency-path: deepseek_documentary/requirements.txt
+    - shell: bash
+      run: |
+        sudo apt-get update -qq
+        sudo apt-get install -y -qq --no-install-recommends ffmpeg espeak-ng libcairo2-dev libpango1.0-dev pkg-config \
+          texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended dvisvgm fonts-inter
+        pip install -q -r deepseek_documentary/requirements.txt
+    - uses: actions/cache@v4
+      with:
+        path: deepseek_documentary/models
+        key: kokoro-v1.0-onnx
