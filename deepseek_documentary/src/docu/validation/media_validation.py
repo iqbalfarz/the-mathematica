@@ -19,7 +19,10 @@ def _ff(args, path):
     return r.stderr
 
 
-def visual(path: Path, q: dict, black_min=2.0):
+def visual(path: Path, q: dict, black_min=1.5, allowed=()):
+    """`allowed`: (start, end) windows of intentional black. A frame counts as
+    empty only if 99.9% of it is near-black: the house style is sparse text on a
+    dark background, so the ffmpeg default (98%) would flag ordinary frames."""
     info = ffprobe(path)
     v = next(s for s in info["streams"] if s["codec_type"] == "video")
     issues = []
@@ -30,10 +33,13 @@ def visual(path: Path, q: dict, black_min=2.0):
         issues.append(f"fps {num/den} != {q['fps']}")
     if abs(int(v["width"]) / int(v["height"]) - 16 / 9) > 0.01:
         issues.append("aspect ratio is not 16:9")
-    log = _ff(["-vf", f"blackdetect=d={black_min}:pix_th=0.06", "-an"], path)
+    log = _ff(["-vf", f"blackdetect=d={black_min}:pix_th=0.08:pic_th=0.999", "-an"], path)
     blacks = re.findall(r"black_start:([\d.]+) black_end:([\d.]+)", log)
     for a, b in blacks:
-        issues.append(f"black segment {float(a):.1f}s–{float(b):.1f}s")
+        a, b = float(a), float(b)
+        if any(w0 - 0.5 <= a and b <= w1 + 0.5 for w0, w1 in allowed):
+            continue
+        issues.append(f"empty (black) segment {a:.1f}s–{b:.1f}s")
     return issues, {"codec": v["codec_name"], "width": v["width"], "height": v["height"],
                     "fps": round(num / den, 3), "duration": float(info["format"]["duration"]),
                     "pix_fmt": v.get("pix_fmt")}

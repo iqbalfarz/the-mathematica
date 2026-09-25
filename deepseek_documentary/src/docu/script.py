@@ -45,6 +45,7 @@ class SceneSpec:
     beats: list[Beat] = field(default_factory=list)
     loops_open: list[str] = field(default_factory=list)
     loops_close: list[str] = field(default_factory=list)
+    allow_black: float = 0.0       # seconds of intentional black at scene start
 
     @property
     def module(self) -> str:
@@ -68,6 +69,7 @@ def load_script() -> list[SceneSpec]:
                 index=len(scenes) + 1,
                 loops_open=list(loops.get("open", []) or []),
                 loops_close=list(loops.get("close", []) or []),
+                allow_black=float(sc.get("allow_black", 0.0)),
             )
             for b in sc["beats"]:
                 spec.beats.append(Beat(id=b["id"], say=b["say"], pause=float(b.get("pause", 0.35)),

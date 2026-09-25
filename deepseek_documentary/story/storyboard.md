@@ -401,7 +401,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 12:28–12:59 |
+| Time | 12:28–13:00 |
 | Act | 4 — Inside a Transformer |
 | Manim class | `docu.scenes.act04.S0407TheStack` |
 | Output | `scene_017.mp4` |
@@ -424,7 +424,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 12:59–13:36 |
+| Time | 13:00–13:36 |
 | Act | 5 — The Computational Explosion |
 | Manim class | `docu.scenes.act05.S0501Scaling` |
 | Output | `scene_018.mp4` |
@@ -447,7 +447,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 13:36–14:09 |
+| Time | 13:36–14:10 |
 | Act | 5 — The Computational Explosion |
 | Manim class | `docu.scenes.act05.S0502DoWeNeedAll` |
 | Output | `scene_019.mp4` |
@@ -470,7 +470,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 14:09–14:43 |
+| Time | 14:10–14:44 |
 | Act | 6 — Mixture of Experts |
 | Manim class | `docu.scenes.act06.S0601SplitTheNetwork` |
 | Output | `scene_020.mp4` |
@@ -493,7 +493,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 14:43–15:27 |
+| Time | 14:44–15:28 |
 | Act | 6 — Mixture of Experts |
 | Manim class | `docu.scenes.act06.S0602TheRouter` |
 | Output | `scene_021.mp4` |
@@ -518,7 +518,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 15:27–16:23 |
+| Time | 15:28–16:24 |
 | Act | 6 — Mixture of Experts |
 | Manim class | `docu.scenes.act06.S0603RoutingMath` |
 | Output | `scene_022.mp4` |
@@ -543,7 +543,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 16:23–17:40 |
+| Time | 16:24–17:41 |
 | Act | 6 — Mixture of Experts |
 | Manim class | `docu.scenes.act06.S0604DeepSeekMoE` |
 | Output | `scene_023.mp4` |
@@ -572,7 +572,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 17:40–18:25 |
+| Time | 17:41–18:26 |
 | Act | 7 — The Communication Problem |
 | Manim class | `docu.scenes.act07.S0701Islands` |
 | Output | `scene_024.mp4` |
@@ -595,7 +595,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 18:25–19:17 |
+| Time | 18:26–19:19 |
 | Act | 7 — The Communication Problem |
 | Manim class | `docu.scenes.act07.S0702WaitingGPUs` |
 | Output | `scene_025.mp4` |
@@ -618,7 +618,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 19:17–20:21 |
+| Time | 19:19–20:23 |
 | Act | 7 — The Communication Problem |
 | Manim class | `docu.scenes.act07.S0703Overlap` |
 | Output | `scene_026.mp4` |
@@ -645,7 +645,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 20:21–21:01 |
+| Time | 20:23–21:03 |
 | Act | 8 — The Memory Wall |
 | Manim class | `docu.scenes.act08.S0801WritingOneToken` |
 | Output | `scene_027.mp4` |
@@ -668,7 +668,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 21:01–21:57 |
+| Time | 21:03–21:59 |
 | Act | 8 — The Memory Wall |
 | Manim class | `docu.scenes.act08.S0802CacheGrowth` |
 | Output | `scene_028.mp4` |
@@ -693,7 +693,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 21:57–23:01 |
+| Time | 21:59–23:04 |
 | Act | 8 — The Memory Wall |
 | Manim class | `docu.scenes.act08.S0803LatentAttention` |
 | Output | `scene_029.mp4` |
@@ -718,7 +718,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 23:01–23:31 |
+| Time | 23:04–23:34 |
 | Act | 8 — The Memory Wall |
 | Manim class | `docu.scenes.act08.S0804ThreeDials` |
 | Output | `scene_030.mp4` |
@@ -741,7 +741,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 23:31–24:28 |
+| Time | 23:34–24:30 |
 | Act | 9 — DeepSeek-V4.1-Flash: Pushing the Memory Wall |
 | Manim class | `docu.scenes.act09.S0901Agents` |
 | Output | `scene_031.mp4` |
@@ -764,7 +764,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 24:28–25:17 |
+| Time | 24:30–25:20 |
 | Act | 9 — DeepSeek-V4.1-Flash: Pushing the Memory Wall |
 | Manim class | `docu.scenes.act09.S0902SparseAttention` |
 | Output | `scene_032.mp4` |
@@ -787,7 +787,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 25:17–26:17 |
+| Time | 25:20–26:20 |
 | Act | 9 — DeepSeek-V4.1-Flash: Pushing the Memory Wall |
 | Manim class | `docu.scenes.act09.S0903LayerReuse` |
 | Output | `scene_033.mp4` |
@@ -812,7 +812,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 26:17–27:02 |
+| Time | 26:20–27:05 |
 | Act | 9 — DeepSeek-V4.1-Flash: Pushing the Memory Wall |
 | Manim class | `docu.scenes.act09.S0904FourBits` |
 | Output | `scene_034.mp4` |
@@ -835,7 +835,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 27:02–27:49 |
+| Time | 27:05–27:52 |
 | Act | 9 — DeepSeek-V4.1-Flash: Pushing the Memory Wall |
 | Manim class | `docu.scenes.act09.S0905EncoderDecoder` |
 | Output | `scene_035.mp4` |
@@ -858,7 +858,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 27:49–29:10 |
+| Time | 27:52–29:13 |
 | Act | 9 — DeepSeek-V4.1-Flash: Pushing the Memory Wall |
 | Manim class | `docu.scenes.act09.S0906TheChart` |
 | Output | `scene_036.mp4` |
@@ -889,7 +889,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 29:10–29:52 |
+| Time | 29:13–29:55 |
 | Act | 10 — How a Model Learns |
 | Manim class | `docu.scenes.act10.S1001Loss` |
 | Output | `scene_037.mp4` |
@@ -912,7 +912,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 29:52–30:43 |
+| Time | 29:55–30:46 |
 | Act | 10 — How a Model Learns |
 | Manim class | `docu.scenes.act10.S1002GradientDescent` |
 | Output | `scene_038.mp4` |
@@ -937,7 +937,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 30:43–31:28 |
+| Time | 30:46–31:32 |
 | Act | 10 — How a Model Learns |
 | Manim class | `docu.scenes.act10.S1003TheLoop` |
 | Output | `scene_039.mp4` |
@@ -960,7 +960,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 31:28–32:19 |
+| Time | 31:32–32:23 |
 | Act | 10 — How a Model Learns |
 | Manim class | `docu.scenes.act10.S1004TrainingV3` |
 | Output | `scene_040.mp4` |
@@ -983,7 +983,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 32:19–33:24 |
+| Time | 32:23–33:28 |
 | Act | 11 — The Numbers, Honestly |
 | Manim class | `docu.scenes.act11.S1101TheLedger` |
 | Output | `scene_041.mp4` |
@@ -1008,7 +1008,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 33:24–34:07 |
+| Time | 33:28–34:11 |
 | Act | 11 — The Numbers, Honestly |
 | Manim class | `docu.scenes.act11.S1102WhatWasSurprising` |
 | Output | `scene_042.mp4` |
@@ -1031,7 +1031,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 34:07–34:46 |
+| Time | 34:11–34:51 |
 | Act | 12 — The Whole Machine |
 | Manim class | `docu.scenes.act12.S1201WholeMachine` |
 | Output | `scene_043.mp4` |
@@ -1054,7 +1054,7 @@ One entry per scene. Each scene is one Manim class in `src/docu/scenes/actNN.py`
 
 | Field | Value |
 |---|---|
-| Time | 34:46–35:44 |
+| Time | 34:51–35:49 |
 | Act | 12 — The Whole Machine |
 | Manim class | `docu.scenes.act12.S1202TheAnswer` |
 | Output | `scene_044.mp4` |

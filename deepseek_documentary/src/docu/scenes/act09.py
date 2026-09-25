@@ -198,9 +198,9 @@ class S0903LayerReuse(DocScene):
         tags = VGroup(*[T(m.lower(), S.TINY, colors[m]).next_to(l, LEFT, buff=0.2) for m, l in zip(modes, layers)])
         self.play(FadeIn(tags, lag_ratio=0.05), *[l.animate.set_stroke(colors[m], width=2) for m, l in zip(modes, layers)],
                   run_time=self.dur(0.3))
-        exp = VGroup(T("full: builds the shared memory + picks entries", S.SMALL, S.MEMORY),
-                     T("reindex: borrows memory, re-picks with its own query", S.SMALL, S.ATTN),
-                     T("reuse: borrows memory and picks; keeps only its query", S.SMALL, S.EXPERT))
+        exp = VGroup(T("full: builds memory, picks entries", S.SMALL, S.MEMORY),
+                     T("reindex: borrows memory, re-picks", S.SMALL, S.ATTN),
+                     T("reuse: borrows memory and picks", S.SMALL, S.EXPERT))
         exp.arrange(DOWN, buff=0.3, aligned_edge=LEFT)
         fit_width(exp, safe_right() - shelves.get_right()[0] - 0.7)
         exp.next_to(shelves, RIGHT, buff=0.6)
@@ -414,7 +414,7 @@ class S0906TheChart(DocScene):
         cost = Line(axl.get_left() + UP * 1.6, axl.get_right() + UP * 2.0, color=S.COMPUTE, stroke_width=6)
         cl = T("compute per new token: +¼", S.BODY, S.COMPUTE, weight="BOLD").next_to(cost, UP, buff=0.3)
         ctx = T("V4.1-Flash decode FLOPs vs context length (paper Fig. 2)", S.SMALL, S.MUTED).to_edge(UP, buff=0.6)
-        attr2 = source_line(PAPER + " Fig. 2 and §1 (stated endpoints only)")
+        attr2 = source_line("arXiv:2609.19969 Fig. 2, §1 (stated endpoints)")
         self.play(Create(axl), FadeIn(p1), FadeIn(l1), FadeIn(ctx), FadeIn(attr2), run_time=0.6)
         self.play(FadeIn(p2), FadeIn(l2), Create(cost), run_time=self.dur(0.4))
         self.play(FadeIn(cl), run_time=0.5)

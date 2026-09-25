@@ -49,7 +49,10 @@ class S0401TheSentence(DocScene):
                   run_time=self.dur(0.7))
         self.play(FadeOut(g), run_time=0.4)
         self.camera.frame.scale(1 / 0.12).move_to(ORIGIN)
+        inside = T("inside a language model", S.BODY, S.MUTED)
+        self.play(FadeIn(inside, scale=1.1), run_time=0.8)
         self.hold()
+        self.play(FadeOut(inside), run_time=0.4)
 
         self.beat("b2")
         sent = T("The animal didn't cross the street because it was tired.", S.H2, S.TEXT)
@@ -253,7 +256,7 @@ class S0404Softmax(DocScene):
             r.move_to([xs[k], base_y + h / 2, 0])
             bars.add(r)
         axis = Line([xs[0] - 0.6, base_y, 0], [xs[-1] + 0.6, base_y, 0], color=S.MUTED, stroke_width=1.5)
-        lab = T("raw scores for “it”", S.SMALL, S.MUTED).next_to(axis, RIGHT, buff=0.3)
+        lab = T("raw scores for “it”", S.SMALL, S.MUTED).next_to(axis, DOWN, buff=0.9).align_to(axis, RIGHT)
         self.play(Create(axis), FadeIn(lab), LaggedStart(*[GrowFromEdge(b, DOWN if SCORES[k] > 0 else UP)
                                                           for k, b in enumerate(bars)], lag_ratio=0.1),
                   run_time=self.dur(0.5))
@@ -266,7 +269,7 @@ class S0404Softmax(DocScene):
                                  fill_opacity=0.8).move_to([xs[k], base_y + e * eunit / 2 - 1.2, 0])
                        for k, e in enumerate(ex)])
         self.play(axis.animate.shift(DOWN * 1.2), lab.animate.become(
-            T("e^score", S.SMALL, S.MUTED).next_to(axis.copy().shift(DOWN * 1.2), RIGHT, buff=0.3)),
+            T("e^score", S.SMALL, S.MUTED).next_to(axis.copy().shift(DOWN * 1.2), RIGHT, buff=0.25)),
             ReplacementTransform(bars, new), run_time=self.dur(0.5))
         f1 = M(r"s_i \;\to\; e^{s_i}", 40).move_to([4.6, 1.3, 0])
         self.play(Write(f1), run_time=0.8)
@@ -459,7 +462,7 @@ class S0407TheStack(DocScene):
         self.add(blk)
         self.beat("b1")
         blocks = VGroup(*[Block(w=3.0, h=0.2, label_size=S.TINY, attn_label="", ffn_label="") for _ in range(9)])
-        blocks.arrange(UP, buff=0.12).move_to([-2.5, -0.3, 0])
+        blocks.arrange(UP, buff=0.12).move_to([-1.6, -0.3, 0])
         self.play(ReplacementTransform(blk, blocks[0]), run_time=0.6)
         self.play(LaggedStart(*[FadeIn(b, shift=UP * 0.2) for b in blocks[1:]], lag_ratio=0.2),
                   run_time=self.dur(0.5))
@@ -468,7 +471,7 @@ class S0407TheStack(DocScene):
         self.hold()
 
         self.beat("b2")
-        inp = TokenRow(["...", "because", "it", "was", "tired"], size=S.SMALL).next_to(blocks, DOWN, buff=0.35)
+        inp = TokenRow(["because", "it", "was", "tired"], size=S.SMALL).next_to(blocks, DOWN, buff=0.35)
         self.play(FadeIn(inp), run_time=0.5)
         probs = prob_bars(["and", ".", "so", "but", "then"], [0.41, 0.22, 0.12, 0.08, 0.05], color=S.TOKEN,
                           max_h=2.6)

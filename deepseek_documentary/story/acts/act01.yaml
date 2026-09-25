@@ -28,6 +28,7 @@ scenes:
 - id: s0102
   cls: S0102RulesChanged
   title: "Then the rules changed"
+  allow_black: 2.5        # intentional cut to black at the top of the scene
   loops: {open: []}
   beats:
   - id: b1

@@ -73,7 +73,8 @@ def main(argv=None):
     if film.exists():
         manifest = json.loads(film.with_suffix(".manifest.json").read_text())
         expected = sum(m["duration"] for m in manifest)
-        vi, vinfo = media_validation.visual(film, q)
+        allowed = [(m["start"], m["start"] + s.allow_black) for m, s in zip(manifest, scenes) if s.allow_black]
+        vi, vinfo = media_validation.visual(film, q, allowed=allowed)
         de = media_validation.decode_errors(film)
         ai, ainfo = media_validation.audio(film, expected)
         media_info = {"video": vinfo, "audio": ainfo}

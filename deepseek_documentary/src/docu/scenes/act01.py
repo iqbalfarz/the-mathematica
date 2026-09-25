@@ -193,9 +193,13 @@ class S0103TheQuestion(DocScene):
         self.hold()
 
         self.beat("b7")
-        dot = Dot(ORIGIN, radius=0.08, color=S.TEXT)
+        dot = Dot(ORIGIN, radius=0.14, color=S.TEXT)
+        halo = VGroup(*[Circle(r, color=S.PARAM, stroke_width=2, stroke_opacity=0.5 - 0.12 * k)
+                        for k, r in enumerate((0.45, 0.85, 1.3))])
         self.play(*[m.animate.move_to(ORIGIN).scale(0.05).set_opacity(0) for m in self.mobjects],
-                  FadeIn(dot), run_time=self.dur(0.6))
-        self.play(dot.animate.scale(1.6), rate_func=there_and_back, run_time=0.8)
+                  FadeIn(dot), run_time=self.dur(0.5))
+        self.play(LaggedStart(*[Create(c) for c in halo], lag_ratio=0.3), run_time=1.2)
+        self.play(halo.animate.scale(1.15).set_stroke(opacity=0.15), dot.animate.scale(1.3), rate_func=there_and_back,
+                  run_time=1.2)
         self.hold()
         self.finish(tail=0.3)

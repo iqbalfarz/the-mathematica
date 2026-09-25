@@ -165,7 +165,7 @@
   file: scene_011.mp4
   title: What does 'it' mean?
   start: 479.3
-  duration: 37.0
+  duration: 37.37
   beats:
   - b1
   - b2
@@ -180,7 +180,7 @@
   module: docu.scenes.act04
   file: scene_012.mp4
   title: Words as arrows
-  start: 516.3
+  start: 516.67
   duration: 37.8
   beats:
   - b1
@@ -195,7 +195,7 @@
   module: docu.scenes.act04
   file: scene_013.mp4
   title: Questions and advertisements
-  start: 554.1
+  start: 554.47
   duration: 53.23
   beats:
   - b1
@@ -212,7 +212,7 @@
   module: docu.scenes.act04
   file: scene_014.mp4
   title: Scores into attention
-  start: 607.33
+  start: 607.7
   duration: 49.03
   beats:
   - b1
@@ -228,7 +228,7 @@
   module: docu.scenes.act04
   file: scene_015.mp4
   title: Borrowing meaning
-  start: 656.37
+  start: 656.73
   duration: 41.9
   beats:
   - b1
@@ -243,7 +243,7 @@
   module: docu.scenes.act04
   file: scene_016.mp4
   title: Many heads, then thinking
-  start: 698.27
+  start: 698.63
   duration: 50.33
   beats:
   - b1
@@ -258,7 +258,7 @@
   module: docu.scenes.act04
   file: scene_017.mp4
   title: Stack, and predict
-  start: 748.6
+  start: 748.97
   duration: 31.27
   beats:
   - b1
@@ -273,8 +273,8 @@
   module: docu.scenes.act05
   file: scene_018.mp4
   title: Bigger, and bigger
-  start: 779.87
-  duration: 36.58
+  start: 780.23
+  duration: 36.73
   beats:
   - b1
   - b2
@@ -288,8 +288,8 @@
   module: docu.scenes.act05
   file: scene_019.mp4
   title: Do we need all of it?
-  start: 816.45
-  duration: 32.92
+  start: 816.97
+  duration: 33.03
   beats:
   - b1
   - b2
@@ -303,8 +303,8 @@
   module: docu.scenes.act06
   file: scene_020.mp4
   title: Splitting the thinker
-  start: 849.37
-  duration: 34.0
+  start: 850.0
+  duration: 34.13
   beats:
   - b1
   - b2
@@ -318,8 +318,8 @@
   module: docu.scenes.act06
   file: scene_021.mp4
   title: Who decides?
-  start: 883.36
-  duration: 44.0
+  start: 884.13
+  duration: 44.13
   beats:
   - b1
   - b2
@@ -334,8 +334,8 @@
   module: docu.scenes.act06
   file: scene_022.mp4
   title: The mathematics of choosing
-  start: 927.37
-  duration: 56.57
+  start: 928.27
+  duration: 56.7
   beats:
   - b1
   - b2
@@ -350,8 +350,8 @@
   module: docu.scenes.act06
   file: scene_023.mp4
   title: DeepSeek's version
-  start: 983.93
-  duration: 76.07
+  start: 984.97
+  duration: 76.23
   beats:
   - b1
   - b2
@@ -368,8 +368,8 @@
   module: docu.scenes.act07
   file: scene_024.mp4
   title: Experts on islands
-  start: 1060.0
-  duration: 45.62
+  start: 1061.2
+  duration: 45.73
   beats:
   - b1
   - b2
@@ -383,8 +383,8 @@
   module: docu.scenes.act07
   file: scene_025.mp4
   title: The cost of waiting
-  start: 1105.62
-  duration: 52.29
+  start: 1106.93
+  duration: 52.4
   beats:
   - b1
   - b2
@@ -398,8 +398,8 @@
   module: docu.scenes.act07
   file: scene_026.mp4
   title: Hiding the wait
-  start: 1157.91
-  duration: 64.03
+  start: 1159.33
+  duration: 64.37
   beats:
   - b1
   - b2
@@ -415,8 +415,8 @@
   module: docu.scenes.act08
   file: scene_027.mp4
   title: Writing one token at a time
-  start: 1221.94
-  duration: 39.38
+  start: 1223.7
+  duration: 39.47
   beats:
   - b1
   - b2
@@ -430,8 +430,8 @@
   module: docu.scenes.act08
   file: scene_028.mp4
   title: How big is the shelf?
-  start: 1261.32
-  duration: 56.2
+  start: 1263.17
+  duration: 56.67
   beats:
   - b1
   - b2
@@ -446,8 +446,8 @@
   module: docu.scenes.act08
   file: scene_029.mp4
   title: Compress the memory
-  start: 1317.52
-  duration: 64.33
+  start: 1319.83
+  duration: 64.43
   beats:
   - b1
   - b2
@@ -462,8 +462,8 @@
   module: docu.scenes.act08
   file: scene_030.mp4
   title: Three dials
-  start: 1381.85
-  duration: 29.85
+  start: 1384.27
+  duration: 29.97
   beats:
   - b1
   - b2
@@ -477,8 +477,8 @@
   module: docu.scenes.act09
   file: scene_031.mp4
   title: The agent problem
-  start: 1411.71
-  duration: 56.5
+  start: 1414.23
+  duration: 56.6
   beats:
   - b1
   - b2
@@ -492,8 +492,8 @@
   module: docu.scenes.act09
   file: scene_032.mp4
   title: Don't look at everything
-  start: 1468.2
-  duration: 49.19
+  start: 1470.83
+  duration: 49.3
   beats:
   - b1
   - b2
@@ -507,8 +507,8 @@
   module: docu.scenes.act09
   file: scene_033.mp4
   title: Layers that share a memory
-  start: 1517.39
-  duration: 60.01
+  start: 1520.13
+  duration: 60.17
   beats:
   - b1
   - b2
@@ -523,8 +523,8 @@
   module: docu.scenes.act09
   file: scene_034.mp4
   title: Four bits
-  start: 1577.4
-  duration: 45.54
+  start: 1580.3
+  duration: 45.67
   beats:
   - b1
   - b2
@@ -538,8 +538,8 @@
   module: docu.scenes.act09
   file: scene_035.mp4
   title: Reading half as hard
-  start: 1622.94
-  duration: 46.81
+  start: 1625.97
+  duration: 46.93
   beats:
   - b1
   - b2
@@ -553,8 +553,8 @@
   module: docu.scenes.act09
   file: scene_036.mp4
   title: 890 bytes
-  start: 1669.75
-  duration: 80.62
+  start: 1672.9
+  duration: 80.87
   beats:
   - b1
   - b2
@@ -572,8 +572,8 @@
   module: docu.scenes.act10
   file: scene_037.mp4
   title: Measuring wrongness
-  start: 1750.37
-  duration: 41.63
+  start: 1753.77
+  duration: 41.77
   beats:
   - b1
   - b2
@@ -587,8 +587,8 @@
   module: docu.scenes.act10
   file: scene_038.mp4
   title: Walking downhill
-  start: 1792.01
-  duration: 51.25
+  start: 1795.53
+  duration: 51.37
   beats:
   - b1
   - b2
@@ -603,8 +603,8 @@
   module: docu.scenes.act10
   file: scene_039.mp4
   title: The loop
-  start: 1843.26
-  duration: 45.08
+  start: 1846.9
+  duration: 45.2
   beats:
   - b1
   - b2
@@ -618,8 +618,8 @@
   module: docu.scenes.act10
   file: scene_040.mp4
   title: What V3's training took
-  start: 1888.34
-  duration: 50.85
+  start: 1892.1
+  duration: 51.0
   beats:
   - b1
   - b2
@@ -633,8 +633,8 @@
   module: docu.scenes.act11
   file: scene_041.mp4
   title: What the famous number means
-  start: 1939.19
-  duration: 65.24
+  start: 1943.1
+  duration: 65.37
   beats:
   - b1
   - b2
@@ -649,8 +649,8 @@
   module: docu.scenes.act11
   file: scene_042.mp4
   title: So what was surprising?
-  start: 2004.44
-  duration: 42.9
+  start: 2008.47
+  duration: 43.0
   beats:
   - b1
   - b2
@@ -664,8 +664,8 @@
   module: docu.scenes.act12
   file: scene_043.mp4
   title: See it all at once
-  start: 2047.33
-  duration: 39.63
+  start: 2051.47
+  duration: 39.77
   beats:
   - b1
   - b2
@@ -679,8 +679,8 @@
   module: docu.scenes.act12
   file: scene_044.mp4
   title: What you do when you can't buy your way out
-  start: 2086.97
-  duration: 57.07
+  start: 2091.23
+  duration: 58.03
   beats:
   - b1
   - b2

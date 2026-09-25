@@ -116,7 +116,7 @@ class S0603RoutingMath(DocScene):
         Wr = MatrixGrid(rows=8, cols=4, cell=0.44, color=S.ROUTER, show_numbers=False)
         x = vec_column([""] * 4, color=S.TOKEN, cell=0.44)
         s_vals = np.array([0.3, 2.1, -0.4, 0.2, 1.6, -0.8, 0.5, 0.1])
-        s = vec_column([f"{v:.1f}" for v in s_vals], color=S.ROUTER, cell=0.44, num_size=S.SMALL)
+        s = vec_column([f"{v:.1f}" for v in s_vals], color=S.ROUTER, cell=0.56, num_size=S.SMALL)
         eq = VGroup(Wr, x, M("=", 44), s).arrange(RIGHT, buff=0.35).move_to([-3.2, 0.2, 0])
         lab = M(r"s = W_r\,x", 48).move_to([2.8, 1.6, 0])
         l1 = M("W_r", 34, S.ROUTER).next_to(Wr, UP, buff=0.2)
