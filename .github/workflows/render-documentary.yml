@@ -38,6 +38,7 @@ jobs:
     outputs:
       shards: ${{ steps.m.outputs.shards }}
     steps:
+      # No checkout in this job, so override the workflow-level working directory.
       - id: m
         run: echo "shards=$(python3 -c "import json;print(json.dumps(list(range(1,${{ inputs.shards }}+1))))")" >> "$GITHUB_OUTPUT"
         working-directory: .
@@ -80,15 +81,25 @@ jobs:
           restore-keys: scenes-${{ inputs.quality }}-${{ matrix.shard }}of${{ inputs.shards }}-
       - name: Render shard (retries failed scenes once)
         run: python -m docu.rendering.render --quality ${{ inputs.quality }} --shard ${{ matrix.shard }}/${{ inputs.shards }} --workers 2 --retries 1
+      # Scene files and logs go in separate artifacts: upload-artifact stores paths
+      # relative to the common ancestor of all globs, so mixing build/scenes and
+      # build/logs would nest the scenes one level too deep for compose.
+      # state.json is per-shard bookkeeping and is intentionally not uploaded.
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: scenes-${{ matrix.shard }}
           path: |
-            deepseek_documentary/build/scenes/${{ inputs.quality }}/*.mp4
-            deepseek_documentary/build/scenes/${{ inputs.quality }}/*.json
-            deepseek_documentary/build/scenes/${{ inputs.quality }}/*.key
-            deepseek_documentary/build/logs
+            deepseek_documentary/build/scenes/${{ inputs.quality }}/scene_*.mp4
+            deepseek_documentary/build/scenes/${{ inputs.quality }}/scene_*.timeline.json
+            deepseek_documentary/build/scenes/${{ inputs.quality }}/scene_*.key
+          if-no-files-found: error
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: logs-${{ matrix.shard }}
+          path: deepseek_documentary/build/logs
           retention-days: 14
 
   compose:
@@ -98,6 +109,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-docu
+      # Same narration artifact as the render jobs: scene timelines reference these beat timings.
       - uses: actions/download-artifact@v4
         with: {name: narration, path: deepseek_documentary/build/audio}
       - uses: actions/download-artifact@v4
