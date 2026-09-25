@@ -20,10 +20,10 @@ class S0901Agents(DocScene):
         nodes = VGroup()
         for k, (n, c) in enumerate(zip(names, cols)):
             a = PI / 2 - k * TAU / 4
-            box = RoundedRectangle(corner_radius=0.12, width=2.3, height=0.8, stroke_color=c, stroke_width=2,
+            box = RoundedRectangle(corner_radius=0.12, width=2.9, height=0.8, stroke_color=c, stroke_width=2,
                                    fill_color=c, fill_opacity=0.12)
             t = T(n, S.SMALL, S.TEXT).move_to(box)
-            nodes.add(VGroup(box, t).move_to([2.2 * np.cos(a) - 2.4, 1.6 * np.sin(a) + 0.4, 0]))
+            nodes.add(VGroup(box, t).move_to([2.6 * np.cos(a) - 2.4, 1.7 * np.sin(a) + 0.4, 0]))
         arrows = VGroup(*[CurvedArrow(nodes[k].get_center() + 0.55 * (nodes[(k + 1) % 4].get_center() - nodes[k].get_center()) / 1.0 * 0.5,
                                       nodes[(k + 1) % 4].get_center() + 0.25 * (nodes[k].get_center() - nodes[(k + 1) % 4].get_center()),
                                       angle=-PI / 4, color=S.MUTED, stroke_width=2) for k in range(4)])
@@ -78,7 +78,9 @@ class S0901Agents(DocScene):
 
         self.beat("b4")
         self.play(FadeOut(VGroup(card, head, stats)), run_time=0.5)
-        leg = WallsLegend().scale(1.8).move_to(UP * 0.4)
+        leg = WallsLegend()
+        leg.items.arrange(RIGHT, buff=1.2)
+        leg.scale(1.6).move_to(UP * 0.4)
         self.play(FadeIn(leg), run_time=0.5)
         tamed = T("tamed by sparse attention", S.SMALL, S.MUTED).next_to(leg.item("COMPUTE"), DOWN, buff=0.35)
         self.play(leg.item("COMPUTE").animate.set_opacity(0.3), FadeIn(tamed), run_time=self.dur(0.3))
@@ -199,9 +201,9 @@ class S0903LayerReuse(DocScene):
         exp = VGroup(T("full: builds the shared memory + picks entries", S.SMALL, S.MEMORY),
                      T("reindex: borrows memory, re-picks with its own query", S.SMALL, S.ATTN),
                      T("reuse: borrows memory and picks; keeps only its query", S.SMALL, S.EXPERT))
-        exp.arrange(DOWN, buff=0.25, aligned_edge=LEFT).move_to([3.4, -2.3, 0])
-        fit_width(exp, 6.6)
-        exp.set_x(safe_right() - exp.width / 2)
+        exp.arrange(DOWN, buff=0.3, aligned_edge=LEFT)
+        fit_width(exp, safe_right() - shelves.get_right()[0] - 0.7)
+        exp.next_to(shelves, RIGHT, buff=0.6)
         for e in exp:
             self.play(FadeIn(e, shift=LEFT * 0.2), run_time=self.dur(0.12, lo=0.5))
         self.hold()
@@ -403,7 +405,7 @@ class S0906TheChart(DocScene):
         self.hold()
 
         self.beat("b7")
-        self.play(FadeOut(VGroup(chart, ann, title)), run_time=0.5)
+        self.play(FadeOut(VGroup(chart, ann, title, attr)), run_time=0.5)
         axl = Line(LEFT * 5, RIGHT * 5, color=S.MUTED).move_to(DOWN * 1.8)
         p1 = Dot(axl.get_left(), color=S.TEXT)
         p2 = Dot(axl.get_right(), color=S.TEXT)
@@ -412,13 +414,15 @@ class S0906TheChart(DocScene):
         cost = Line(axl.get_left() + UP * 1.6, axl.get_right() + UP * 2.0, color=S.COMPUTE, stroke_width=6)
         cl = T("compute per new token: +¼", S.BODY, S.COMPUTE, weight="BOLD").next_to(cost, UP, buff=0.3)
         ctx = T("V4.1-Flash decode FLOPs vs context length (paper Fig. 2)", S.SMALL, S.MUTED).to_edge(UP, buff=0.6)
-        self.play(Create(axl), FadeIn(p1), FadeIn(l1), FadeIn(ctx), run_time=0.6)
+        attr2 = source_line(PAPER + " Fig. 2 and §1 (stated endpoints only)")
+        self.play(Create(axl), FadeIn(p1), FadeIn(l1), FadeIn(ctx), FadeIn(attr2), run_time=0.6)
         self.play(FadeIn(p2), FadeIn(l2), Create(cost), run_time=self.dur(0.4))
         self.play(FadeIn(cl), run_time=0.5)
         self.hold()
 
         self.beat("b8")
         self.play(FadeOut(VGroup(axl, p1, p2, l1, l2, cost, cl, ctx)), run_time=0.5)
+        attr2.become(source_line(PAPER + " Abstract, §6"))
         card = RoundedRectangle(corner_radius=0.15, width=9.4, height=2.0, stroke_color=S.TOKEN, stroke_width=2,
                                 fill_color=S.PANEL, fill_opacity=1)
         c1 = T("smaller memory, better overall results than V4-Flash", S.BODY, S.TEXT, weight="BOLD")

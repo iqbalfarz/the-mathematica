@@ -76,7 +76,7 @@ def caption(text: str, color=S.MUTED, size: int = S.SMALL) -> Text:
 def source_line(text: str) -> Text:
     """Small attribution line, bottom-right, always inside the safe frame."""
     s = T(text, S.TINY, S.MUTED)
-    fit_width(s, frame_w() * 0.62)
+    fit_width(s, frame_w() * 0.5)
     s.move_to([safe_right() - s.width / 2, safe_bottom() + s.height / 2, 0])
     return s
 

@@ -113,7 +113,7 @@ def compose(q: dict, out_path: Path | None = None) -> Path:
     env = np.sqrt(uniform_filter1d(narr.astype(np.float64) ** 2, size=int(0.25 * SR)))
     duck = np.clip(env / 0.04, 0, 1)
     duck = uniform_filter1d(duck, size=int(0.6 * SR))  # smooth attack/release
-    music_gain = 0.30 * (1.0 - 0.6 * duck)
+    music_gain = 0.60 * (1.0 - 0.55 * duck)
     mix = np.stack([narr, narr], 1) * 1.0 + mus * music_gain[:, None].astype(np.float32) + np.stack([fx, fx], 1) * 0.35
     peak = float(np.abs(mix).max() or 1)
     if peak > 0.98:

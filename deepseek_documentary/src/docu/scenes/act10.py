@@ -76,13 +76,13 @@ class S1002GradientDescent(DocScene):
 
     def construct(self):
         self.beat("b1")
-        ax = Axes(x_range=[-3, 4, 1], y_range=[0, 6, 1], x_length=9, y_length=4.6,
+        ax = Axes(x_range=[0, 7, 1], y_range=[0, 6, 1], x_length=9, y_length=4.6,
                   axis_config={"color": S.MUTED, "include_ticks": False}).move_to(DOWN * 0.4)
         xl = T("one weight  w", S.SMALL, S.PARAM).next_to(ax, DOWN, buff=0.25)
         yl = T("loss", S.SMALL, S.LOSS).next_to(ax, LEFT, buff=0.2)
-        curve = ax.plot(loss_fn, x_range=[-3, 4], color=S.LOSS, stroke_width=5)
+        curve = ax.plot(lambda x: loss_fn(x - 3), x_range=[0, 7], color=S.LOSS, stroke_width=5)
         w = ValueTracker(-2.3)
-        ball = always_redraw(lambda: Dot(ax.c2p(w.get_value(), loss_fn(w.get_value())), radius=0.14, color=S.PARAM))
+        ball = always_redraw(lambda: Dot(ax.c2p(w.get_value() + 3, loss_fn(w.get_value())), radius=0.14, color=S.PARAM))
         self.play(Create(ax), FadeIn(xl), FadeIn(yl), Create(curve), run_time=self.dur(0.5))
         self.add(ball)
         self.hold()
@@ -92,13 +92,13 @@ class S1002GradientDescent(DocScene):
             x0 = w.get_value()
             y0 = loss_fn(x0)
             d = dloss(x0)
-            return Line(ax.c2p(x0 - 0.8, y0 - 0.8 * d), ax.c2p(x0 + 0.8, y0 + 0.8 * d), color=S.GRAD, stroke_width=3)
+            return Line(ax.c2p(x0 + 3 - 0.8, y0 - 0.8 * d), ax.c2p(x0 + 3 + 0.8, y0 + 0.8 * d), color=S.GRAD, stroke_width=3)
         tan = always_redraw(tangent)
         def garrow():
             x0 = w.get_value()
             d = dloss(x0)
             step = -np.sign(d) * 0.9
-            return Arrow(ax.c2p(x0, loss_fn(x0)) + UP * 0.35, ax.c2p(x0 + step, loss_fn(x0)) + UP * 0.35, buff=0,
+            return Arrow(ax.c2p(x0 + 3, loss_fn(x0)) + UP * 0.35, ax.c2p(x0 + 3 + step, loss_fn(x0)) + UP * 0.35, buff=0,
                          color=S.GRAD, stroke_width=4)
         ga = always_redraw(garrow)
         gl = T("gradient = slope", S.SMALL, S.GRAD).to_edge(UP, buff=0.7)
@@ -156,16 +156,21 @@ class S1002GradientDescent(DocScene):
 LOOP = [("BATCH", S.TOKEN), ("FORWARD", S.COMPUTE), ("LOSS", S.LOSS), ("BACKWARD", S.GRAD), ("UPDATE", S.PARAM)]
 
 
-def loop_nodes(r=2.3, center=(0, 0, 0)):
+def loop_nodes(r=2.1, center=(-2.4, -0.2, 0)):
     nodes = VGroup()
     for k, (n, c) in enumerate(LOOP):
         a = PI / 2 - k * TAU / 5
-        box = RoundedRectangle(corner_radius=0.12, width=2.2, height=0.75, stroke_color=c, stroke_width=2,
+        box = RoundedRectangle(corner_radius=0.12, width=1.9, height=0.7, stroke_color=c, stroke_width=2,
                                fill_color=c, fill_opacity=0.14)
         nodes.add(VGroup(box, T(n, S.SMALL, c, weight="BOLD").move_to(box)).move_to(
-            np.array(center) + [r * 1.25 * np.cos(a), r * np.sin(a), 0]))
-    arrows = VGroup(*[Arrow(nodes[k].get_center(), nodes[(k + 1) % 5].get_center(), buff=0.55, color=S.MUTED,
-                            stroke_width=2.5) for k in range(5)])
+            np.array(center) + [r * 1.55 * np.cos(a), r * np.sin(a), 0]))
+    arrows = VGroup()
+    for k in range(5):
+        a, b = nodes[k][0], nodes[(k + 1) % 5][0]
+        d = b.get_center() - a.get_center()
+        d = d / np.linalg.norm(d)
+        arrows.add(Arrow(a.get_boundary_point(d), b.get_boundary_point(-d), buff=0.12, color=S.MUTED,
+                         stroke_width=2.5, max_tip_length_to_length_ratio=0.2))
     return nodes, arrows
 
 
@@ -174,7 +179,7 @@ class S1003TheLoop(DocScene):
 
     def construct(self):
         self.beat("b1")
-        nodes, arrows = loop_nodes(center=(-2.6, -0.2, 0))
+        nodes, arrows = loop_nodes()
         for k in range(5):
             self.play(FadeIn(nodes[k], scale=0.9), GrowArrow(arrows[k]), run_time=self.dur(0.12, lo=0.4))
         self.play(LaggedStart(*[n[0].animate(rate_func=there_and_back).set_fill(opacity=0.6) for n in nodes],

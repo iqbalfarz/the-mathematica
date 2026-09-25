@@ -94,7 +94,7 @@ class S1102WhatWasSurprising(DocScene):
         self.hold()
 
         self.beat("b2")
-        self.play(cards.animate.scale(0.55).to_edge(UP, buff=0.5), run_time=self.dur(0.4))
+        self.play(FadeOut(cards, shift=UP * 0.3), run_time=self.dur(0.4))
         hdr = VGroup(T("WALL", S.SMALL, S.MUTED, weight="BOLD"), T("WHAT DEEPSEEK AIMED AT IT", S.SMALL, S.MUTED,
                                                                    weight="BOLD"))
         hdr[0].move_to([-4.3, 1.3, 0])

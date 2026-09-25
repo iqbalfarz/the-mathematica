@@ -204,15 +204,17 @@ class S0803LatentAttention(DocScene):
         self.play(FadeIn(bp[0]), run_time=self.dur(0.35))
         self.play(FadeIn(bp[1]), run_time=self.dur(0.3))
         x57 = T("≈ 57× fewer numbers (our arithmetic)", S.SMALL, S.MEMORY, weight="BOLD").next_to(bp, DOWN, buff=0.4)
-        src = source_line("DeepSeek-V3 config_671B.json: kv_lora_rank 512, qk_rope_head_dim 64, 128 heads × 128")
+        src = source_line("DeepSeek-V3 config_671B.json")
         self.play(FadeIn(x57), FadeIn(src), run_time=0.6)
         self.hold()
 
         self.beat("b5")
         self.play(FadeOut(VGroup(bp, x57, src)), run_time=0.4)
-        card = RoundedRectangle(corner_radius=0.15, width=8.4, height=2.2, stroke_color=S.MEMORY, stroke_width=2,
+        card = RoundedRectangle(corner_radius=0.15, width=10.4, height=2.4, stroke_color=S.MEMORY, stroke_width=2,
                                 fill_color=S.PANEL, fill_opacity=1).move_to(DOWN * 0.3)
-        big = T("−93.3% KV cache", 72, S.MEMORY, weight="BOLD").move_to(card).shift(UP * 0.25)
+        big = T("−93.3% KV cache", 72, S.MEMORY, weight="BOLD")
+        fit_width(big, 9.4)
+        big.move_to(card).shift(UP * 0.3)
         who = T("DeepSeek-V2 vs DeepSeek 67B, as reported by DeepSeek", S.SMALL, S.MUTED).next_to(big, DOWN, buff=0.2)
         self.play(FadeIn(card), FadeIn(big, scale=1.1), FadeIn(who), run_time=self.dur(0.4))
         self.hold()

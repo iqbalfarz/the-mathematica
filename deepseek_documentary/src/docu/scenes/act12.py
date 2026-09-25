@@ -26,7 +26,10 @@ class S1201WholeMachine(DocScene):
 
     def construct(self):
         self.beat("b1")
-        self.wait(self.dur(0.5))
+        stage = VGroup(*[Dot([x, y, 0], radius=0.025, color=S.DIM) for x in np.arange(-6.5, 6.6, 0.5)
+                         for y in np.arange(-3.5, 3.6, 0.5)])
+        self.play(FadeIn(stage, lag_ratio=0.002), self.camera.frame.animate.scale(1.08), run_time=self.dur(0.8))
+        self.play(self.camera.frame.animate.scale(1 / 1.08), run_time=0.4)
         self.hold()
 
         self.beat("b2")
@@ -58,8 +61,11 @@ class S1201WholeMachine(DocScene):
         self.beat("b4")
         glow = lambda m, c: SurroundingRectangle(m, color=c, buff=0.12, stroke_width=4, corner_radius=0.1)
         comp = VGroup(glow(fwd[3], S.COMPUTE), glow(fwd[5], S.COMPUTE), glow(bwd[1], S.COMPUTE))
-        mem = VGroup(glow(fwd[3], S.MEMORY).scale(1.12), glow(bwd[2], S.MEMORY))
-        comm = VGroup(glow(VGroup(fwd[4], fwd[5]), S.COMM).scale(1.2))
+        mem = VGroup(SurroundingRectangle(fwd[3], color=S.MEMORY, buff=0.22, stroke_width=4, corner_radius=0.1),
+                     glow(bwd[2], S.MEMORY))
+        comm = VGroup(Line(fwd[4].get_top() + UP * 0.35, fwd[5].get_top() + UP * 0.35, color=S.COMM, stroke_width=8),
+                      Line(fwd[4].get_bottom() + DOWN * 0.35, fwd[5].get_bottom() + DOWN * 0.35, color=S.COMM,
+                           stroke_width=8))
         cl = T("COMPUTE: where numbers multiply", S.SMALL, S.COMPUTE, weight="BOLD")
         ml = T("MEMORY: where numbers wait (KV cache, weights)", S.SMALL, S.MEMORY, weight="BOLD")
         vl = T("COMMUNICATION: where numbers travel (router → experts)", S.SMALL, S.COMM, weight="BOLD")
@@ -107,8 +113,8 @@ class S1202TheAnswer(DocScene):
         chip_ = GPU("hardware", w=2.6, h=2.0, cores=(6, 8)).move_to([-3.2, 0, 0])
         eqn = VGroup(RoundedRectangle(corner_radius=0.15, width=2.8, height=2.0, stroke_color=S.TOKEN, stroke_width=2,
                                       fill_color=S.PANEL, fill_opacity=1),
-                     T("softmax(QKᵀ/√d)V", S.SMALL, S.TOKEN))
-        eqn[1].move_to(eqn[0])
+                     MathTex(r"\mathrm{softmax}\!\left(\tfrac{QK^\top}{\sqrt d}\right)V", color=S.TOKEN))
+        eqn[1].scale_to_fit_width(2.4).move_to(eqn[0])
         el = T("algorithms", S.SMALL, S.TOKEN, weight="BOLD").next_to(eqn[0], DOWN, buff=0.12)
         eqn.add(el)
         eqn.move_to([3.2, 0, 0])
