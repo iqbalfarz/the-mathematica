@@ -21,7 +21,7 @@ scenes:
   - id: b3
     say: "Pull it apart, and it's surprisingly simple."
     pause: 0.4
-    visual: "Exploded view along the axle: thumbwheel, alphabet ring, wiring core, ratchet slide apart."
+    visual: "Exploded view along the axle: notched index ring, alphabet ring, wiring core, thumbwheel, ratchet slide apart."
     sfx: whoosh
   - id: b4
     say: "On one face, twenty-six spring-loaded pins. On the other, twenty-six flat brass plates. [[MACH-ROTOR-PARTS]]"
@@ -30,7 +30,7 @@ scenes:
   - id: b5
     say: "Around the outside, a ring with the alphabet on it, and one small notch. Remember that notch. We'll need it later."
     pause: 0.5
-    visual: "Labels: ALPHABET RING, NOTCH (brass tab on the ring edge)."
+    visual: "Labels: ALPHABET RING, NOTCH (a cut in the brass index ring on the left edge)."
   - id: b6
     say: "And a toothed wheel, the ratchet, which is how the machine turns it."
     pause: 0.8

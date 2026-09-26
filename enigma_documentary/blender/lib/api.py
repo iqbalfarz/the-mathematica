@@ -119,7 +119,7 @@ def set_rotor_positions(rig, letters: str, t: float, fps: int):
         U.key(rig.rotors[slot], "rotation_euler", _f(t, fps), a, index=0, interp="CONSTANT")
 
 
-def rotate_rotor(rig, slot: str, from_letter: str, t0: float, dur: float, fps: int, steps=1):
+def rotate_rotor(rig, slot: str, from_letter: str, t0: float, dur: float, fps: int, steps=1, ease="EASE_OUT"):
     """Advance a rotor `steps` positions (always forward, never the short way round)."""
     r = rig.rotors[slot]
     # Keep a running angle so Z -> A keeps turning forward instead of unwinding a full turn.
@@ -127,24 +127,61 @@ def rotate_rotor(rig, slot: str, from_letter: str, t0: float, dur: float, fps: i
     expected = L.rotor_angle(ord(from_letter) - 65)
     if abs(((a0 - expected + math.pi) % (2 * math.pi)) - math.pi) > 1e-6:
         raise ValueError(f"rotor {slot} is not showing {from_letter}: rig and simulator disagree")
-    U.key(r, "rotation_euler", _f(t0, fps), a0, index=0)
-    U.key(r, "rotation_euler", _f(t0 + dur, fps), a0 - steps * L.STEP, index=0, interp="BEZIER", ease="EASE_OUT")
+    # the interpolation stored on a key governs the segment that starts there
+    U.key(r, "rotation_euler", _f(t0, fps), a0, index=0,
+          interp="LINEAR" if ease == "LINEAR" else "BEZIER", ease="AUTO" if ease == "LINEAR" else ease)
+    U.key(r, "rotation_euler", _f(t0 + dur, fps), a0 - steps * L.STEP, index=0, interp="BEZIER", ease=ease if ease != "LINEAR" else "AUTO")
     r["angle"] = a0 - steps * L.STEP
 
 
-def animate_pawls(rig, steps: list, t: float, fps: int):
-    """All three pawls swing up on every key press; those that engage push a rotor."""
+def animate_pawls(rig, steps: list, t: float, fps: int, slow: float = 1.0, linger: float = 0.0):
+    """All three pawls move forward on every key press. A pawl that can drop (pawl 1
+    always; pawls 2 and 3 only into a notch) falls in, catches a tooth and pushes
+    it one step; the others slide along on their ring and push nothing.
+    `slow` stretches the motion for close-ups (1 = real speed); `linger` keeps the
+    pawls at the end of their push for that many extra seconds (to explain it)."""
     engaged = {s["pawl"] for s in steps}
+    drop = L.NOTCH_RING_R - (L.RATCHET_ROOT_R + 0.0003)
+    t_in, t_push0, t_push1 = t + 0.5 * STEP_START * slow, t + STEP_START * slow, t + STEP_END * slow
+    t_out, t_back = t + (STEP_END + 0.05) * slow + linger, t + 0.45 * slow + linger
     for pawl, pivot in rig.pawls.items():
-        lift = math.radians(14 if pawl in engaged else 9)
-        U.key(pivot, "rotation_euler", _f(t, fps), 0.0, index=0)
-        U.key(pivot, "rotation_euler", _f(t + STEP_END, fps), -lift, index=0)
-        U.key(pivot, "rotation_euler", _f(t + 0.45, fps), -lift, index=0)
-        U.key(pivot, "rotation_euler", _f(t + 0.6, fps), 0.0, index=0)
+        body = rig.parts[f"ENIGMA_pawl_{pawl}_body"]
+        rest = body.get("rest")
+        if rest is None:
+            rest = tuple(body.location)
+            body["rest"] = rest
+        U.key(pivot, "rotation_euler", _f(t_push0, fps), 0.0, index=0,
+              interp="LINEAR" if slow > 1 else "BEZIER")          # moves with the rotor it pushes
+        U.key(pivot, "rotation_euler", _f(t_push1, fps), -L.STEP, index=0)
+        U.key(pivot, "rotation_euler", _f(t_out, fps), -L.STEP, index=0)
+        U.key(pivot, "rotation_euler", _f(t_back, fps), 0.0, index=0)
+        d = drop if pawl in engaged else 0.0
+        inward = tuple(-v / L.NOTCH_RING_R * d for v in _radial_of(rest))
+        dropped = tuple(r + i for r, i in zip(rest, inward))
+        for tt, loc in ((t, rest), (t_in, dropped), (t_push1, dropped), (t_out, rest)):
+            for i in (1, 2):
+                U.key(body, "location", _f(tt, fps), loc[i], index=i)
     lever = rig.parts["ENIGMA_stepping_lever"]
     U.key(lever, "rotation_euler", _f(t, fps), 0.0, index=0)
-    U.key(lever, "rotation_euler", _f(t + KEY_DOWN, fps), math.radians(6), index=0)
-    U.key(lever, "rotation_euler", _f(t + 0.6, fps), 0.0, index=0)
+    U.key(lever, "rotation_euler", _f(t + KEY_DOWN * slow, fps), math.radians(6), index=0)
+    U.key(lever, "rotation_euler", _f(t + 0.6 * slow, fps), 0.0, index=0)
+
+
+def _radial_of(loc):
+    """Unit-length-times-R radial vector of a body rest position (it is R * radial)."""
+    return (0.0, loc[1], loc[2])
+
+
+def step_press(rig, press: dict, t: float, fps: int, slow: float = 1.0, linger: float = 0.0):
+    """The mechanical half of a key press: pawls move, rotors that the stream says
+    step turn one position, all while the key goes down (before the current)."""
+    before = dict(zip(("left", "middle", "right"), press["positions_before"]))
+    moved = {s["rotor"] for s in press["steps"]}
+    animate_pawls(rig, press["steps"], t, fps, slow=slow, linger=linger)
+    for slot in ("left", "middle", "right"):
+        if slot in moved:
+            rotate_rotor(rig, slot, before[slot], t + STEP_START * slow, (STEP_END - STEP_START) * slow, fps,
+                         ease="LINEAR" if slow > 1 else "EASE_OUT")
 
 
 # ------------------------------------------------------------------ current
@@ -212,9 +249,10 @@ def place_rotor(rig, slot: str, to, t: float, fps: int):
 
 
 def explode_rotor(rig, slot: str, t0: float, dur: float, fps: int, gap=0.028, back_at: float | None = None):
-    """Slide a rotor's parts apart along its axle (thumbwheel, ring+letters+notch, core, ratchet)."""
-    offsets = {"thumbwheel": -3.0, "ring": -1.6, "ringletter": -1.6, "notch": -1.6, "ratchet": 1.2}
-    # the thumbwheel and ring go well clear of the core so its plate face can be seen through the gap
+    """Slide a rotor's parts apart along its axle (index ring, tyre, core, thumbwheel, ratchet)."""
+    # left: index ring (with the notch) and alphabet tyre; right: thumbwheel and ratchet.
+    # They go well clear of the core so both contact faces can be seen.
+    offsets = {"notchring": -2.8, "notch": -2.8, "ring": -1.6, "ringletter": -1.6, "thumbwheel": 1.5, "ratchet": 2.7}
     for ob in rig.rotors[slot].children:
         part = ob.name.replace(f"ENIGMA_rotor_{slot}_", "").split("_")[0]
         k = offsets.get(part)

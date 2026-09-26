@@ -9,25 +9,21 @@ from . import api
 
 
 def play(rig, stream: dict, press_times: list[float], fps: int, show_signal=False, signal_dur=1.6,
-         hold=0.55, signal_pins: dict | None = None, lamps=True):
+         hold=0.55, signal_pins: dict | None = None, lamps=True, slow: float = 1.0, linger: float = 0.0):
     """Animate every press in `stream` at `press_times` (seconds).
 
     For shots, prefer play_shot(ctx), which reads press times, holds and the
     signal settings from config/shots.yaml via the timeline."""
     # `hold` is seconds the key stays down (lamp lit): one number or one per press.
+    # `slow` stretches the mechanical part of each press (pawls, stepping) for close-ups.
     presses = stream["presses"]
     if len(press_times) != len(presses):
         raise ValueError(f"{len(presses)} presses in stream but {len(press_times)} times given")
     api.set_rotor_positions(rig, stream["config"]["positions"], 0.0, fps)
     holds = hold if isinstance(hold, (list, tuple)) else [hold] * len(presses)
     for press, t, h in zip(presses, press_times, holds):
-        before = dict(zip(("left", "middle", "right"), press["positions_before"]))
-        moved = {s["rotor"] for s in press["steps"]}
-        api.animate_pawls(rig, press["steps"], t, fps)
-        for slot in ("left", "middle", "right"):
-            if slot in moved:
-                api.rotate_rotor(rig, slot, before[slot], t + api.STEP_START, api.STEP_END - api.STEP_START, fps)
-        on = t + api.CURRENT_ON
+        api.step_press(rig, press, t, fps, slow=slow, linger=linger)
+        on = t + api.CURRENT_ON * slow          # the contact closes only after the rotors have stepped
         key_hold = max(h, (signal_dur + 0.4) if show_signal else h)
         api.animate_key(rig, press["key"], t, fps, hold=key_hold)
         lamp_on = on + (signal_dur if show_signal else 0.0)
@@ -51,7 +47,8 @@ def play_shot(ctx, show_signal=None):
     if ctx.shot.get("replay"):
         return replay(ctx, show)
     presses = play(ctx.rig, ctx.stream, ctx.sc["press_times"], ctx.fps, show_signal=False,
-                   hold=ctx.sc["press_holds"], lamps=not show)
+                   hold=ctx.sc["press_holds"], lamps=not show, slow=ctx.sc.get("slow", 1.0),
+                   linger=ctx.sc.get("linger", 0.0))
     if show and presses:
         _signal_and_lamp(ctx, presses[0], ctx.sc["press_times"][0] + ctx.sc["press_holds"][0])
     return presses

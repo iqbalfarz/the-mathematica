@@ -80,6 +80,34 @@ def rotor_angle(position: int) -> float:
     return -position * STEP
 
 
+# ------------------------------------------------------------------ stepping geometry
+# Each pawl sits in the gap between two rotors: half of its tip over the ratchet
+# teeth on the right face of the rotor to its left, half on the notched ring on the
+# left edge of the rotor to its right. The ring holds the pawl clear of the teeth,
+# except where the ring has its notch. (Pawl 1 has no ring beside it, only the
+# entry wheel, so it catches the right rotor's teeth on every press.)
+PAWL_ANGLE = math.radians(128)       # where the pawl tips touch the rotors (front, low)
+PAWL_TIP_HALF = math.radians(2.6)    # half the tip's width, as an angle at the rim
+NOTCH_RING_R = ROTOR_R               # the pawl rides on this rim...
+RATCHET_TIP_R = ROTOR_R - 0.0012     # ...just clear of the ratchet teeth
+RATCHET_ROOT_R = ROTOR_R - 0.0050
+NOTCH_DEPTH_R = ROTOR_R - 0.0058     # a notch lets the pawl drop below the tooth roots
+NOTCH_HALF = math.radians(4.8)
+PAWL_GAP = {1: ("right", "entry"), 2: ("middle", "right"), 3: ("left", "middle")}   # (ratchet rotor, ring rotor)
+
+
+def notch_local_angle(notch_index: int) -> float:
+    """Angle of the notch on its ring (rotor frame) so that it lies under the pawl
+    exactly when the rotor shows its notch letter in the window."""
+    return PAWL_ANGLE - rotor_angle(notch_index)
+
+
+def ratchet_phase() -> float:
+    """Rotor-frame angle of a tooth face, so that at every window position a face
+    sits just in front of the pawl tip (on the side the teeth move away to)."""
+    return PAWL_ANGLE - PAWL_TIP_HALF - 0.004
+
+
 def core_angle(ring: int) -> float:
     return ring * STEP
 

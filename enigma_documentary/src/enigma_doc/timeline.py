@@ -53,12 +53,14 @@ def build(profile: dict) -> dict:
         cues = [{"t": b["start"], "sfx": b["sfx"]} for b in beats if b["sfx"]]
         shot = shots.get(sc.shot) if sc.shot else None
         press_times = [round(beat_time(entry, r), 3) for r in (shot or {}).get("press_at", [])]
+        slow = float((shot or {}).get("slow", 1.0))
         for pt in press_times:       # mechanical sounds of every key press (see blender/lib/api.py timing)
-            cues += [{"t": round(pt + 0.03, 3), "sfx": "clack"}, {"t": round(pt + 0.10, 3), "sfx": "click"}]
+            cues += [{"t": round(pt + 0.03 * slow, 3), "sfx": "clack"}, {"t": round(pt + 0.10 * slow, 3), "sfx": "click"}]
         scenes.append({"id": sc.id, "title": sc.title, "act": sc.act, "act_title": sc.act_title,
                        "tool": sc.tool, "shot": sc.shot, "music": sc.music,
                        "film_start": round(t_film, 3), "duration": round(duration, 3), "frames": frames,
-                       "beats": beats, "press_times": press_times,
+                       "beats": beats, "press_times": press_times, "slow": slow,
+                       "linger": float((shot or {}).get("linger", 0.0)),
                        "press_holds": _holds(entry, shot, press_times),
                        **_signal(entry, shot, press_times), "sfx": sorted(cues, key=lambda c: c["t"]),
                        "estimated": not real})

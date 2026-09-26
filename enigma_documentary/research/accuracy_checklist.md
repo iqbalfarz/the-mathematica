@@ -22,4 +22,5 @@ Tick before locking each act. "Sim" = enforced by a test.
 - [x] Bombe = Turing's design + Welchman's diagonal board; built by BTM (Harold "Doc" Keen). Don't credit Turing alone.
 - [x] "Shortened the war by two years" = Hinsley's estimate; attribute and mention it is debated.
 - [ ] Re-read Wikipedia pages listed in sources.md (blocked in build env) before final lock.
+- [ ] Rotor part order (finger wheel + ratchet on the pin side, notched ring on the plate side; MACH-THUMBWHEEL, medium confidence) and pawl position (the model puts them low at the front of the stack, inside the case): check against photos of a real Enigma I before final lock.
 - [ ] Cillies and Herivel tip: confirm dates (Herivel tip: 1940) before writing Act XI.

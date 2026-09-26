@@ -97,6 +97,18 @@ def steel():
     return m
 
 
+def machined_steel():
+    """Ratchet teeth: partly diffuse so the tooth faces read against a dark set
+    (fully metallic steel only mirrors the black background)."""
+    m, nt = _new("MAT_machined_steel")
+    if nt:
+        b = _bsdf(nt)
+        _set(b, "Base Color", (0.58, 0.58, 0.60, 1))
+        _set(b, "Metallic", 0.55)
+        _set(b, "Roughness", 0.32)
+    return m
+
+
 def copper():
     m, nt = _new("MAT_copper")
     if nt:
@@ -224,7 +236,7 @@ def translucent_core():
 
 
 def all_materials() -> dict:
-    return {"crinkle": crinkle_paint(), "bakelite": bakelite(), "brass": brass(), "steel": steel(),
+    return {"crinkle": crinkle_paint(), "bakelite": bakelite(), "brass": brass(), "steel": steel(), "machined_steel": machined_steel(),
             "copper": copper(), "ivory": ivory(), "ink": ink(), "white": engraved_white(), "oak": oak(),
             "lamp_window": glass_dark(),
             "lamp": driven_emission("MAT_lamp_letter", LAMP_GLOW, 14.0, dim=(0.012, 0.011, 0.010, 1)),

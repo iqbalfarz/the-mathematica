@@ -31,7 +31,7 @@ python run.py doctor
 
 The Kokoro voice model (~350 MB) downloads automatically the first time you run the voice step.
 
-## 2. First run: a draft (about 8 hours for Acts I–V on 4 cores; `preview` takes about 2)
+## 2. First run: a draft (about 11 hours for Acts I–VI on 4 cores; `preview` takes about 3)
 
 ```bash
 python run.py all --profile draft
@@ -51,7 +51,7 @@ Scenes that aren't rendered yet show up as labelled storyboard slates, so the st
 python run.py estimate --profile final     # renders 1 frame per Blender shot, prints projected hours
 python run.py all --profile final          # 1080p24; resumable
 ```
-Measured on a 4-core CPU with no GPU: about **100 hours** of Blender time for Acts I–V (about 20 h for Acts I–II, 45 h for I–III, 70 h for I–IV). Manim and Remotion take minutes. Render one scene per night if you like: `python run.py blender --profile final --scene s0301`.
+Measured on a 4-core CPU with no GPU: about **135 hours** of Blender time for Acts I–VI (about 20 h for Acts I–II, 45 h for I–III, 70 h for I–IV, 100 h for I–V). Manim and Remotion take minutes. Render one scene per night if you like: `python run.py blender --profile final --scene s0301`.
 
 - **Stop any time** (Ctrl+C, close the lid, reboot). Run the same command again and it continues. Finished frames are kept; the frame that was interrupted is redone.
 - **Keep the laptop usable** while it renders: `BLENDER_THREADS=3 python run.py blender --profile final` (Windows PowerShell: `$env:BLENDER_THREADS=3`).
@@ -73,8 +73,8 @@ Run `estimate` with the profile first. EEVEE couldn't be tested in the build env
 | Profile | Size | fps | Blender | Use |
 |---|---|---|---|---|
 | smoke | 320×180 | 6 | 8 samples | proves the pipeline works (minutes) |
-| preview | 640×360 | 12 | 4 samples | watch the whole film (about 2 h for Acts I–V) |
-| draft | 960×540 | 12 | 8 samples | timing & story check (about 8 h for Acts I–V) |
+| preview | 640×360 | 12 | 4 samples | watch the whole film (about 3 h for Acts I–VI) |
+| draft | 960×540 | 12 | 8 samples | timing & story check (about 11 h for Acts I–VI) |
 | review | 1280×720 | 24 | 12 samples | look check |
 | **final** | 1920×1080 | 24 | 16 samples + denoise | CPU-only master |
 | final_gpu | 1920×1080 | 24 | 64 samples | with a GPU |

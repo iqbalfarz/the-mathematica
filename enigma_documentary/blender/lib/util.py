@@ -102,6 +102,56 @@ def bm_gear(radius, depth, teeth=52, tooth=0.002, axis="X"):
     return bm
 
 
+def bm_ring_profile(outer, inner: float, depth: float):
+    """Flat ring around the X axis. `outer` is a list of (angle, radius) points,
+    angles increasing over one turn, in the rotor convention (angle 0 = up,
+    y = -r sin a, z = r cos a); the hole has radius `inner`."""
+    bm = bmesh.new()
+
+    def v(x, a, r):
+        return bm.verts.new((x, -r * math.sin(a), r * math.cos(a)))
+
+    h = depth / 2
+    ot = [v(h, a, r) for a, r in outer]
+    ob = [v(-h, a, r) for a, r in outer]
+    it = [v(h, a, inner) for a, _ in outer]
+    ib = [v(-h, a, inner) for a, _ in outer]
+    n = len(outer)
+    for i in range(n):
+        j = (i + 1) % n
+        bm.faces.new((ot[i], ot[j], it[j], it[i]))      # +x face
+        bm.faces.new((ob[j], ob[i], ib[i], ib[j]))      # -x face
+        bm.faces.new((ob[i], ob[j], ot[j], ot[i]))      # outer rim
+        bm.faces.new((it[i], it[j], ib[j], ib[i]))      # hole
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    bm.normal_update()
+    return bm
+
+
+def sawtooth(teeth: int, root: float, tip: float, phase: float, eps=0.002):
+    """Ratchet outline: each tooth ramps from root up to tip, then drops straight
+    back to root. The drop (the face a pawl pushes) is at phase + k * 2pi/teeth."""
+    step = 2 * math.pi / teeth
+    pts = []
+    for k in range(teeth):
+        a = phase + k * step
+        pts += [(a, root), (a + step * 0.5, root + (tip - root) * 0.55), (a + step - eps, tip)]
+    return pts
+
+
+def notched_circle(radius: float, depth_r: float, centre: float, half_width: float, n=156):
+    """A circle of `radius` with one square notch (bottom at `depth_r`) centred at angle `centre`."""
+    two_pi = 2 * math.pi
+    pts = []
+    lo, hi = centre - half_width, centre + half_width
+    for i in range(n):
+        a = lo + half_width * 2 + (two_pi - half_width * 2) * i / n     # everything outside the notch
+        pts.append((a, radius))
+    # the notch goes last so the angles keep increasing; its far wall joins back to the first point
+    pts += [(lo + two_pi - 1e-4, radius), (lo + two_pi, depth_r), (hi + two_pi, depth_r)]
+    return pts
+
+
 def bm_uv_sphere(radius, segs=24, rings=12):
     bm = bmesh.new()
     bmesh.ops.create_uvsphere(bm, u_segments=segs, v_segments=rings, radius=radius)

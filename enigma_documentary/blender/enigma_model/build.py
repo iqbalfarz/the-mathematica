@@ -208,24 +208,37 @@ def _rotor(rig: Rig, slot: str, name: str, ring: int, pos: int):
     parent["rotor_name"] = name
     rig.rotors[slot], rig.rotor_names[slot], rig.rings[slot] = parent, name, ring
     w = L.ROTOR_W
-    # Alphabet ring (turns with the rotor; its letters show in the window)
-    ringob = U.mesh_object(f"ENIGMA_rotor_{slot}_ring", c, U.bm_cylinder(L.ROTOR_R, w * 0.55, 78, axis="X"),
-                           m["crinkle"], parent, (0.0015, 0, 0), smooth=True)
+    # Left to right along the axle (operator's view):
+    #   notched index ring | alphabet tyre | wiring core | thumbwheel | ratchet
+    # The plates face left, the spring pins face right (see the core below).
+    # Tyre, thumbwheel and ratchet are rings, so the contact faces stay visible.
+    hole = L.CONTACT_R + 0.004
+    ringob = U.mesh_object(f"ENIGMA_rotor_{slot}_ring", c,
+                           U.bm_ring_profile([(2 * math.pi * i / 192, L.ROTOR_R) for i in range(192)], hole, 0.013),
+                           m["crinkle"], parent, (-0.0015, 0, 0))
     for k in range(26):
         a = k * L.STEP
         U.text(f"ENIGMA_rotor_{slot}_ringletter_{L.ALPHA[k]}", c, L.ALPHA[k], 0.0085, m["white"],
-               (0.0015, -(L.ROTOR_R + 0.0002) * math.sin(a), (L.ROTOR_R + 0.0002) * math.cos(a)),
+               (-0.0015, -(L.ROTOR_R + 0.0002) * math.sin(a), (L.ROTOR_R + 0.0002) * math.cos(a)),
                rot=(a, 0, 0), parent=parent)
-    notch = NOTCHES[name]
-    na = (L.ALPHA.index(notch) + 0.5) * L.STEP   # turnover notch cut just after the notch letter
-    U.mesh_object(f"ENIGMA_rotor_{slot}_notch", c, U.bm_box(0.004, 0.006, 0.004), m["brass"], parent,
-                  (-w / 2 + 0.002, -(L.ROTOR_R + 0.001) * math.sin(na), (L.ROTOR_R + 0.001) * math.cos(na)))
-    # Thumbwheel (serrated, left side) and ratchet (26 teeth, right side)
-    U.mesh_object(f"ENIGMA_rotor_{slot}_thumbwheel", c, U.bm_gear(L.ROTOR_R + 0.004, 0.004, 52, 0.0016),
-                  m["bakelite"], parent, (-w / 2 + 0.001, 0, 0))
-    # Ratchet: 26 teeth around the hub, inside the circle of pins so the pins stay visible.
-    U.mesh_object(f"ENIGMA_rotor_{slot}_ratchet", c, U.bm_gear(L.CONTACT_R - 0.011, 0.003, 26, 0.0025),
-                  m["steel"], parent, (w / 2 - 0.0005, 0, 0))
+    # The turnover notch: a cut in the index ring, placed so it is under the pawl
+    # exactly when the notch letter shows in the window (layout.notch_local_angle).
+    na = L.notch_local_angle(L.ALPHA.index(NOTCHES[name]))
+    U.mesh_object(f"ENIGMA_rotor_{slot}_notchring", c,
+                  U.bm_ring_profile(U.notched_circle(L.NOTCH_RING_R, L.NOTCH_DEPTH_R, na, L.NOTCH_HALF), hole, 0.004),
+                  m["brass"], parent, (-w / 2 + 0.002, 0, 0))
+    notch = U.empty(f"ENIGMA_rotor_{slot}_notch", c,
+                    (-w / 2 + 0.002, -L.NOTCH_DEPTH_R * math.sin(na), L.NOTCH_DEPTH_R * math.cos(na)), parent, size=0.003)
+    notch["angle"] = na
+    # Thumbwheel (serrated, sticks up through the lid) and the ratchet: 26 teeth
+    # whose faces the pawl pushes.
+    U.mesh_object(f"ENIGMA_rotor_{slot}_thumbwheel", c,
+                  U.bm_ring_profile([(2 * math.pi * i / 104, L.ROTOR_R + 0.004 + (0.0016 if i % 2 else 0.0))
+                                     for i in range(104)], hole, 0.003),
+                  m["bakelite"], parent, (w / 2 - 0.0045, 0, 0))
+    U.mesh_object(f"ENIGMA_rotor_{slot}_ratchet", c,
+                  U.bm_ring_profile(U.sawtooth(26, L.RATCHET_ROOT_R, L.RATCHET_TIP_R, L.ratchet_phase()), hole, 0.003),
+                  m["machined_steel"], parent, (w / 2 - 0.0015, 0, 0))
     # Wiring core, rotated by the ring setting relative to the ring
     core = U.empty(f"ENIGMA_rotor_{slot}_core", c, (0, 0, 0), parent, size=0.02)
     core.rotation_mode = "XYZ"
@@ -313,23 +326,37 @@ def _entry_wheel(rig: Rig):
 
 # ------------------------------------------------------------------ stepping mechanism
 def _stepping(rig: Rig):
-    """Three pawls under the rotors (in front of the stack), one per rotor, pivoting
-    on a common shaft. Each is keyed by the pawl number used in StepEvent."""
+    """Three pawls, one per rotor (numbered as in StepEvent). Pawl n sits in the gap
+    between its two rotors (layout.PAWL_GAP): the tip is wide enough to lie over the
+    ratchet teeth of one and the notched ring of the other.
+
+    Each pawl hangs from an empty on the rotor axis, so turning that empty moves the
+    tip along the rim (the push), and moving the tip object in or out along the
+    radius is the pawl dropping into a notch or riding on the ring."""
     c, m = rig.cols["stepping"], rig.mats
-    y = L.ROTOR_AXIS_Y - L.ROTOR_R + 0.006
-    z = L.ROTOR_AXIS_Z - L.ROTOR_R + 0.004
-    rig.parts["ENIGMA_pawl_shaft"] = U.mesh_object(
-        "ENIGMA_pawl_shaft", c, U.bm_cylinder(0.0025, 0.12, 20, axis="X"), m["steel"], rig.root,
-        (0.0, y - 0.01, z - 0.012), smooth=True)
-    for pawl, slot in ((1, "right"), (2, "middle"), (3, "left")):
-        pivot = U.empty(f"ENIGMA_pawl_{pawl}_pivot", c, (L.AXIS_X[slot] + L.ROTOR_W / 2 - 0.002, y - 0.01, z - 0.012),
-                        rig.root, size=0.01)
+    pa = L.PAWL_ANGLE
+    radial = (0.0, -math.sin(pa), math.cos(pa))
+    tangent = (0.0, -math.cos(pa), -math.sin(pa))       # direction of increasing angle
+    for pawl, (a_slot, b_slot) in L.PAWL_GAP.items():
+        a_face = L.AXIS_X[a_slot] + L.ROTOR_W / 2
+        b_face = L.AXIS_X[b_slot] - (L.ROTOR_W / 2 if b_slot != "entry" else L.ROTOR_W * 0.4)
+        xg = (a_face + b_face) / 2
+        width = (b_face - a_face) + 0.006           # 3 mm over the ratchet, 3 mm over the ring
+        pivot = U.empty(f"ENIGMA_pawl_{pawl}_pivot", c, (xg, L.ROTOR_AXIS_Y, L.ROTOR_AXIS_Z), rig.root, size=0.01)
         pivot.rotation_mode = "XYZ"
-        U.mesh_object(f"ENIGMA_pawl_{pawl}", c, U.bm_box(0.003, 0.004, 0.022, bevel=0.0004), m["steel"], pivot,
-                      (0, 0.004, 0.011))
-        U.mesh_object(f"ENIGMA_pawl_{pawl}_tip", c, U.bm_box(0.003, 0.006, 0.003), m["steel"], pivot,
-                      (0, 0.007, 0.022))
+        pivot["gap"] = (a_slot, b_slot)
+        # 'riding' position: the tip rests on the ring rim
+        body = U.empty(f"ENIGMA_pawl_{pawl}_body", c, tuple(v * L.NOTCH_RING_R for v in radial), pivot, size=0.004)
+        body.rotation_mode = "XYZ"
+        body.rotation_euler.x = pa
+        # tip: a block whose inner face touches the rim; arm: back along the tangent and outward
+        U.mesh_object(f"ENIGMA_pawl_{pawl}", c, U.bm_box(width, 0.004, 0.005, bevel=0.0004), m["steel"], body,
+                      (0, 0, 0.0025))
+        U.mesh_object(f"ENIGMA_pawl_{pawl}_arm", c, U.bm_box(0.003, 0.004, 0.030, bevel=0.0004), m["steel"], body,
+                      (0, -0.004, 0.017))                  # trails behind the tip, away from the rim
         rig.pawls[pawl] = pivot
+        rig.parts[f"ENIGMA_pawl_{pawl}_body"] = body
+        body["tangent"] = tangent
     lever = U.empty("ENIGMA_stepping_lever_pivot", c, (0.09, -0.02, 0.06), rig.root, size=0.01)
     lever.rotation_mode = "XYZ"
     U.mesh_object("ENIGMA_stepping_lever", c, U.bm_box(0.004, 0.12, 0.004), m["steel"], lever, (0, 0.05, 0))

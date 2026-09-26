@@ -42,4 +42,4 @@ def build(ctx):
     lab.track("26 FLAT PLATES", f"ENIGMA_rotor_{slot}_plate_00", b["b4"] + 4.4, b["b5"] - 0.2, offset=(0, 0, 0.004))
     lab.track("ALPHABET RING", f"ENIGMA_rotor_{slot}_ringletter_A", b["b5"] + 0.6, b["b6"] - 0.2, offset=(0, 0, 0.006))
     lab.track("NOTCH", f"ENIGMA_rotor_{slot}_notch", b["b5"] + 2.4, b["b6"] - 0.2, offset=(0, 0, 0.004))
-    lab.track("RATCHET", f"ENIGMA_rotor_{slot}_ratchet", b["b6"] + 0.6, b["b6"] + 2.0, offset=(0, 0, 0.036))
+    lab.track("RATCHET", f"ENIGMA_rotor_{slot}_ratchet", b["b6"] + 0.6, b["b6"] + 2.0, offset=(0, 0, 0.043))

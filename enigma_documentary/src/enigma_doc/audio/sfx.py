@@ -104,8 +104,8 @@ def music_bed(mood: str, dur: float = 60.0) -> np.ndarray:
     """A slow, quiet drone that loops under narration. Ducked in Remotion."""
     t = _t(dur)
     roots = {"tension": [55.0, 82.41, 103.83], "minimal": [65.41, 98.0, 130.81],
-             "wonder": [73.42, 110.0, 146.83], "history": [49.0, 73.42, 98.0]}[mood if mood in
-             ("tension", "minimal", "wonder", "history") else "minimal"]
+             "wonder": [73.42, 110.0, 146.83], "history": [49.0, 73.42, 98.0],
+             "mechanism": [61.74, 92.5, 123.47]}[mood if mood in MOODS else "minimal"]
     s = np.zeros_like(t)
     for i, f in enumerate(roots):
         lfo = 0.6 + 0.4 * np.sin(2 * np.pi * (0.03 + 0.017 * i) * t + i)
@@ -118,7 +118,7 @@ def music_bed(mood: str, dur: float = 60.0) -> np.ndarray:
 
 SFX = {"click": click, "clack": clack, "tick": tick, "clunk": clunk, "relay": relay,
        "hum": hum, "current": current, "whoosh": whoosh, "impact": impact}
-MOODS = ["tension", "minimal", "wonder", "history"]
+MOODS = ["tension", "minimal", "wonder", "history", "mechanism"]
 
 
 def main():

@@ -7,10 +7,10 @@
 # Run `make estimate PROFILE=...` to get the numbers for YOUR machine first.
 #
 #   smoke        seconds: proves the pipeline runs end to end
-#   preview      about 2 h for Acts I-V: a watchable whole-film check (360p, 12 fps)
-#   draft        about 8 h for Acts I-V: check timing, framing, story
+#   preview      about 3 h for Acts I-VI: a watchable whole-film check (360p, 12 fps)
+#   draft        about 11 h for Acts I-VI: check timing, framing, story
 #   review       a few hours: check look and readability at 720p
-#   final        1080p24, CPU-safe quality (about 100 h for Acts I-V on 4 cores)
+#   final        1080p24, CPU-safe quality (about 135 h for Acts I-VI on 4 cores)
 #   final_gpu    1080p24, 64 samples; use when Cycles finds a GPU (BLENDER_DEVICE=GPU)
 #   final_eevee  1080p24 with EEVEE (needs a GPU with OpenGL 4.3, even integrated); fastest
 #   final4k      2160p24 on a GPU

@@ -179,3 +179,49 @@ def test_replay_holds_the_key_and_keeps_the_stepped_rotors():
         assert abs(d) < 1e-6
     lit = [c for c, parts in rig.lamps.items() if parts[0].color[0] > 0.5]
     assert lit == [presses[0].lamp]                                            # lamp at the end of the current
+
+
+def _wrap(a):
+    return (a + math.pi) % (2 * math.pi) - math.pi
+
+
+@pytest.mark.parametrize("rotor", ["I", "II", "III", "IV", "V"])
+def test_notch_is_under_the_pawl_exactly_at_the_notch_letter(rotor):
+    """The cut in the index ring must reach the pawl at the same window letter at
+    which enigma_core says the rotor turns its neighbour over."""
+    from enigma_core.rotor import Rotor
+    U.reset_scene()
+    cfg = load_configs(ROOT / "config" / "machines.yaml")["double_step_demo"].to_dict()
+    cfg["rotors"] = [rotor, "II", "III"]
+    rig = build_enigma(cfg)
+    notch = bpy.data.objects["ENIGMA_rotor_left_notch"]
+    for p in range(26):
+        r = Rotor.from_name(rotor, ring=0, position=p)
+        under = abs(_wrap(notch["angle"] + L.rotor_angle(p) - L.PAWL_ANGLE)) < L.NOTCH_HALF - L.PAWL_TIP_HALF
+        assert under == r.at_notch(), (rotor, chr(65 + p))
+
+
+def test_pawls_drop_only_into_real_notches_through_the_double_step():
+    """Play ADU -> ADV -> AEW -> BFX and check, press by press, that a pawl drops in
+    exactly when the ring beside it has its notch under the pawl tip, and that this
+    is exactly the set of pawls the simulator says engaged."""
+    rig, s, times = _rig_for("double_step_demo", "AAAA")
+    notches = {slot: bpy.data.objects[f"ENIGMA_rotor_{slot}_notch"]["angle"] for slot in ("left", "middle", "right")}
+    for press, t in zip(s["presses"], times):
+        before = dict(zip(("left", "middle", "right"), press["positions_before"]))
+        want = {st["pawl"] for st in press["steps"]}
+        free = {1}
+        for pawl, (_, ring_slot) in L.PAWL_GAP.items():
+            if ring_slot == "entry":
+                continue
+            a = notches[ring_slot] + L.rotor_angle(ord(before[ring_slot]) - 65)
+            if abs(_wrap(a - L.PAWL_ANGLE)) < L.NOTCH_HALF - L.PAWL_TIP_HALF:
+                free.add(pawl)
+        assert free == want, (press["positions_before"], free, want)
+        f = U.sec(t + 0.9 * api.STEP_END, FPS)          # mid-push (between frames at real speed)
+        for pawl in (1, 2, 3):
+            body = rig.parts[f"ENIGMA_pawl_{pawl}_body"]
+            fc = {c.array_index: c for c in U._fcurves(body) if c.data_path == "location"}
+            r = math.hypot(fc[1].evaluate(f), fc[2].evaluate(f))
+            assert (r < L.RATCHET_TIP_R) == (pawl in want), (pawl, r)
+    assert [p["positions_after"] for p in s["presses"]] == ["ADV", "AEW", "BFX", "BFY"]

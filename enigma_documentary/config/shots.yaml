@@ -100,3 +100,30 @@ shots:
         entry_out: "b3+0.6"
         plugboard_out: "b3+1.8"
         lamp: "b4+0.9"
+
+  # ---------------- Act VI: the stepping mechanism, in slow motion ----------------
+  s0601_pawls:                       # ADU -> ADV: only pawl 1 catches teeth
+    machine: double_step_demo
+    scene: s0601
+    keys: A
+    press_at: ["b3.end"]
+    hold: [2.0]
+    slow: 30                         # the 0.07 s push takes 2.1 s on screen
+  s0602_notch:                       # ADV -> AEW: the right rotor's notch lets pawl 2 in
+    machine: double_step_demo
+    continues: s0601_pawls
+    scene: s0602
+    keys: A
+    press_at: ["b3.end"]
+    hold: [2.0]
+    slow: 30
+    linger: 5
+  s0603_double:                      # AEW -> BFX: pawl 3 drops into the middle rotor's own notch
+    machine: double_step_demo
+    continues: s0602_notch
+    scene: s0603
+    keys: A
+    press_at: ["b2.end"]
+    hold: [2.0]
+    slow: 30
+    linger: 12                       # pawl 3 stays in the notch while b4 explains the drag

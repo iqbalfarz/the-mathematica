@@ -35,6 +35,8 @@ export type SceneEntry = {
   events?: {presses: Press[]} | null;
   labels?: LabelData | null;
   press_times: number[];
+  slow?: number;
+  linger?: number;
 };
 
 export type LabelTrack = {text: string; t0: number; t1: number; frame0: number; track: ([number, number] | null)[]};

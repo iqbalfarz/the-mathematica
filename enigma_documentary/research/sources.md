@@ -21,6 +21,8 @@ and should be re-read before final lock (see accuracy_checklist.md).
 | CIPHERMACHINES_TECH | Dirk Rijmenants, *Enigma Tech Details* — ciphermachinesandcryptology.com/en/enigmatech.htm | rotor anatomy: pin and plate contacts, notch, ratchet |
 | HISTORYHUB | historyhub.info, *British Signals Intelligence and the Shortening of World War Two* | Hinsley estimate and critics |
 | WIKI_HINSLEY | Wikipedia, *Harry Hinsley* | Hinsley quote |
+| WIKI_ENIGMA | Wikipedia, *Enigma machine* (section "Stepping") | pawls half on the notched ring, half over the next rotor's 26 teeth; double step |
+| WIKI_ROTOR_DETAILS | Wikipedia, *Enigma rotor details* (exploded-view caption: notched ring, alphabet tyre, plate contacts, wires, pin contacts, ring-adjusting lever, hub, finger wheel, ratchet) | rotor part order |
 
 ## Test vectors (all pass in `tests/test_machine.py`)
 

@@ -46,7 +46,7 @@ Measured in the build container (4 CPU cores, no GPU), Cycles + OpenImageDenoise
 
 Act III adds s0301 (parts tour, 910 frames) and s0302 (cutaway with glass rotors, 977 frames). At `final`, s0302 measured about 45 s per frame, so **Acts I–III together (about 3,150 Blender frames) come to roughly 45 hours** on a 4-core CPU: two or three nights, resumable.
 
-Act IV adds s0401–s0403 (about 2,250 frames of a single lifted rotor, a lighter scene at roughly 40 s per frame), so **Acts I–IV come to about 70 hours** on a CPU-only laptop. Act V (s0501–s0503, about 2,170 frames of the cutaway) brings **Acts I–V to roughly 100 hours**. Render one scene per night with `python run.py blender --profile final --scene <id>`, or use a GPU profile.
+Act IV adds s0401–s0403 (about 2,250 frames of a single lifted rotor, a lighter scene at roughly 40 s per frame), so **Acts I–IV come to about 70 hours** on a CPU-only laptop. Act V (s0501–s0503, about 2,170 frames of the cutaway) brings **Acts I–V to roughly 100 hours**. Act VI (s0601–s0603, about 3,230 frames of the rotor stack alone, a light scene) adds roughly 35 hours: **Acts I–VI come to about 135 hours**. Render one scene per night with `python run.py blender --profile final --scene <id>`, or use a GPU profile.
 
 So on a CPU-only laptop, `final` (16 samples + denoiser) is the quality/time sweet spot: the denoiser removes the noise and hard-surface macro shots stay crisp (see a sample in `build/estimate/` after `make estimate`). Your machine may be faster or slower; `make estimate PROFILE=final` renders one frame per shot and prints *your* hours before you commit.
 

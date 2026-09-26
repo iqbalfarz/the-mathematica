@@ -1,6 +1,6 @@
 # C. Scene-by-scene breakdown
 
-Acts I–V are fully scripted in `story/acts/act01.yaml`–`act05.yaml` (narration, visuals, SFX, claim tags) and implemented. The rest are specified here at production-planning depth; each becomes a YAML scene with beats when its act is built.
+Acts I–VI are fully scripted in `story/acts/act01.yaml`–`act06.yaml` (narration, visuals, SFX, claim tags) and implemented. The rest are specified here at production-planning depth; each becomes a YAML scene with beats when its act is built.
 
 | Scene | Purpose (what the viewer learns) | Visual | Tool | Sim data | Accuracy notes |
 |---|---|---|---|---|---|
@@ -18,7 +18,10 @@ Acts I–V are fully scripted in `story/acts/act01.yaml`–`act05.yaml` (narrati
 | s0501 ✅ | Three rotors in a chain | rotor I returns (showing D, turned back to A); press W; current right→left W→B→M→O, stops at the reflector | Blender + caption | `s0501_three` (AFU→AFV) | MACH-PATH |
 | s0502 ✅ | The reflector pairs contacts; never with itself | glass reflector, 13 wires; AY BR CU; current crosses O↔M; all 13 again | Blender + caption | same press (`replay`), `reflector_pairs` | MACH-REFLECTOR; opens L8 |
 | s0503 ✅ | The way back, to one lamp | return M→C→G→F, entry wheel, plugboard, lamp F; chain W→B→M→O⟲M→C→G→F | Blender + Remotion chain | same press (`replay`) | MACH-PATH; pays L2 |
-| s0601–s0604 | Pawls, ratchets, notches, double step | macro behind rotors, state table ADU→BFX | Blender + Remotion table | `double_step_demo` | SIM-DOUBLESTEP; never "odometer" |
+| s0601 ✅ | Three pawls; only the right one reaches teeth | under the stack; side view along the axle (entry wheel cut away): pawl 1 pushes the ratchet, pawls 2–3 ride their rings; slow motion ×30 | Blender + window readout | `s0601_pawls` ADU→ADV | MACH-PAWLS, MACH-STEP-FIRST |
+| s0602 ✅ | The notch lets a pawl in | side view at pawl 2 (right rotor cut away except its notched ring): pawl 2 drops into the notch, pushes the middle rotor | Blender + window readout | `s0602_notch` ADV→AEW | MACH-NOTCHES |
+| s0603 ✅ | The double step | side view at pawl 3: it drops into the middle rotor's own notch, pushes the left rotor and drags the middle one; wide shot of both turned; pays L3 | Blender + window readout | `s0603_double` AEW→BFX | SIM-DOUBLESTEP; never "odometer" |
+| s0604 ✅ | The word "state"; the period | state table with the pawls that caught teeth; middle rotor's dwell per letter (E: 1 press); 26×25×26 = 16,900 vs 26³ | Manim | computed from enigma_core while rendering | SIM-PERIOD |
 | s0701 | Payoff of L1 | split screen: state vs lamp | Blender + Remotion | s0101 stream | — |
 | s0801–s0802 | Reciprocity & no self-encipherment | E→K, K→E, reflector geometry | Blender + Manim | test_reciprocal | SIM-RECIP, SIM-NOSELF |
 | s0901–s0903 | Plugboard swaps | plug cables A↔Q … | Blender → Manim graph | config with plugs | 10 cables from 1939 (MACH-CABLES) |

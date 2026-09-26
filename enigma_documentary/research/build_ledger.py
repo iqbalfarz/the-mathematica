@@ -101,6 +101,15 @@ R = [
 ("MACH-REFLECTOR", "The reflector (Umkehrwalze) has contacts on one side only; 13 wires join its 26 contacts in pairs, and no contact is wired to itself. UKW-B pairs: AY BR CU DH EQ FS GL IP JX KN MO TZ VW.",
  "CRYPTOMUSEUM; enigma_core (test_reflector_b_pairs_match_published_table)", "secondary+simulation", "n/a", "Enigma I (UKW-B)", "high", "VERIFIED_SECONDARY",
  "Thirteen wires join its twenty-six contacts in pairs.", "The reflector turns like a rotor (it does not on Enigma I)."),
+("MACH-PAWLS", "Stepping: one pawl per rotor, all moved by every key press. Each pawl lies half over the notched index ring of the rotor to its right and half over the 26 ratchet teeth of the rotor to its left; the ring holds it clear of the teeth except at the notch. The rightmost pawl has no ring beside it, so it steps the right rotor on every press.",
+ "WIKI_ENIGMA (via search excerpt); CIPHERMACHINES_TECH; HAMER_1997; enigma_core.stepping", "secondary", "n/a", "Enigma I", "high", "VERIFIED_SECONDARY",
+ "Each pawl sits half on the notched ring of one rotor and half over the teeth of the next.", "Gears inside the machine turn the rotors like clockwork."),
+("MACH-STEP-FIRST", "The rotors step as the key goes down, before the key's contact closes and current flows.",
+ "WIKI_ENIGMA (via search excerpt); enigma_core.stepping docstring; test_blender_rig", "secondary+simulation", "n/a", "Enigma I", "high", "SIMULATED",
+ "The rotors move first; only then does the current flow.", ""),
+("MACH-THUMBWHEEL", "Each rotor's serrated finger wheel and its ratchet are on the pin (right) side; the notched index ring and the flat plates are on the left.",
+ "WIKI_ROTOR_DETAILS exploded-view caption (via search excerpt); CIPHERMACHINES_TECH", "secondary", "n/a", "Enigma I", "medium", "VERIFIED_SECONDARY",
+ "", ""),
 ("LANG-E", "E is the most frequent letter in German text.", "standard letter-frequency tables", "secondary", "n/a", "n/a", "high", "VERIFIED_SECONDARY", "", ""),
 ]
 

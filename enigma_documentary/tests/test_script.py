@@ -44,9 +44,25 @@ def test_sim_checks_match_the_simulator():
             if "lamps" in chk:
                 out = "".join(p.lamp for p in presses)
                 assert out == chk["lamps"], f"{sc.id}: script says {chk['lamps']}, simulator gives {out}"
+            if "positions" in chk:        # window letters before the first press, then after each
+                chain = " ".join([presses[0].positions_before] + [p.positions_after for p in presses])
+                assert chain == chk["positions"], f"{sc.id}: script says {chk['positions']}, simulator gives {chain}"
+            for p, want in zip(presses, chk.get("pawls", [])):
+                got = " ".join(str(n) for n in sorted({st.pawl for st in p.steps}))
+                assert got == want, f"{sc.id}: pawls {want} in the script, the simulator engages {got}"
             for stage, io in (chk.get("stages") or {}).items():
                 hop = next(h for h in presses[0].path if h.stage == stage)
                 assert hop.in_letter + hop.out_letter == io, f"{sc.id} {stage}: script {io}, simulator {hop.in_letter}{hop.out_letter}"
+        elif "machine" in chk:
+            m = EnigmaMachine(CONFIGS[chk["machine"]])
+            presses = m.press_keys(chk["keys"])
+            chain = " ".join([presses[0].positions_before] + [p.positions_after for p in presses])
+            assert chain == chk["positions"], f"{sc.id}: script says {chk['positions']}, simulator gives {chain}"
+            if "period" in chk:
+                m = EnigmaMachine(CONFIGS[chk["machine"]])
+                start = m.positions
+                n = next(i + 1 for i in range(20000) if m.press_keys("A")[0].positions_after == start)
+                assert n == chk["period"], f"{sc.id}: period {chk['period']} in the script, simulator gives {n}"
         elif "rotor_demo" in chk:
             spec = SHOTS[chk["rotor_demo"]]["rotor_demo"]
             outs = "".join(step["out"] for step in rotor_demo(spec))
@@ -167,3 +183,21 @@ def test_act5_narration_letters_match_the_press():
     r = hops["reflector"]
     assert f"came in at {r.in_letter} leaves at its partner, {r.out_letter}" in said
     assert f"One lamp lights. {presses[0].lamp}." in said
+
+
+def test_act6_narration_matches_the_steps():
+    """Every 'X becomes Y' in Act VI is a rotor the simulator actually stepped, and
+    the state table read aloud in s0604 is the simulator's."""
+    sc = {s.id: s for s in load_script()}
+    for scene, shot in (("s0601", "s0601_pawls"), ("s0602", "s0602_notch"), ("s0603", "s0603_double")):
+        _, presses = RESOLVED[shot]
+        said = " ".join(b.spoken for b in sc[scene].beats)
+        claimed = re.findall(r"\b([A-Z]) becomes ([A-Z])\.", said)
+        moved = {(st.from_letter, st.to_letter) for p in presses for st in p.steps}
+        assert claimed and set(claimed) <= moved, (scene, claimed, moved)
+    _, p3 = RESOLVED["s0603_double"]
+    assert [st.reason for st in p3[0].steps].count("double_step") == 1
+    spoken = " ".join(b.spoken for b in sc["s0604"].beats)
+    table = sc["s0604"].sim_check["positions"].split()
+    assert ". Press. ".join(" ".join(w) for w in table) + "." in spoken
+    assert "16,900" in spoken and "17,576" in spoken and 26 ** 3 == 17576

@@ -1,0 +1,123 @@
+act: 6
+title: "The Machine Moves"
+music: mechanism
+scenes:
+- id: s0601
+  cls: S0601ThreePawls
+  tool: blender
+  shot: s0601_pawls
+  title: "Three pawls"
+  sim_check: {shot: s0601_pawls, keys: A, positions: "ADU ADV", pawls: ["1"]}
+  loops: {open: []}
+  beats:
+  - id: b1
+    say: "So what actually turns the rotors? Let's take the lid off and look underneath them."
+    pause: 0.4
+    visual: "Casing and wiring fade away; the camera sinks below the rotor stack, front side, to the three steel pawls in the gaps."
+  - id: b2
+    say: "On its right side, every rotor carries a ratchet: twenty-six teeth, one for each letter. And in each gap sits a small steel finger, called a pawl. Three rotors, three pawls. [[MACH-PAWLS]]"
+    pause: 0.4
+    visual: "Labels: RATCHET (26 teeth), PAWL 1, PAWL 2, PAWL 3. Window readout ADU on screen."
+  - id: b3
+    say: "Press a key, and all three pawls are pushed forward together. Here it is, slowed right down."
+    pause: 0.3
+    visual: "Slow motion (x20). All three pawls start to move."
+  - id: b4
+    say: "The right pawl drops onto the right rotor's teeth and pushes it on by one letter. U becomes V. And all of this happens before any current flows. [[MACH-STEP-FIRST]]"
+    pause: 0.4
+    visual: "Pawl 1 dips in and pushes a tooth; the right rotor turns one step; readout ADU becomes ADV."
+  - id: b5
+    say: "The other two pawls move as well. But each one is resting on the edge of a ring, which holds it up, clear of the teeth. They slide along and push nothing."
+    pause: 0.4
+    visual: "Pawls 2 and 3 glide over the brass index rings; the middle and left rotors stay still."
+  - id: b6
+    say: "So on an ordinary key press, only the right rotor turns. [[MACH-PAWLS]]"
+    pause: 0.8
+    visual: "Pawls slide back. Hold on the stack."
+- id: s0602
+  cls: S0602TheNotch
+  tool: blender
+  shot: s0602_notch
+  title: "The notch"
+  sim_check: {shot: s0602_notch, keys: A, positions: "ADV AEW", pawls: ["1 2"]}
+  loops: {open: []}
+  beats:
+  - id: b1
+    say: "Now the right rotor is showing V."
+    pause: 0.3
+    visual: "Readout ADV. Camera on the right rotor's index ring."
+  - id: b2
+    say: "Remember the notch on its ring? At V, that notch sits exactly under the middle pawl. [[MACH-NOTCHES]]"
+    pause: 0.4
+    visual: "The notch in the right rotor's brass ring glows; pawl 2 hangs right above it. Label: NOTCH."
+  - id: b3
+    say: "Press again."
+    pause: 0.3
+    visual: "Slow motion (x20)."
+  - id: b4
+    say: "This time the middle pawl has nothing to rest on. It drops into the notch, catches the teeth of the middle rotor, and pushes. D becomes E."
+    pause: 0.4
+    visual: "Pawl 2 drops into the notch and pushes the middle rotor's ratchet; pawl 1 pushes the right rotor as usual; readout ADV becomes AEW."
+  - id: b5
+    say: "The right rotor moves on too, as always. V becomes W. So once in every turn, the right rotor carries the middle one along with it."
+    pause: 0.8
+    visual: "Hold on both rotors turned; pawls slide back."
+- id: s0603
+  cls: S0603DoubleStep
+  tool: blender
+  shot: s0603_double
+  title: "The double step"
+  sim_check: {shot: s0603_double, keys: A, positions: "AEW BFX", pawls: ["1 3"]}
+  loops: {open: []}
+  beats:
+  - id: b1
+    say: "Look at the middle rotor now. It shows E. And E is where its own notch is. So this time, it's the left pawl that sits over a notch. [[MACH-NOTCHES]]"
+    pause: 0.4
+    visual: "Readout AEW. The notch in the middle rotor's ring glows, under pawl 3."
+  - id: b2
+    say: "Press once more."
+    pause: 0.3
+    visual: "Slow motion (x20)."
+  - id: b3
+    say: "The left pawl drops in, catches the teeth of the left rotor, and pushes it. A becomes B."
+    pause: 0.3
+    visual: "Pawl 3 drops into the middle rotor's notch and pushes the left rotor's ratchet; readout left letter A becomes B."
+  - id: b4
+    say: "But look at what that pawl is sitting in. The notch belongs to the middle rotor. So the same push drags the middle rotor along as well. E becomes F. [[MACH-PAWLS]]"
+    pause: 0.4
+    visual: "Macro: the pawl's tip pushes on the wall of the notch; the middle rotor turns with the left one. Readout E becomes F; right W becomes X."
+  - id: b5
+    say: "The middle rotor has just moved on two presses in a row. D to E, then E to F. That is the famous double step. It isn't an extra rule. It falls straight out of the shape of the parts. [[SIM-DOUBLESTEP]]"
+    pause: 0.5
+    visual: "Readout history ADU, ADV, AEW, BFX with the middle column highlighted."
+  - id: b6
+    say: "So why don't all three rotors turn every time? Because only the right pawl can always reach its teeth. The other two have to wait for a notch."
+    pause: 1.0
+    visual: "Pull back to the whole stack, three pawls resting."
+- id: s0604
+  cls: S0604CountTheSteps
+  tool: manim
+  title: "Count the steps"
+  sim_check: {machine: double_step_demo, keys: AAA, positions: "ADU ADV AEW BFX", period: 16900}
+  loops: {open: []}
+  beats:
+  - id: b1
+    say: "Let's write down the three window letters after each press. Those three letters are the machine's state: they say exactly where every rotor is, right now."
+    pause: 0.4
+    visual: "Three window boxes; the word STATE appears."
+  - id: b2
+    say: "A D U. Press. A D V. Press. A E W. Press. B F X. [[SIM-DOUBLESTEP]]"
+    pause: 0.4
+    visual: "A table grows row by row; changed letters glow; a column notes which pawls caught teeth."
+  - id: b3
+    say: "Most presses change only the right letter. Now and then the middle one. Only rarely the left."
+    pause: 0.4
+    visual: "Column highlights: right (every row), middle (rows 2 and 3), left (row 3)."
+  - id: b4
+    say: "Usually the middle rotor waits a whole turn of the right rotor on each letter. But at its notch letter, the double step moves it on after a single press. [[SIM-PERIOD]]"
+    pause: 0.4
+    visual: "A strip of middle-rotor letters with the dwell of each; E is a single sliver."
+  - id: b5
+    say: "So the rotors come back to where they started after 16,900 key presses, not the 17,576 you would get from twenty-six times twenty-six times twenty-six. [[SIM-PERIOD]]"
+    pause: 1.2
+    visual: "26 × 25 × 26 = 16,900 beside 26 × 26 × 26 = 17,576 (struck through)."
