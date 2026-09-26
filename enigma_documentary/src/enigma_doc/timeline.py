@@ -60,9 +60,7 @@ def build(profile: dict) -> dict:
                        "film_start": round(t_film, 3), "duration": round(duration, 3), "frames": frames,
                        "beats": beats, "press_times": press_times,
                        "press_holds": _holds(entry, shot, press_times),
-                       "signal_dur": _signal_dur(entry, shot, press_times),
-                       "signal_pins": {k: round(beat_time(entry, v), 3)
-                                       for k, v in ((shot or {}).get("signal") or {}).get("pins", {}).items()}, "sfx": sorted(cues, key=lambda c: c["t"]),
+                       **_signal(entry, shot, press_times), "sfx": sorted(cues, key=lambda c: c["t"]),
                        "estimated": not real})
         t_film += frames / fps
     return {"profile": profile["name"], "fps": fps, "width": profile["width"], "height": profile["height"],
@@ -77,14 +75,26 @@ def _holds(entry, shot, press_times):
             for h, t in zip(raw, press_times)]
 
 
-def _signal_dur(entry, shot, press_times):
-    """signal: {dur: s} | {until: beat} | {pins: {..., lamp: beat}}. The current starts
-    when the key contact closes (0.11 s after the press) and reaches the lamp at the end."""
+def _signal(entry, shot, press_times) -> dict:
+    """Resolve a shot's `signal` block to absolute scene times.
+
+    signal: {dur: s} | {until: beat} | {pins: {stage: beat ref | seconds}}.
+    The current starts when the key contact closes (0.11 s after the press) unless
+    pins give `start`; it reaches the lamp at the `lamp` pin (or after `dur`).
+    Numeric pins may lie outside the scene: negative = already happened before
+    this scene began, very large = not reached in this scene (the current holds).
+    """
     sig = (shot or {}).get("signal") or {}
-    end = sig.get("until") or (sig.get("pins") or {}).get("lamp")
-    if end and press_times:
-        return round(beat_time(entry, end) - press_times[0] - 0.11, 3)
-    return float(sig.get("dur", 1.6))
+    pins = {k: (round(beat_time(entry, v), 3) if isinstance(v, str) else float(v))
+            for k, v in (sig.get("pins") or {}).items()}
+    start = pins.pop("start", None)
+    if start is None:
+        start = round(press_times[0] + 0.11, 3) if press_times else 0.0
+    end = pins.get("lamp")
+    if end is None and sig.get("until"):
+        end = beat_time(entry, sig["until"])
+    dur = round(end - start, 3) if end is not None else float(sig.get("dur", 1.6))
+    return {"signal_start": start, "signal_dur": dur, "signal_pins": pins}
 
 
 def beat_time(scene: dict, ref: str) -> float:

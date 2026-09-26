@@ -8,9 +8,7 @@ caption names the part the glow is in. The lamp that lights is the simulator's.
 from lib import api, player
 from lib import layout as L
 from lib import staging as S
-
-OFFSET = (0.05, -0.15, 0.23)       # camera looks steeply down on the current, over the keys
-
+from lib.follow import caption_stages, follow_current
 
 def build(ctx):
     fps, scene, rig = ctx.fps, ctx.scene, ctx.rig
@@ -21,7 +19,7 @@ def build(ctx):
     player.play_shot(ctx)
 
     press = ctx.stream["presses"][0]
-    t_on = ctx.sc["press_times"][0] + api.CURRENT_ON
+    t_on = ctx.sc["signal_start"]
     dur, pins = ctx.sc["signal_dur"], ctx.sc["signal_pins"]
 
     wide, wide_t = S.camera("CAM_cutaway", lens=40, fstop=5.6)
@@ -30,12 +28,7 @@ def build(ctx):
     kx, ky, kz = L.key_pos(press["key"])
     S.move(wide, wide_t, b["b2"], fps, loc=(kx + 0.12, ky - 0.25, kz + 0.16), look=(kx, ky, kz))
 
-    follow, follow_t = S.camera("CAM_follow", lens=35, fstop=6.3)
-    t, step = t_on, 0.6
-    while t <= t_on + dur + 1e-6:
-        h = L.head_position(press, t_on, dur, t, pins)
-        S.move(follow, follow_t, t, fps, loc=tuple(a + o for a, o in zip(h, OFFSET)), look=h)
-        t += step
+    follow, _ = follow_current(ctx, press, t_on, t_on + dur)
 
     lamp, lamp_t = S.camera("CAM_lamp", lens=50, fstop=4.0)
     S.move(lamp, lamp_t, 0.0, fps, loc=(0.0, -0.33, 0.44), look=(0.0, -0.012, L.LAMP_Z))
@@ -48,6 +41,4 @@ def build(ctx):
     S.cut(scene, lamp, pins.get("lamp", t_on + dur) - 0.5, fps)
     S.cut(scene, pull, b["b7"], fps)
 
-    for stop in L.signal_timeline(press, t_on, dur, pins):
-        text = stop["part"].upper() if stop["in"] == stop["out"] else f"{stop['part'].upper()}   {stop['in']} → {stop['out']}"
-        ctx.labels.caption(stop["t"], text)
+    caption_stages(ctx, press)

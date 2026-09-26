@@ -129,11 +129,21 @@ def ink():
 
 
 def engraved_white():
+    """Painted letters. Invisible from behind: ring letters on the far side of a
+    glass rotor would otherwise show through mirrored."""
     m, nt = _new("MAT_engraved_white")
     if nt:
         b = _bsdf(nt)
         _set(b, "Base Color", (0.82, 0.8, 0.74, 1))
         _set(b, "Roughness", 0.5)
+        geo = nt.nodes.new("ShaderNodeNewGeometry")
+        clear = nt.nodes.new("ShaderNodeBsdfTransparent")
+        mix = nt.nodes.new("ShaderNodeMixShader")
+        out = nt.nodes["Material Output"]
+        nt.links.new(geo.outputs["Backfacing"], mix.inputs["Fac"])
+        nt.links.new(b.outputs["BSDF"], mix.inputs[1])
+        nt.links.new(clear.outputs["BSDF"], mix.inputs[2])
+        nt.links.new(mix.outputs["Shader"], out.inputs["Surface"])
     return m
 
 

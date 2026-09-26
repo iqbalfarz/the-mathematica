@@ -1,6 +1,6 @@
 # C. Scene-by-scene breakdown
 
-Acts I–IV are fully scripted in `story/acts/act01.yaml`–`act04.yaml` (narration, visuals, SFX, claim tags) and implemented. The rest are specified here at production-planning depth; each becomes a YAML scene with beats when its act is built.
+Acts I–V are fully scripted in `story/acts/act01.yaml`–`act05.yaml` (narration, visuals, SFX, claim tags) and implemented. The rest are specified here at production-planning depth; each becomes a YAML scene with beats when its act is built.
 
 | Scene | Purpose (what the viewer learns) | Visual | Tool | Sim data | Accuracy notes |
 |---|---|---|---|---|---|
@@ -15,7 +15,9 @@ Acts I–IV are fully scripted in `story/acts/act01.yaml`–`act04.yaml` (narrat
 | s0402 ✅ | Each wire maps a letter | glass core, per-wire glow A→E, B→K, C→M, then all 26 | Blender + caption | `rotor_demo_spec.wires` | rotor I wiring from CRYPTOMUSEUM |
 | s0403 ✅ | Turning changes the mapping | fixed contact A; rotor steps A→B→C→D; outputs E, J, K, C (the B→K wire exits at J) | Blender + caption | `rotor_demo` A..D, key A | SIM-ROTOR26 |
 | s0404 ✅ | The word "permutation"; 26! wirings | two-row table, each letter once, position B table, 26! | Manim | Rotor.forward asserted | KEY-WIRINGS (derived) |
-| s0501–s0503 | Full path through 3 rotors and reflector | camera follows pulse, slow motion | Blender | `show_signal: true` press | stepping happens before current |
+| s0501 ✅ | Three rotors in a chain | rotor I returns (showing D, turned back to A); press W; current right→left W→B→M→O, stops at the reflector | Blender + caption | `s0501_three` (AFU→AFV) | MACH-PATH |
+| s0502 ✅ | The reflector pairs contacts; never with itself | glass reflector, 13 wires; AY BR CU; current crosses O↔M; all 13 again | Blender + caption | same press (`replay`), `reflector_pairs` | MACH-REFLECTOR; opens L8 |
+| s0503 ✅ | The way back, to one lamp | return M→C→G→F, entry wheel, plugboard, lamp F; chain W→B→M→O⟲M→C→G→F | Blender + Remotion chain | same press (`replay`) | MACH-PATH; pays L2 |
 | s0601–s0604 | Pawls, ratchets, notches, double step | macro behind rotors, state table ADU→BFX | Blender + Remotion table | `double_step_demo` | SIM-DOUBLESTEP; never "odometer" |
 | s0701 | Payoff of L1 | split screen: state vs lamp | Blender + Remotion | s0101 stream | — |
 | s0801–s0802 | Reciprocity & no self-encipherment | E→K, K→E, reflector geometry | Blender + Manim | test_reciprocal | SIM-RECIP, SIM-NOSELF |

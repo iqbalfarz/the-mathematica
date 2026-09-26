@@ -1,0 +1,89 @@
+act: 5
+title: "Three Rotors and a Mirror"
+music: wonder
+scenes:
+- id: s0501
+  cls: S0501ThreeInARow
+  tool: blender
+  shot: s0501_three
+  title: "Three in a row"
+  sim_check: {shot: s0501_three, keys: W, stages: {rotor_right_in: WB, rotor_middle_in: BM, rotor_left_in: MO}}
+  loops: {open: []}
+  beats:
+  - id: b1
+    say: "Let's put the rotor back, and turn it to A again."
+    pause: 0.4
+    visual: "Cutaway machine, glass rotors. Rotor I floats above its slot showing D (where Act IV left it), drops back onto the axle; a thumb-spin turns it forward to A."
+    sfx: clunk
+  - id: b2
+    say: "Three rotors sit side by side, pressed together. The plates of one touch the pins of the next."
+    pause: 0.4
+    visual: "Slow push along the stack; the gap between two rotors, plates against pins, in macro."
+  - id: b3
+    say: "Press W."
+    pause: 0.3
+    visual: "Key W goes down; the right rotor clicks forward one step first."
+  - id: b4
+    say: "The right rotor turns W into B. The middle rotor turns B into M. And the left rotor turns M into O."
+    pause: 0.4
+    visual: "Camera follows the glow right to left through the three glass rotors. Caption per rotor: W → B, B → M, M → O."
+  - id: b5
+    say: "Three scrambles in a row. And then the current reaches the end of the line... [[MACH-PATH]]"
+    pause: 1.0
+    visual: "The glow reaches the reflector at the far left and stops there. Hold."
+- id: s0502
+  cls: S0502TheMirror
+  tool: blender
+  shot: s0502_mirror
+  title: "The mirror"
+  sim_check: {reflector: B, pairs: "AY BR CU", shot: s0501_three, via: OM}
+  loops: {open: [L8]}
+  beats:
+  - id: b1
+    say: "...a half wheel called the reflector."
+    pause: 0.4
+    visual: "Macro on the reflector; the glowing current waits at contact O."
+  - id: b2
+    say: "It has contacts on one side only. Inside, thirteen wires join its twenty-six contacts in pairs. [[MACH-REFLECTOR]]"
+    pause: 0.4
+    visual: "Reflector turns to smoked glass; its 13 wires glow faintly."
+  - id: b3
+    say: "A with Y. B with R. C with U. And so on, all the way round."
+    pause: 0.4
+    visual: "Pairs AY, BR, CU light in turn (caption), then all 13 briefly."
+  - id: b4
+    say: "So the current that came in at O leaves at its partner, M, and heads back into the rotors."
+    pause: 0.4
+    visual: "Only wire O–M stays lit; the glow passes through it and turns round."
+  - id: b5
+    say: "Notice one thing. No wire in here connects a contact to itself. Hold on to that. Much later, it turns out to matter enormously. [[MACH-REFLECTOR]]"
+    pause: 1.0
+    visual: "All 13 pairs light once more; every wire visibly joins two different contacts."
+- id: s0503
+  cls: S0503TheWayBack
+  tool: blender
+  shot: s0503_return
+  title: "The way back"
+  sim_check: {shot: s0501_three, keys: W, lamps: F, stages: {rotor_left_out: MC, rotor_middle_out: CG, rotor_right_out: GF}}
+  loops: {close: [L2]}
+  beats:
+  - id: b1
+    say: "Now it comes back."
+    pause: 0.3
+    visual: "Glow leaves the reflector at M."
+  - id: b2
+    say: "Through the left rotor, M becomes C. Through the middle, C becomes G. Through the right, G becomes F."
+    pause: 0.4
+    visual: "Return path in deeper orange through the three rotors, backwards along different wires. Captions per rotor."
+  - id: b3
+    say: "Out through the entry wheel and the plugboard, and up to the lampboard."
+    pause: 0.3
+    visual: "Glow runs down to the front panel and up to the lamps."
+  - id: b4
+    say: "One lamp lights. F."
+    pause: 0.6
+    visual: "Lamp F lights."
+  - id: b5
+    say: "That's everything inside the box. A key, three rotors, a reflector, the same three rotors backwards, and a lamp. Seven scrambles for every letter you type. [[MACH-PATH]]"
+    pause: 1.2
+    visual: "Pull back over the whole glowing path. Remotion builds the chain: W → B → M → O ⟲ M → C → G → F."

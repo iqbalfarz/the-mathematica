@@ -56,3 +56,25 @@ def test_rotor_demo_follows_one_contact_through_the_turning_rotor():
         r = Rotor.from_name("I", position=ord(s["position"]) - 65)
         assert chr(65 + r.forward(0)[0]) == s["out"]
     assert "".join(s["out"] for s in steps) == "EJKC"
+
+
+def test_replay_shots_reuse_the_same_press():
+    from enigma_core.cli import resolve_shots
+    shots = resolve_shots()
+    cfg, presses = shots["s0501_three"]
+    for sid in ("s0502_mirror", "s0503_return"):
+        assert shots[sid][1] is presses                     # same press, not a new one
+    assert presses[0].positions_before == "AFU" and presses[0].positions_after == "AFV"
+
+
+def test_timeline_signal_pins_accept_seconds_and_start():
+    import sys
+    sys.path.insert(0, str(ROOT / "src"))
+    from enigma_doc.timeline import _signal
+    entry = {"beats": [{"id": "b1", "start": 1.0, "dur": 2.0}, {"id": "b2", "start": 4.0, "dur": 2.0}]}
+    shot = {"signal": {"pins": {"start": -30, "reflector": -1, "turn": "b2+0.5", "lamp": 9999}}}
+    out = _signal(entry, shot, [])
+    assert out["signal_start"] == -30 and out["signal_dur"] == 9999 + 30
+    assert out["signal_pins"] == {"reflector": -1.0, "turn": 4.5, "lamp": 9999.0}
+    out = _signal(entry, {"signal": {"pins": {"lamp": "b2"}}}, [2.0])
+    assert out["signal_start"] == 2.11 and abs(out["signal_dur"] - 1.89) < 1e-9

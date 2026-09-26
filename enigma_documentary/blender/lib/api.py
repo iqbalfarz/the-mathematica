@@ -258,3 +258,31 @@ def glow_label(obj, t_on: float, fps: int, t_off: float | None = None):
 
 def glow_wire(rig, slot: str, pin: str, t_on: float, fps: int, t_off: float | None = None):
     glow(rig.parts[f"wires_{slot}"][pin], t_on, fps, t_off)
+
+
+def glass_reflector(rig):
+    ob = rig.parts["ENIGMA_reflector"]
+    ob.data.materials.clear()
+    ob.data.materials.append(rig.mats["core_glass"])
+
+
+def reflector_pair(rig, a: str, b: str):
+    """The glowing wire object joining contacts a and b (either order)."""
+    wires = rig.parts["reflector_wires"]
+    return wires.get(a + b) or wires[b + a]
+
+
+def return_rotor(rig, slot: str, lifted_at, t0: float, dur: float, fps: int, showing: str, set_to: str):
+    """Put a lifted rotor back on the axle, then spin it forward (the operator's thumb
+    on the thumbwheel) from the letter it shows to the letter it must show."""
+    home = (L.AXIS_X[slot], L.ROTOR_AXIS_Y, L.ROTOR_AXIS_Z)
+    r = rig.rotors[slot]
+    a = L.rotor_angle(ord(showing) - 65)
+    r["angle"] = a
+    U.key(r, "rotation_euler", _f(0.0, fps), a, index=0, interp="CONSTANT")
+    U.key(r, "location", _f(0.0, fps), tuple(lifted_at), interp="CONSTANT")
+    U.key(r, "location", _f(t0, fps), tuple(lifted_at))
+    U.key(r, "location", _f(t0 + dur, fps), home, ease="EASE_IN_OUT")
+    steps = (ord(set_to) - ord(showing)) % 26
+    if steps:
+        rotate_rotor(rig, slot, showing, t0 + dur + 0.3, 0.9, fps, steps=steps)

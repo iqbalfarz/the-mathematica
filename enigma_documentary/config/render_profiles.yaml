@@ -9,7 +9,7 @@
 #   smoke        seconds: proves the pipeline runs end to end
 #   draft        about an hour for Acts I-II: check timing, framing, story
 #   review       a few hours: check look and readability at 720p
-#   final        1080p24, CPU-safe quality (about 70 h for Acts I-IV on 4 cores)
+#   final        1080p24, CPU-safe quality (about 100 h for Acts I-V on 4 cores)
 #   final_gpu    1080p24, 64 samples; use when Cycles finds a GPU (BLENDER_DEVICE=GPU)
 #   final_eevee  1080p24 with EEVEE (needs a GPU with OpenGL 4.3, even integrated); fastest
 #   final4k      2160p24 on a GPU

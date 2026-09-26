@@ -5,7 +5,8 @@ import {StageCaption, TrackedLabels} from './Labels';
 export const S0401Overlay: React.FC<{scene: SceneEntry}> = ({scene}) =>
   scene.labels ? <TrackedLabels data={scene.labels} /> : null;
 
-/** s0402 / s0403: caption naming the wire / step, from the rotor_demo stream. */
+/** s0402 / s0403: caption naming the wire / step, from the rotor_demo stream.
+ * s0403 puts it at the top so it never covers the glowing exit letter below the rotor. */
 export const S04CaptionOverlay: React.FC<{scene: SceneEntry}> = ({scene}) => (
-  <StageCaption scene={scene} prefix={scene.id === 's0402' ? 'WIRE' : 'CURRENT'} />
+  <StageCaption scene={scene} prefix={scene.id === 's0402' ? 'WIRE' : 'CURRENT'} top={scene.id === 's0403'} />
 );

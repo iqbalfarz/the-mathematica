@@ -136,3 +136,46 @@ def test_rotor_demo_wires_and_lit_exit_follow_the_simulator():
         world = core.matrix_world @ pin_ob.location
         want = L.ring_point(0, 0.0, L.CONTACT_R)            # fixed contact A = angle 0
         assert abs(world.y - want[1]) < 1e-5 and abs(world.z - want[2]) < 1e-5, step
+
+
+def test_reflector_wires_are_the_simulated_pairs():
+    from enigma_core.reflector import Reflector
+    from enigma_model.build import reflector_wire_objects
+    U.reset_scene()
+    cfg = load_configs(ROOT / "config" / "machines.yaml")["hero_opening"]
+    rig = build_enigma(stream(cfg.to_dict(), [])["config"])
+    wires = reflector_wire_objects(rig)
+    want = {chr(65 + a) + chr(65 + b) for a, b in Reflector.from_name("B").pairs()}
+    assert set(wires) == want and len(wires) == 13
+    for pair, ob in wires.items():
+        pts = ob.data.splines[0].points
+        a, b = (ord(c) - 65 for c in pair)
+        assert abs(pts[0].co.z - L.CONTACT_R * math.cos(a * L.STEP)) < 1e-6
+        assert abs(pts[-1].co.z - L.CONTACT_R * math.cos(b * L.STEP)) < 1e-6
+
+
+def test_replay_holds_the_key_and_keeps_the_stepped_rotors():
+    from lib import player
+    U.reset_scene()
+    cfg = load_configs(ROOT / "config" / "machines.yaml")["hero_opening"]
+    presses = EnigmaMachine(cfg).press_keys("W")
+    s = stream(cfg.to_dict(), presses)
+    rig = build_enigma(s["config"])
+
+    class Ctx:
+        pass
+    ctx = Ctx()
+    ctx.rig, ctx.fps, ctx.stream, ctx.duration = rig, FPS, s, 5.0
+    ctx.shot = {"replay": "x", "signal": {"show": True}}
+    ctx.sc = {"signal_start": -30.0, "signal_dur": 32.0, "signal_pins": {"reflector": -2.0, "turn": -1.0}}
+    z0 = rig.keys["W"].location.z
+    player.play_shot(ctx)
+    scene = bpy.context.scene
+    lamp_frame = int(U.sec(2.5, FPS))
+    scene.frame_set(lamp_frame)
+    assert abs(rig.keys["W"].location.z - (z0 - L.KEY_TRAVEL)) < 1e-6          # key still held down
+    for slot, letter in zip(("left", "middle", "right"), presses[0].positions_after):
+        d = (rig.rotors[slot].rotation_euler.x - L.rotor_angle(ord(letter) - 65) + math.pi) % (2 * math.pi) - math.pi
+        assert abs(d) < 1e-6
+    lit = [c for c, parts in rig.lamps.items() if parts[0].color[0] > 0.5]
+    assert lit == [presses[0].lamp]                                            # lamp at the end of the current

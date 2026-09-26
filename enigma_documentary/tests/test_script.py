@@ -7,6 +7,7 @@ import yaml
 from enigma_core import EnigmaMachine
 from enigma_core.configuration import load_configs
 from enigma_core.cli import resolve_shots, rotor_demo, rotor_wire_pairs
+from enigma_core.reflector import Reflector
 from enigma_core.rotor import Rotor
 
 from conftest import ROOT
@@ -28,12 +29,24 @@ def test_sim_checks_match_the_simulator():
         chk = sc.sim_check
         if not chk:
             continue
-        if "shot" in chk:
+        if "reflector" in chk:
+            pairs = {"".join(sorted(chr(65 + a) + chr(65 + b))) for a, b in Reflector.from_name(chk["reflector"]).pairs()}
+            for pair in chk["pairs"].split():
+                assert "".join(sorted(pair)) in pairs, f"{sc.id}: {pair} is not a reflector {chk['reflector']} pair"
+            if "via" in chk:
+                _, presses = RESOLVED[chk["shot"]]
+                hop = next(h for h in presses[0].path if h.stage == "reflector")
+                assert hop.in_letter + hop.out_letter == chk["via"], f"{sc.id}: current crosses {hop.in_letter}{hop.out_letter}"
+        elif "shot" in chk:
             shot = SHOTS[chk["shot"]]
             assert shot["keys"] == chk["keys"]
             _, presses = RESOLVED[chk["shot"]]       # honours `continues`
-            out = "".join(p.lamp for p in presses)
-            assert out == chk["lamps"], f"{sc.id}: script says {chk['lamps']}, simulator gives {out}"
+            if "lamps" in chk:
+                out = "".join(p.lamp for p in presses)
+                assert out == chk["lamps"], f"{sc.id}: script says {chk['lamps']}, simulator gives {out}"
+            for stage, io in (chk.get("stages") or {}).items():
+                hop = next(h for h in presses[0].path if h.stage == stage)
+                assert hop.in_letter + hop.out_letter == io, f"{sc.id} {stage}: script {io}, simulator {hop.in_letter}{hop.out_letter}"
         elif "rotor_demo" in chk:
             spec = SHOTS[chk["rotor_demo"]]["rotor_demo"]
             outs = "".join(step["out"] for step in rotor_demo(spec))
@@ -50,7 +63,7 @@ def test_sim_checks_match_the_simulator():
                 outs += chr(65 + r.forward(ord(chk["key"]) - 65)[0])
             assert outs == chk["outputs"], f"{sc.id}: script says {chk['outputs']}, simulator gives {outs}"
         checked += 1
-    assert checked >= 5
+    assert checked >= 8
 
 
 def test_spoken_letters_match_sim_check():
@@ -94,8 +107,11 @@ def test_loops_open_before_payoff_and_exist():
 def test_shots_reference_known_machines_and_scenes():
     ids = {s.id for s in load_script()}
     for name, shot in SHOTS.items():
-        assert shot["machine"] in CONFIGS
         assert shot["scene"] in ids
+        if shot.get("replay"):
+            assert shot["replay"] in SHOTS and "keys" not in shot   # a replay never presses again
+            continue
+        assert shot["machine"] in CONFIGS
         spec = shot.get("rotor_demo")
         if spec:
             # the demo rotor must be the rotor actually sitting in that slot of the machine
@@ -137,3 +153,17 @@ def test_act4_narration_letters_match_the_rotor():
     # the wire named in beat b4 is the one the simulator says contact A meets at position B
     step_b = rotor_demo(SHOTS["s0403_turn"]["rotor_demo"])[1]
     assert f"pin {step_b['in_pin']}. Its wire goes to {step_b['out_pin']}." in spoken
+
+
+def test_act5_narration_letters_match_the_press():
+    sc = {s.id: s for s in load_script()}
+    _, presses = RESOLVED["s0501_three"]
+    hops = {h.stage: h for h in presses[0].path}
+    said = " ".join(b.spoken for s in ("s0501", "s0502", "s0503") for b in sc[s].beats)
+    for stage in ("rotor_right_in", "rotor_middle_in", "rotor_left_in", "rotor_left_out",
+                  "rotor_middle_out", "rotor_right_out"):
+        h = hops[stage]
+        assert re.search(rf"{h.in_letter} (?:into|becomes) {h.out_letter}\.", said), stage
+    r = hops["reflector"]
+    assert f"came in at {r.in_letter} leaves at its partner, {r.out_letter}" in said
+    assert f"One lamp lights. {presses[0].lamp}." in said

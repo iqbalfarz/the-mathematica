@@ -62,3 +62,41 @@ shots:
     continues: s0302_circuit
     scene: s0403
     rotor_demo: {rotor: I, ring: A, slot: left, positions: ABCD, key: A}
+  s0501_three:                       # rotor I goes back in; press W: through three rotors
+    machine: hero_opening
+    continues: s0302_circuit         # machine state AFU (the demo turns in Act IV were outside the machine)
+    scene: s0501
+    return_from: s0403_turn          # the lifted rotor comes back showing where Act IV left it
+    keys: W
+    press_at: ["b3+0.2"]
+    hold: [1000]                     # held down through s0502 and s0503
+    signal:
+      show: true
+      pins:                          # forward half only in this scene; it stops at the reflector
+        rotor_right_in: "b4+0.6"
+        rotor_middle_in: "b4+3.3"
+        rotor_left_in: "b4+6.0"
+        reflector: "b5+2.6"
+        turn: 9000
+        lamp: 9999
+  s0502_mirror:                      # same press, key still held: the reflector
+    replay: s0501_three
+    scene: s0502
+    signal:
+      show: true
+      pins: {start: -30, reflector: -1, turn: "b4+1.2", rotor_left_out: 9000, lamp: 9999}
+  s0503_return:                      # same press: back through the rotors to the lamp
+    replay: s0501_three
+    scene: s0503
+    signal:
+      show: true
+      pins:
+        start: -30
+        reflector: -2
+        turn: -1
+        rotor_left_out: "b2+0.8"
+        rotor_middle_out: "b2+2.6"
+        rotor_right_out: "b2+4.4"
+        entry_out: "b3+0.6"
+        plugboard_out: "b3+1.8"
+        lamp: "b4+0.9"

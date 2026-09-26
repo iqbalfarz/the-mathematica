@@ -396,3 +396,30 @@ def demo_stators(rig: Rig, slot: str) -> dict:
     for ob in anchor.children_recursive:
         ob.hide_render = ob.hide_viewport = True
     return parts
+
+
+def reflector_wire_objects(rig: Rig) -> dict:
+    """The reflector's 13 wires as separate glowing curves named by pair ("AY", "BR", ...),
+    same geometry as ENIGMA_reflector_wires. Hidden until shown."""
+    ob = rig.parts["ENIGMA_reflector"]
+    wiring = REFLECTORS[ob["reflector"]]
+    w = L.ROTOR_W * 0.4
+    out = {}
+    for a in range(26):
+        b = L.ALPHA.index(wiring[a])
+        if b < a:
+            continue
+        aa, ab = a * L.STEP, b * L.STEP
+        d = (ab - aa + math.pi) % (2 * math.pi) - math.pi
+        am = aa + d / 2
+        pts = [(w, -L.CONTACT_R * math.sin(aa), L.CONTACT_R * math.cos(aa)),
+               (-w / 2, -L.CONTACT_R * 0.5 * math.sin(am), L.CONTACT_R * 0.5 * math.cos(am)),
+               (w, -L.CONTACT_R * math.sin(ab), L.CONTACT_R * math.cos(ab))]
+        pair = L.ALPHA[a] + L.ALPHA[b]
+        c = U.poly_curve(f"ENIGMA_reflector_wire_{pair}", rig.cols["wiring"], pts, bevel=0.0006,
+                         material=rig.mats["wire_glow"], parent=ob)
+        c.color = (0, 0, 0, 1)
+        c.hide_render = c.hide_viewport = True
+        out[pair] = c
+    rig.parts["reflector_wires"] = out
+    return out

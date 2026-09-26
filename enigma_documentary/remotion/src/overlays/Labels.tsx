@@ -39,7 +39,11 @@ export const TrackedLabels: React.FC<{data: LabelData}> = ({data}) => {
 };
 
 /** Lower-third caption that switches as the current reaches each part. */
-export const StageCaption: React.FC<{scene: SceneEntry; prefix?: string}> = ({scene, prefix = 'CURRENT IN'}) => {
+export const StageCaption: React.FC<{scene: SceneEntry; prefix?: string; top?: boolean}> = ({
+  scene,
+  prefix = 'CURRENT IN',
+  top = false,
+}) => {
   const frame = useCurrentFrame();
   const {height, fps} = useVideoConfig();
   const t = frame / fps;
@@ -53,7 +57,7 @@ export const StageCaption: React.FC<{scene: SceneEntry; prefix?: string}> = ({sc
   const o = fade(t, caps[0].t, 0.3, last.t + 3.0);
   const c = caps[cur];
   return (
-    <div style={{position: 'absolute', left: vh(height, 0.06), bottom: vh(height, 0.08), opacity: o,
+    <div style={{position: 'absolute', left: vh(height, 0.06), ...(top ? {top: vh(height, 0.07)} : {bottom: vh(height, 0.08)}), opacity: o,
       fontFamily: FONT_MONO, fontSize: vh(height, 0.034), color: C.paper, background: 'rgba(14,13,11,0.75)',
       padding: `${vh(height, 0.012)}px ${vh(height, 0.022)}px`, borderLeft: `${vh(height, 0.006)}px solid ${C.signal}`}}>
       <span style={{color: C.muted, fontSize: vh(height, 0.02), letterSpacing: '0.2em'}}>{prefix}&nbsp;&nbsp;</span>

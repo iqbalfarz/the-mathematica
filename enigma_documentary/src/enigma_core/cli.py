@@ -17,6 +17,7 @@ from . import keyspace
 from .configuration import MachineConfig, load_configs
 from .alphabet import ch, idx
 from .events import write_stream
+from .reflector import Reflector
 from .rotor import Rotor
 from .wiring import ROTORS
 from .machine import EnigmaMachine
@@ -43,6 +44,10 @@ def resolve_shots() -> dict[str, tuple[MachineConfig, list]]:
         if shot_id in stack:
             raise ValueError(f"shot continuation loop: {' -> '.join(stack + (shot_id,))}")
         spec = shots[shot_id]
+        if spec.get("replay"):
+            # Same key press, seen again (the key is still held down): identical stream.
+            done[shot_id] = run(spec["replay"], stack + (shot_id,))
+            return done[shot_id]
         cfg = copy.deepcopy(configs[spec["machine"]])
         if spec.get("continues"):
             parent_cfg, parent_presses = run(spec["continues"], stack + (shot_id,))
@@ -85,11 +90,15 @@ def shot_streams() -> dict[str, Path]:
     out = {}
     shots = yaml.safe_load(SHOTS.read_text())["shots"]
     for sid, (cfg, presses) in resolve_shots().items():
-        extra = None
+        extra = {}
         d = shots[sid].get("rotor_demo")
         if d:
             extra = {"rotor_demo_spec": dict(d, wires=rotor_wire_pairs(d["rotor"])),
                      "rotor_demo": rotor_demo(d) if d.get("positions") else []}
+        if shots[sid].get("replay"):
+            extra["replay_of"] = shots[sid]["replay"]
+        # The reflector's 13 wires, as letter pairs (for scenes that show them).
+        extra["reflector_pairs"] = [chr(65 + a) + chr(65 + b) for a, b in Reflector.from_name(cfg.reflector).pairs()]
         out[sid] = write_stream(EVENTS / f"{sid}.json", cfg.to_dict(), presses, extra)
     return out
 

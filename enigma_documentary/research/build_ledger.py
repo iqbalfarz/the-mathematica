@@ -98,6 +98,9 @@ R = [
 ("KEY-WIRINGS", "A rotor wiring is a permutation of 26 letters: 26! = 403,291,461,126,605,635,584,000,000 possible wirings.",
  "enigma_core.keyspace.rotor_wirings", "arithmetic", "n/a", "any 26-contact rotor", "high", "DERIVED",
  "About four hundred septillion possible wirings.", "The Germans chose from 26! wirings every day (they used a handful of fixed rotors)."),
+("MACH-REFLECTOR", "The reflector (Umkehrwalze) has contacts on one side only; 13 wires join its 26 contacts in pairs, and no contact is wired to itself. UKW-B pairs: AY BR CU DH EQ FS GL IP JX KN MO TZ VW.",
+ "CRYPTOMUSEUM; enigma_core (test_reflector_b_pairs_match_published_table)", "secondary+simulation", "n/a", "Enigma I (UKW-B)", "high", "VERIFIED_SECONDARY",
+ "Thirteen wires join its twenty-six contacts in pairs.", "The reflector turns like a rotor (it does not on Enigma I)."),
 ("LANG-E", "E is the most frequent letter in German text.", "standard letter-frequency tables", "secondary", "n/a", "n/a", "high", "VERIFIED_SECONDARY", "", ""),
 ]
 
