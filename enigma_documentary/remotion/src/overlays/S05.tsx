@@ -43,6 +43,8 @@ export const S0503Overlay: React.FC<{scene: SceneEntry}> = ({scene}) => {
   return (
     <>
       {t < b5 ? <StageCaption scene={scene} /> : null}
+      <div style={{position: 'absolute', left: 0, right: 0, bottom: 0, height: vh(height, 0.32),
+        opacity: fade(t, b5, 0.4), background: 'linear-gradient(to top, rgba(8,7,6,0.9), rgba(8,7,6,0))'}} />
       <div style={{position: 'absolute', left: 0, right: 0, bottom: vh(height, 0.1), textAlign: 'center',
         fontFamily: FONT_MONO, fontSize: vh(height, 0.05), opacity: fade(t, b5 + 0.2, 0.3),
         textShadow: '0 0 20px rgba(0,0,0,0.9)'}}>
