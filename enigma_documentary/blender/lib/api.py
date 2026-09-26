@@ -37,9 +37,10 @@ def show_enigma(rig, t=0.0, fps=24):
     set_visible([o for c in rig.cols.values() for o in c.objects if "wires" not in o.name], True, t, fps)
 
 
-def hide_casing(rig, t: float, fps: int, hide=True):
-    """Hide the wooden case, front panel and decks (keeps keys, lamps, rotors)."""
-    objs = [o for o in rig.cols["casing"].objects]
+def hide_casing(rig, t: float, fps: int, hide=True, keep=("ENIGMA_case_base",)):
+    """Hide the wooden case, front panel and decks (keeps keys, lamps, rotors and,
+    by default, the base board so the parts don't float in a void)."""
+    objs = [o for o in rig.cols["casing"].objects if o.name not in keep]
     set_visible(objs, not hide, t, fps)
 
 
@@ -82,12 +83,15 @@ def show_wiring(rig, t: float, fps: int, slots=("left", "middle", "right"), on=T
         set_visible([rig.parts[f"ENIGMA_rotor_{slot}_wires"]], on, t, fps)
     if "reflector" in slots or slots == ("left", "middle", "right"):
         set_visible([rig.parts["ENIGMA_reflector_wires"]], on, t, fps)
+    # Rotor bodies and alphabet rings turn to smoked glass so the copper wiring
+    # inside is visible; ring letters stay, floating on the glass.
     glass = rig.mats["core_glass"]
     for slot in slots:
-        body = bpy.data.objects.get(f"ENIGMA_rotor_{slot}_body")
-        if body and on:
-            body.data.materials.clear()
-            body.data.materials.append(glass)
+        for part in ("body", "ring"):
+            ob = bpy.data.objects.get(f"ENIGMA_rotor_{slot}_{part}")
+            if ob and on:
+                ob.data.materials.clear()
+                ob.data.materials.append(glass)
 
 
 # ------------------------------------------------------------------ keys, lamps
@@ -145,24 +149,26 @@ def animate_pawls(rig, steps: list, t: float, fps: int):
 
 # ------------------------------------------------------------------ current
 def show_signal_path(rig, press: dict, t0: float, dur: float, fps: int, t_off: float | None = None,
-                     pulse_len=0.12):
+                     pins: dict | None = None):
     """Draw the current for one key press: a glowing trace that grows from key to
-    lamp over `dur` seconds, plus a brighter travelling pulse at its head."""
+    lamp over `dur` seconds, following layout.signal_schedule()."""
     fwd, back = L.signal_points(press)
     col = rig.cols["signal"]
     tag = f"{press['index']:03d}"
     objs = []
     for part, pts, mat in (("fwd", fwd, rig.mats["signal"]), ("ret", back, rig.mats["signal_return"])):
-        trace = U.poly_curve(f"ENIGMA_signal_{tag}_{part}", col, pts, bevel=0.0009, material=mat,
+        trace = U.poly_curve(f"ENIGMA_signal_{tag}_{part}", col, pts, bevel=0.0016, material=mat,
                              parent=rig.root)
         trace.color = (1, 1, 1, 1)
         objs.append(trace)
-    half = dur / 2
-    for ob, (a, b) in zip(objs, ((t0, t0 + half), (t0 + half, t0 + dur))):
+    # Grow each half along the shared schedule (slow in the rotors, fast on plain wires).
+    sched = L.signal_schedule(press, t0, dur, pins)
+    for ob, half in zip(objs, ("fwd", "ret")):
         cu = ob.data
         U.key(cu, "bevel_factor_end", _f(0, fps), 0.0, interp="CONSTANT")
-        U.key(cu, "bevel_factor_end", _f(a, fps), 0.0, interp="LINEAR")
-        U.key(cu, "bevel_factor_end", _f(b, fps), 1.0, interp="LINEAR")
+        for a in sched:
+            if a["half"] == half:
+                U.key(cu, "bevel_factor_end", _f(a["t"], fps), a["f"], interp="LINEAR")
         if t_off is not None:
             U.key(ob, "color", _f(t_off - 0.2, fps), (1, 1, 1, 1))
             U.key(ob, "color", _f(t_off, fps), (0, 0, 0, 1))
@@ -172,3 +178,83 @@ def show_signal_path(rig, press: dict, t0: float, dur: float, fps: int, t_off: f
 def set_plugboard(rig, spec: str):
     from enigma_model.build import set_plugboard as _sp
     _sp(rig, spec)
+
+
+# ------------------------------------------------------------------ single rotor (Act IV)
+def rotor_tree(rig, slot):
+    """The rotor's parent empty and everything under it."""
+    r = rig.rotors[slot]
+    return [r, *r.children_recursive]
+
+
+def isolate(rig, keep: list, t: float, fps: int):
+    """Hide every ENIGMA object except `keep` (and their descendants) from time t."""
+    keep_set = set()
+    for ob in keep:
+        keep_set.add(ob.name)
+        keep_set.update(c.name for c in ob.children_recursive)
+    hide = [o for c in rig.cols.values() for o in c.objects
+            if o.name not in keep_set and o.type != "EMPTY" and not o.hide_render]
+    set_visible(hide, False, t, fps)
+
+
+def lift_rotor(rig, slot: str, to, t0: float, dur: float, fps: int):
+    """Carry a rotor off the axle to world position `to` (it keeps its orientation)."""
+    r = rig.rotors[slot]
+    U.key(r, "location", _f(t0, fps), tuple(r.location))
+    U.key(r, "location", _f(t0 + dur, fps), tuple(to), ease="EASE_IN_OUT")
+    r.location = to
+
+
+def place_rotor(rig, slot: str, to, t: float, fps: int):
+    r = rig.rotors[slot]
+    U.key(r, "location", _f(t, fps), tuple(to), interp="CONSTANT")
+
+
+def explode_rotor(rig, slot: str, t0: float, dur: float, fps: int, gap=0.028, back_at: float | None = None):
+    """Slide a rotor's parts apart along its axle (thumbwheel, ring+letters+notch, core, ratchet)."""
+    offsets = {"thumbwheel": -2.0, "ring": -1.0, "ringletter": -1.0, "notch": -1.0, "ratchet": 1.2}
+    for ob in rig.rotors[slot].children:
+        part = ob.name.replace(f"ENIGMA_rotor_{slot}_", "").split("_")[0]
+        k = offsets.get(part)
+        if k is None:
+            continue
+        x0 = ob.location.x
+        U.key(ob, "location", _f(t0, fps), x0, index=0)
+        U.key(ob, "location", _f(t0 + dur, fps), x0 + k * gap, index=0, ease="EASE_IN_OUT")
+        if back_at is not None:
+            U.key(ob, "location", _f(back_at, fps), x0 + k * gap, index=0)
+            U.key(ob, "location", _f(back_at + dur, fps), x0, index=0, ease="EASE_IN_OUT")
+
+
+def glass_core(rig, slot: str):
+    """Rotor body (and ring) as smoked glass, so the wires inside can be seen."""
+    for part in ("body", "ring"):
+        ob = bpy.data.objects.get(f"ENIGMA_rotor_{slot}_{part}")
+        if ob:
+            ob.data.materials.clear()
+            ob.data.materials.append(rig.mats["core_glass"])
+
+
+def glow(obj, t_on: float, fps: int, t_off: float | None = None, level=1.0):
+    U.key(obj, "color", _f(max(0.0, t_on - 1 / fps), fps), tuple(obj.color), interp="CONSTANT")
+    U.key(obj, "color", _f(t_on, fps), (level, level, level, 1), interp="CONSTANT")
+    obj.color = (level, level, level, 1)
+    if t_off is not None:
+        U.key(obj, "color", _f(t_off, fps), (0, 0, 0, 1), interp="CONSTANT")
+        obj.color = (0, 0, 0, 1)
+
+
+def glow_label(obj, t_on: float, fps: int, t_off: float | None = None):
+    """A letter that is only visible (and lit) while its contact carries current."""
+    if not obj.get("_hidden_from_start"):
+        set_visible([obj], False, 0.0, fps)      # else Blender holds the first "visible" key backwards
+        obj["_hidden_from_start"] = True
+    set_visible([obj], True, t_on, fps)
+    glow(obj, t_on, fps, t_off)
+    if t_off is not None:
+        set_visible([obj], False, t_off, fps)
+
+
+def glow_wire(rig, slot: str, pin: str, t_on: float, fps: int, t_off: float | None = None):
+    glow(rig.parts[f"wires_{slot}"][pin], t_on, fps, t_off)

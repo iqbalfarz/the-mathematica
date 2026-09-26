@@ -28,4 +28,4 @@ Durations are targets; the real length comes from the narration (audio-first tim
 | XXIII | Consequences | s2301 scale of intelligence, carefully sourced (Hinsley estimate + critics) | 1:00 | Remotion | |
 | XXIV | The final reveal | s2401 simple parts + clever structure + changing state | 0:45 | Blender | |
 
-Total ≈ 23 min. **This build contains Acts I–II (s0101–s0203) end to end**; every other scene is planned here and gets added act by act using the same pipeline.
+Total ≈ 23 min. **This build contains Acts I–IV (s0101–s0404) end to end**; every other scene is planned here and gets added act by act using the same pipeline.

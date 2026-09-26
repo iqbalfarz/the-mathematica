@@ -7,8 +7,8 @@ from __future__ import annotations
 
 import bpy
 
-SIGNAL = (1.0, 0.62, 0.22, 1.0)       # warm amber: electricity
-SIGNAL_RETURN = (1.0, 0.42, 0.16, 1.0)
+SIGNAL = (1.0, 0.42, 0.08, 1.0)       # warm amber: electricity (saturated so AgX keeps the hue)
+SIGNAL_RETURN = (1.0, 0.22, 0.04, 1.0)
 LAMP_GLOW = (1.0, 0.50, 0.12, 1.0)      # saturated so AgX keeps it amber, not white
 CORRECT = (0.30, 0.85, 0.45, 1.0)
 REJECT = (0.95, 0.25, 0.22, 1.0)
@@ -196,7 +196,7 @@ def driven_emission(name, base_rgba, strength=12.0, dim=(0.10, 0.09, 0.08, 1)):
     return m
 
 
-def signal_material(name="MAT_signal", color=SIGNAL, strength=25.0):
+def signal_material(name="MAT_signal", color=SIGNAL, strength=7.0):
     return driven_emission(name, color, strength, dim=(0.02, 0.015, 0.01, 1))
 
 
@@ -220,4 +220,7 @@ def all_materials() -> dict:
             "lamp": driven_emission("MAT_lamp_letter", LAMP_GLOW, 14.0, dim=(0.012, 0.011, 0.010, 1)),
             "lamp_glass": driven_emission("MAT_lamp_glass", LAMP_GLOW, 1.2, dim=(0.16, 0.15, 0.13, 1)),
             "signal": signal_material(), "signal_return": signal_material("MAT_signal_return", SIGNAL_RETURN),
-            "core_glass": translucent_core()}
+            "core_glass": translucent_core(),
+            "wire_glow": driven_emission("MAT_wire_glow", SIGNAL, 6.0, dim=(0.55, 0.30, 0.18, 1)),
+            "contact_glow": driven_emission("MAT_contact_glow", SIGNAL, 8.0, dim=(0.60, 0.45, 0.20, 1)),
+            "label_glow": driven_emission("MAT_label_glow", SIGNAL, 8.0, dim=(0.55, 0.53, 0.48, 1))}

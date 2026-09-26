@@ -1,0 +1,132 @@
+act: 4
+title: "One Rotor"
+music: wonder
+scenes:
+- id: s0401
+  cls: S0401OneWheel
+  tool: blender
+  shot: s0401_rotor
+  title: "One wheel"
+  loops: {open: []}
+  beats:
+  - id: b1
+    say: "Let's take one rotor out of the machine."
+    pause: 0.4
+    visual: "Rotor well from above. The left rotor rises off the axle; the rest of the machine sinks into darkness."
+    sfx: clunk
+  - id: b2
+    say: "This is the left one. Its wiring is exactly the scrambled alphabet from our paper wheel."
+    pause: 0.5
+    visual: "Rotor turns slowly in space, alphabet ring facing camera."
+  - id: b3
+    say: "Pull it apart, and it's surprisingly simple."
+    pause: 0.4
+    visual: "Exploded view along the axle: thumbwheel, alphabet ring, wiring core, ratchet slide apart."
+    sfx: whoosh
+  - id: b4
+    say: "On one face, twenty-six spring-loaded pins. On the other, twenty-six flat brass plates. [[MACH-ROTOR-PARTS]]"
+    pause: 0.5
+    visual: "Camera orbits the core. Labels: 26 SPRING PINS (right face), 26 FLAT PLATES (left face)."
+  - id: b5
+    say: "Around the outside, a ring with the alphabet on it, and one small notch. Remember that notch. We'll need it later."
+    pause: 0.5
+    visual: "Labels: ALPHABET RING, NOTCH (brass tab on the ring edge)."
+  - id: b6
+    say: "And a toothed wheel, the ratchet, which is how the machine turns it."
+    pause: 0.8
+    visual: "Label: RATCHET. Parts slide back together."
+- id: s0402
+  cls: S0402TwentySixWires
+  tool: blender
+  shot: s0402_wires
+  title: "Twenty-six wires"
+  sim_check: {rotor: I, wires: ABC, plates: EKM}
+  loops: {open: []}
+  beats:
+  - id: b1
+    say: "Now look inside."
+    pause: 0.4
+    visual: "The core turns to smoked glass. Twenty-six dim copper wires inside."
+  - id: b2
+    say: "Each pin is joined to one plate by a single wire. Pin A goes to plate E."
+    pause: 0.4
+    visual: "Wire A→E glows. Caption: PIN A → PLATE E."
+  - id: b3
+    say: "Pin B goes to K. Pin C goes to M."
+    pause: 0.4
+    visual: "Wires B→K and C→M glow in turn."
+  - id: b4
+    say: "Twenty-six pins, twenty-six plates, twenty-six wires. [[MACH-ROTOR-PARTS]]"
+    pause: 0.4
+    visual: "All remaining wires light up in quick succession until the core is a glowing tangle."
+  - id: b5
+    say: "And no two wires ever end on the same plate. So whatever letter goes in, exactly one letter comes out."
+    pause: 0.8
+    visual: "Slow orbit around the fully lit core."
+- id: s0403
+  cls: S0403TurnItOnce
+  tool: blender
+  shot: s0403_turn
+  title: "Turn it once"
+  sim_check: {rotor_demo: s0403_turn, outputs: EJKC}
+  loops: {open: []}
+  beats:
+  - id: b1
+    say: "Now hold everything else still, and send current in at the same contact every time. Contact A."
+    pause: 0.4
+    visual: "A fixed contact plate beside the rotor; contact A highlighted in amber."
+  - id: b2
+    say: "With the rotor at A, the current rides the wire from pin A to plate E, and comes out at E."
+    pause: 0.5
+    visual: "Wire A→E glows; exit contact E highlighted. Caption: POSITION A · IN A → OUT E."
+  - id: b3
+    say: "Now turn the rotor by one step."
+    pause: 0.3
+    visual: "Rotor clicks forward one position."
+    sfx: clack
+  - id: b4
+    say: "Contact A now touches a different pin, pin B. Its wire goes to K. But the whole wheel has turned by one, so it comes out at J."
+    pause: 0.5
+    visual: "Wire B→K glows; exit contact J highlighted (one position before K). Caption: POSITION B · IN A → OUT J."
+  - id: b5
+    say: "Turn again, and it's K. Again, and it's C."
+    pause: 0.5
+    visual: "Two more clicks; outputs K, then C."
+  - id: b6
+    say: "One wheel, twenty-six positions, twenty-six different substitutions. [[SIM-ROTOR26]]"
+    pause: 1.0
+    visual: "Pull back; rotor turns slowly; captions summarise A→E, A→J, A→K, A→C."
+- id: s0404
+  cls: S0404Permutation
+  tool: manim
+  title: "A permutation"
+  loops: {open: []}
+  beats:
+  - id: b1
+    say: "Let's write down what that wheel does."
+    pause: 0.4
+    visual: "Two-row table builds: A..Z on top."
+  - id: b2
+    say: "Top row, every letter going in. Bottom row, where each one comes out."
+    pause: 0.4
+    visual: "Bottom row fills in from rotor I at position A: E K M F L G D Q V Z N T O W Y H X U S P A I B R C J."
+  - id: b3
+    say: "Every letter appears in the bottom row exactly once. Nothing is lost, and nothing is doubled."
+    pause: 0.5
+    visual: "Bottom row letters tick off against a sorted alphabet; check marks."
+  - id: b4
+    say: "A rearrangement like this has a name. A permutation."
+    pause: 0.6
+    visual: "Title word 'permutation' settles above the table."
+  - id: b5
+    say: "Turning the rotor doesn't change the kind of rule. It just gives another permutation, the same wiring seen one step round."
+    pause: 0.5
+    visual: "Bottom row morphs into the table for position B."
+  - id: b6
+    say: "And how many different ways could you wire a single rotor? Twenty-six factorial. About four hundred septillion. [[KEY-WIRINGS]]"
+    pause: 0.6
+    visual: "26 × 25 × 24 × … × 1 builds, then collapses to 403,291,461,126,605,635,584,000,000 (our arithmetic)."
+  - id: b7
+    say: "That's the building block of Enigma. Now imagine three of them, feeding into each other."
+    pause: 1.0
+    visual: "Table shrinks into a small rotor icon; two more slide in beside it."

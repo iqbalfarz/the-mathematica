@@ -68,15 +68,18 @@ class KeyPress:
                 "path": [h.to_dict() for h in self.path]}
 
 
-def stream(config: dict, presses: list[KeyPress]) -> dict:
-    return {"schema_version": SCHEMA_VERSION, "config": config,
-            "presses": [p.to_dict() for p in presses]}
+def stream(config: dict, presses: list[KeyPress], extra: dict | None = None) -> dict:
+    out = {"schema_version": SCHEMA_VERSION, "config": config, "presses": [p.to_dict() for p in presses]}
+    out.update(extra or {})
+    return out
 
 
-def write_stream(path: str | Path, config: dict, presses: list[KeyPress]) -> Path:
+def write_stream(path: str | Path, config: dict, presses: list[KeyPress], extra: dict | None = None) -> Path:
+    """`extra` adds sections such as a single-rotor demo:
+    "rotor_demo_spec": {...}, "rotor_demo": [{position, in, in_pin, out_pin, out}, ...]"""
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(stream(config, presses), indent=1))
+    path.write_text(json.dumps(stream(config, presses, extra), indent=1))
     return path
 
 

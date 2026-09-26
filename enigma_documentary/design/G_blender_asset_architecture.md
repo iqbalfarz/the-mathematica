@@ -27,6 +27,10 @@ Layout constants (`blender/lib/layout.py`, pure Python, unit-tested) put contact
 
 `blender/lib/player.py` plays an event stream: for each press, pawls rise, the rotors named in `steps` turn, then the key contact closes, the current (optional) draws from key to lamp, and the simulator's lamp lights while the key is held.
 
+## Tracked labels (`blender/lib/labels.py`)
+
+Shots call `ctx.labels.track("ROTORS", anchor, t0, t1)` or `ctx.labels.caption(t, text)`. At render time the anchors are projected through the active camera for every frame into `labels.json`; Remotion draws the text, so labels are sharp at every profile and never baked into the 3D image.
+
 ## Shots
 
 `blender/shots/<scene>.py` define cameras, cuts (timeline markers bound to cameras) and which helpers to call, using beat times from `build/timeline.json` and press times from `config/shots.yaml`. A shot never types a letter.
@@ -40,6 +44,10 @@ Measured in the build container (4 CPU cores, no GPU), Cycles + OpenImageDenoise
 | 64 | 240 s | 161 s | ~67 h |
 | **16 (profile `final`)** | **68 s** | **48 s** | **~20 h** |
 
+Act III adds s0301 (parts tour, 910 frames) and s0302 (cutaway with glass rotors, 977 frames). At `final`, s0302 measured about 45 s per frame, so **Acts I–III together (about 3,150 Blender frames) come to roughly 45 hours** on a 4-core CPU: two or three nights, resumable.
+
+Act IV adds s0401–s0403 (about 2,250 frames of a single lifted rotor, a lighter scene at roughly 40 s per frame), so **Acts I–IV come to about 70 hours** on a CPU-only laptop. Render one scene per night with `python run.py blender --profile final --scene <id>`, or use a GPU profile.
+
 So on a CPU-only laptop, `final` (16 samples + denoiser) is the quality/time sweet spot: the denoiser removes the noise and hard-surface macro shots stay crisp (see a sample in `build/estimate/` after `make estimate`). Your machine may be faster or slower; `make estimate PROFILE=final` renders one frame per shot and prints *your* hours before you commit.
 
 - **Resumable:** stop any time (Ctrl+C, sleep, reboot) and rerun `make blender PROFILE=final`; finished frames are kept, interrupted ones redone. Frames are only thrown away if the shot itself changed.
@@ -48,3 +56,5 @@ So on a CPU-only laptop, `final` (16 samples + denoiser) is the quality/time swe
 - **Draft first:** `make all PROFILE=draft` gives the whole slice at 540p12 in about an hour so you can judge timing before spending a night on `final`.
 
 As more acts are added, Blender footage grows to roughly 8–10 minutes. At `final` CPU speed that is several days of rendering, so for the full film plan either a GPU profile or rendering act by act overnight.
+
+**Known polish items:** in the s0302 cutaway, ring letters on the far side of the glass rotors show through mirrored; a later pass can hide the back half of each ring's letters while the wiring is shown.

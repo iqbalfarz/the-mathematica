@@ -1,6 +1,6 @@
 # C. Scene-by-scene breakdown
 
-Acts I–II are fully scripted in `story/acts/act01.yaml` and `act02.yaml` (narration, visuals, SFX, claim tags) and implemented. The rest are specified here at production-planning depth; each becomes a YAML scene with beats when its act is built.
+Acts I–IV are fully scripted in `story/acts/act01.yaml`–`act04.yaml` (narration, visuals, SFX, claim tags) and implemented. The rest are specified here at production-planning depth; each becomes a YAML scene with beats when its act is built.
 
 | Scene | Purpose (what the viewer learns) | Visual | Tool | Sim data | Accuracy notes |
 |---|---|---|---|---|---|
@@ -9,12 +9,12 @@ Acts I–II are fully scripted in `story/acts/act01.yaml` and `act02.yaml` (narr
 | s0201 | Substitution = a rule on letters | two alphabets, shift 3, HELLO→KHOOR | Manim | — | Caesar attributed (HIS-CAESAR) |
 | s0202 | A fixed rule leaks patterns | repeated letters, frequency bars | Manim | rotor I wiring used as a fixed substitution | chart labelled illustrative |
 | s0203 | Moving the rule hides patterns | wheel with 26 chords turning; H→Q,U,X,K | Manim | enigma_core Rotor I, ring A | asserted in code and tests |
-| s0301 | Name the parts | lid open, parts labelled in turn | Blender | hero state | layout per accuracy checklist |
-| s0302 | A key press closes a circuit | battery→key→…→lamp simplified path | Blender | one press | ETW is identity on Enigma I |
-| s0401 | A rotor is 26 wires in a wheel | exploded rotor: ring, core, contacts | Blender (Cycles hero) | rotor I | — |
-| s0402 | Each wire maps a letter | wires reveal one by one A→E… | Blender | wiring table | rotor I wiring from CRYPTOMUSEUM |
-| s0403 | Turning changes the mapping | same entry contact, rotor steps | Blender + Manim | Rotor.forward per position | — |
-| s0404 | The word "permutation" | table of 26 arrows | Manim | — | term introduced only after physical |
+| s0301 ✅ | Name the parts | lid open, camera tour, labels tracked onto the 3D parts (projected in Blender, drawn by Remotion) | Blender + Remotion | `s0301_tour` continues s0101 (AFT) | MACH-ROTORS |
+| s0302 ✅ | A key press closes a circuit | cutaway, glass rotors, current traced key→rotors→reflector→lamp; camera follows the current; caption names each part and letter | Blender + Remotion | `s0302_circuit`: A at AFT → N (A→Q→T→P, reflector P→I, I→V→V→N) | MACH-BATTERY (4.5 V), MACH-PATH, MACH-ETW |
+| s0401 ✅ | A rotor is a wheel with 26 pins, 26 plates, a lettered ring, a notch, a ratchet | left rotor (rotor I) lifts out, explodes along its axle, tracked labels | Blender + Remotion | `s0401_rotor` (continues s0302) | MACH-ROTOR-PARTS |
+| s0402 ✅ | Each wire maps a letter | glass core, per-wire glow A→E, B→K, C→M, then all 26 | Blender + caption | `rotor_demo_spec.wires` | rotor I wiring from CRYPTOMUSEUM |
+| s0403 ✅ | Turning changes the mapping | fixed contact A; rotor steps A→B→C→D; outputs E, J, K, C (the B→K wire exits at J) | Blender + caption | `rotor_demo` A..D, key A | SIM-ROTOR26 |
+| s0404 ✅ | The word "permutation"; 26! wirings | two-row table, each letter once, position B table, 26! | Manim | Rotor.forward asserted | KEY-WIRINGS (derived) |
 | s0501–s0503 | Full path through 3 rotors and reflector | camera follows pulse, slow motion | Blender | `show_signal: true` press | stepping happens before current |
 | s0601–s0604 | Pawls, ratchets, notches, double step | macro behind rotors, state table ADU→BFX | Blender + Remotion table | `double_step_demo` | SIM-DOUBLESTEP; never "odometer" |
 | s0701 | Payoff of L1 | split screen: state vs lamp | Blender + Remotion | s0101 stream | — |

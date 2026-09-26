@@ -7,6 +7,8 @@ REPLACEMENTS = [
     (r"\bUKW\b", "U K W"),
     (r"\bRejewski\b", "Reh-yef-ski"),
     (r"\bBombe\b", "Bomb"),
+    (r"\bPin ([A-Z])\b", r"Pin \1,"),        # "Pin A goes to" -> a small pause after the letter
+    (r"\bat ([A-Z])\.", r"at \1."),
     (r"(\d),(\d{3})", r"\1\2"),
 ]
 

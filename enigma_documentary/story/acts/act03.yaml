@@ -1,0 +1,72 @@
+act: 3
+title: "Enter Enigma"
+music: wonder
+scenes:
+- id: s0301
+  cls: S0301InsideTheBox
+  tool: blender
+  shot: s0301_tour
+  title: "Inside the box"
+  loops: {open: []}
+  beats:
+  - id: b1
+    say: "So let's look at what's actually in the box."
+    pause: 0.5
+    visual: "Lid already open. High three-quarter view of the whole machine, slow drift."
+  - id: b2
+    say: "At the front, a keyboard. Behind it, a lampboard, with one lamp for every key."
+    pause: 0.5
+    visual: "Camera rises over keyboard and lampboard. Tracked labels: KEYBOARD, LAMPBOARD."
+  - id: b3
+    say: "Down on the front panel, a row of sockets called the plugboard. We'll come back to it later."
+    pause: 0.5
+    visual: "Camera drops to the front panel. Label: PLUGBOARD."
+  - id: b4
+    say: "And at the back, the heart of the machine. Three rotors, side by side. [[MACH-ROTORS]]"
+    pause: 0.5
+    visual: "Camera climbs over the open rotor well. Labels on the three rotors: LEFT, MIDDLE, RIGHT."
+  - id: b5
+    say: "On the right, a fixed wheel where the wires come in, the entry wheel. On the far left, a half wheel that never turns. The reflector."
+    pause: 0.6
+    visual: "Camera moves round to the side of the rotor stack. Labels: ENTRY WHEEL (right), REFLECTOR (left)."
+  - id: b6
+    say: "Keyboard, rotors, reflector, lamps. That's the whole path. Now let's watch electricity use it."
+    pause: 1.0
+    visual: "Pull back wide; labels fade out in the order of the current's path."
+- id: s0302
+  cls: S0302KeyIsASwitch
+  tool: blender
+  shot: s0302_circuit
+  title: "A key is a switch"
+  sim_check: {shot: s0302_circuit, keys: A, lamps: N}
+  loops: {open: []}
+  beats:
+  - id: b1
+    say: "Hidden inside is a small battery, four and a half volts, the kind used in a pocket torch. [[MACH-BATTERY]]"
+    pause: 0.5
+    visual: "Casing fades away to a cutaway. Rotor bodies turn to smoked glass; the copper wiring inside becomes visible."
+  - id: b2
+    say: "Press A. The key closes a switch, and current starts to flow."
+    pause: 0.3
+    visual: "Key A goes down. A warm glow starts at the key and runs down into the machine. Caption tracks the part it is in."
+    sfx: current
+  - id: b3
+    say: "Through the plugboard, into the entry wheel, and then from right to left through all three rotors. Each rotor sends it out at a different letter. [[MACH-PATH]]"
+    pause: 0.3
+    visual: "Camera follows the head of the current. Caption: right rotor A → Q, middle rotor Q → T, left rotor T → P."
+  - id: b4
+    say: "At the far end, the reflector turns it round..."
+    pause: 0.2
+    visual: "The current enters the reflector at P and leaves at I."
+  - id: b5
+    say: "and it comes back through the rotors by a completely different route."
+    pause: 0.3
+    visual: "Return path glows a deeper orange: I → V → V → N, then out through the entry wheel and plugboard."
+  - id: b6
+    say: "All the way to one lamp. N."
+    pause: 0.8
+    visual: "Cut to the lampboard: lamp N lights."
+  - id: b7
+    say: "Every letter you type takes a journey through a maze of wires. And the maze changes shape every time you press a key."
+    pause: 1.2
+    visual: "Pull back over the glowing path; hold."

@@ -53,3 +53,26 @@ def test_every_letter_has_a_key_lamp_and_socket():
     for c in L.ALPHA:
         L.key_pos(c), L.lamp_pos(c), L.socket_pos(c)
     assert sorted("".join(L.ROWS)) == list(L.ALPHA)
+
+
+def test_signal_schedule_respects_pins_and_order():
+    press = EnigmaMachine(CONFIGS["hero_opening"]).press_key("A").to_dict()
+    pins = {"reflector": 5.0, "lamp": 9.0}
+    sched = L.signal_schedule(press, 1.0, 8.0, pins)
+    times = [a["t"] for a in sched]
+    assert times == sorted(times) and times[0] == 1.0 and times[-1] == 9.0
+    assert next(a["t"] for a in sched if a["stage"] == "reflector") == 5.0
+    stops = L.signal_timeline(press, 1.0, 8.0, pins)
+    assert stops[-1]["part"] == "lamp" and stops[-1]["out"] == press["lamp"]
+    # The head starts at the key and ends at the lamp.
+    kx, ky, _ = L.key_pos("A")
+    lx, ly, _ = L.lamp_pos(press["lamp"])
+    assert _close(L.head_position(press, 1.0, 8.0, 1.0, pins)[:2], (kx, ky))
+    assert _close(L.head_position(press, 1.0, 8.0, 9.0, pins)[:2], (lx, ly))
+
+
+def test_out_of_order_pins_are_rejected():
+    import pytest
+    press = EnigmaMachine(CONFIGS["hero_opening"]).press_key("A").to_dict()
+    with pytest.raises(ValueError):
+        L.signal_schedule(press, 0.0, 8.0, {"reflector": 6.0, "rotor_right_in": 7.0})

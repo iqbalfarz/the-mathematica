@@ -3,6 +3,7 @@
 The film's sound grammar (design/H_visual_design_system.md):
   key press  -> click     rotor step -> clack     pawl -> tick
   ratchet    -> clunk     relay      -> relay     room -> hum
+  current    -> current (soft electrical hum, never a sci-fi beep)
 Nothing sounds like sci-fi beeps: every effect is a filtered transient with a
 short metallic resonance, like a real mechanism.
 
@@ -71,6 +72,15 @@ def hum(dur=4.0):      # dark room + transformer hum
     return 0.25 * s * env
 
 
+def current(dur=2.5):  # electricity starting to flow: soft rising hum with a faint crackle
+    t = _t(dur)
+    rng = np.random.default_rng(9)
+    hum_ = 0.5 * np.sin(2 * np.pi * 100 * t) + 0.25 * np.sin(2 * np.pi * 200 * t) + 0.1 * np.sin(2 * np.pi * 300 * t)
+    crackle = _band(rng.normal(0, 1, len(t)), 2000, 8000) * (rng.random(len(t)) < 0.002) * 3
+    env = np.minimum(1, t / 0.6) * np.minimum(1, (dur - t) / 1.0)
+    return 0.3 * (hum_ + crackle) * env
+
+
 def whoosh(dur=1.2):
     rng = np.random.default_rng(8)
     n = int(dur * SR)
@@ -107,7 +117,7 @@ def music_bed(mood: str, dur: float = 60.0) -> np.ndarray:
 
 
 SFX = {"click": click, "clack": clack, "tick": tick, "clunk": clunk, "relay": relay,
-       "hum": hum, "whoosh": whoosh, "impact": impact}
+       "hum": hum, "current": current, "whoosh": whoosh, "impact": impact}
 MOODS = ["tension", "minimal", "wonder", "history"]
 
 

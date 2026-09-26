@@ -223,7 +223,8 @@ def _rotor(rig: Rig, slot: str, name: str, ring: int, pos: int):
     # Thumbwheel (serrated, left side) and ratchet (26 teeth, right side)
     U.mesh_object(f"ENIGMA_rotor_{slot}_thumbwheel", c, U.bm_gear(L.ROTOR_R + 0.004, 0.004, 52, 0.0016),
                   m["bakelite"], parent, (-w / 2 + 0.001, 0, 0))
-    U.mesh_object(f"ENIGMA_rotor_{slot}_ratchet", c, U.bm_gear(L.ROTOR_R - 0.012, 0.003, 26, 0.003),
+    # Ratchet: 26 teeth around the hub, inside the circle of pins so the pins stay visible.
+    U.mesh_object(f"ENIGMA_rotor_{slot}_ratchet", c, U.bm_gear(L.CONTACT_R - 0.011, 0.003, 26, 0.0025),
                   m["steel"], parent, (w / 2 - 0.0005, 0, 0))
     # Wiring core, rotated by the ring setting relative to the ring
     core = U.empty(f"ENIGMA_rotor_{slot}_core", c, (0, 0, 0), parent, size=0.02)
@@ -333,3 +334,65 @@ def _stepping(rig: Rig):
     lever.rotation_mode = "XYZ"
     U.mesh_object("ENIGMA_stepping_lever", c, U.bm_box(0.004, 0.12, 0.004), m["steel"], lever, (0, 0.05, 0))
     rig.parts["ENIGMA_stepping_lever"] = lever
+
+
+# ------------------------------------------------------------------ single-rotor demo parts (Act IV)
+def _wire_points(j: int, o: int, w: float):
+    """Core-frame path of the wire from right-face pin j to left-face plate o
+    (same geometry as the combined ENIGMA_rotor_<slot>_wires curve)."""
+    aj, ao = j * L.STEP, o * L.STEP
+    d = (ao - aj + math.pi) % (2 * math.pi) - math.pi
+    am = aj + d / 2
+    return [(w / 2, -L.CONTACT_R * math.sin(aj), L.CONTACT_R * math.cos(aj)),
+            (w / 6, -L.CONTACT_R * 0.6 * math.sin(am), L.CONTACT_R * 0.6 * math.cos(am)),
+            (-w / 6, -L.CONTACT_R * 0.6 * math.sin(am), L.CONTACT_R * 0.6 * math.cos(am)),
+            (-w / 2, -L.CONTACT_R * math.sin(ao), L.CONTACT_R * math.cos(ao))]
+
+
+def rotor_wire_objects(rig: Rig, slot: str) -> dict:
+    """One curve per wire, named by its pin letter (ENIGMA_rotor_<slot>_wire_<X>),
+    so each can glow on its own (animate object.color like a lamp). Hidden until shown."""
+    name = rig.rotor_names[slot]
+    wiring = WIRINGS[name]
+    core = rig.cores[slot]
+    out = {}
+    for j in range(26):
+        o = L.ALPHA.index(wiring[j])
+        ob = U.poly_curve(f"ENIGMA_rotor_{slot}_wire_{L.ALPHA[j]}", rig.cols["wiring"],
+                          _wire_points(j, o, L.ROTOR_W), bevel=0.0005, material=rig.mats["wire_glow"], parent=core)
+        ob.color = (0, 0, 0, 1)
+        ob["pin"], ob["plate"] = L.ALPHA[j], wiring[j]
+        ob.hide_render = ob.hide_viewport = True
+        out[L.ALPHA[j]] = ob
+    rig.parts[f"wires_{slot}"] = out
+    return out
+
+
+def demo_stators(rig: Rig, slot: str) -> dict:
+    """Fixed contacts either side of a lifted rotor (they do NOT turn with it):
+    'in' on the pin side (right), 'out' on the plate side (left), 26 contacts each
+    at the same radius as the rotor's pins, plus a ring of large front-facing
+    letters outside the rotor so the viewer can read which contact is which.
+    Contacts and their letters glow together (animate object.color on both)."""
+    anchor = U.empty(f"ENIGMA_demo_{slot}_stators", rig.cols["rotor_stack"], (0, 0, 0), rig.root, size=0.02)
+    parts = {"anchor": anchor, "in": {}, "out": {}, "in_label": {}, "out_label": {}}
+    rig.parts[f"stators_{slot}"] = parts
+    gap = 0.010
+    label_r = L.ROTOR_R + 0.014
+    for side, sx in (("in", L.ROTOR_W / 2 + gap), ("out", -L.ROTOR_W / 2 - gap)):
+        for k in range(26):
+            a = k * L.STEP
+            y, z = -L.CONTACT_R * math.sin(a), L.CONTACT_R * math.cos(a)
+            c = U.mesh_object(f"ENIGMA_demo_{slot}_{side}_{L.ALPHA[k]}", rig.cols["rotor_stack"],
+                              U.bm_cylinder(0.0019, 0.0012, 16, axis="X"), rig.mats["contact_glow"], anchor,
+                              (sx, y, z), smooth=True)
+            c.color = (0, 0, 0, 1)
+            parts[side][L.ALPHA[k]] = c
+            t = U.text(f"ENIGMA_demo_{slot}_{side}_label_{L.ALPHA[k]}", rig.cols["rotor_stack"], L.ALPHA[k], 0.0075,
+                       rig.mats["label_glow"], (sx, -label_r * math.sin(a), label_r * math.cos(a)),
+                       rot=(math.pi / 2, 0, 0), parent=anchor)       # faces the camera (-Y), upright
+            t.color = (0, 0, 0, 1)
+            parts[side + "_label"][L.ALPHA[k]] = t       # shown only while lit (see shots)
+    for ob in anchor.children_recursive:
+        ob.hide_render = ob.hide_viewport = True
+    return parts
