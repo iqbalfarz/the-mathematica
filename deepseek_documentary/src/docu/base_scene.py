@@ -29,6 +29,21 @@ from .paths import TIMELINE, TIMING
 TEXT_TYPES = (Text, MarkupText, MathTex, Tex, SingleStringMathTex, Paragraph)
 LEAD_IN = 0.35
 DEFAULT_TAIL = 0.6
+ENCODER_QUEUE_BUDGET = 600e6   # bytes of queued RGBA frames allowed per encode job
+
+
+def bound_encoder_memory():
+    """Keep Manim's frame queue bounded.
+
+    With Manim's default (max_inflight_encoders = 1) the per-animation frame
+    queue is created with maxsize=0, i.e. unbounded. Cairo draws frames faster
+    than x264 encodes them, so at 8K (~133 MB per RGBA frame) a single worker
+    grew past 12 GB and GitHub's 16 GB runners were killed. Enabling the
+    bounded-queue mode caps queued frames per job to ~ENCODER_QUEUE_BUDGET.
+    """
+    frame_bytes = config.pixel_width * config.pixel_height * 4
+    config.max_inflight_encoders = 2
+    config.encoder_queue_size = int(min(8, max(2, ENCODER_QUEUE_BUDGET // frame_bytes)))
 
 
 class DocScene(MovingCameraScene):
@@ -37,6 +52,7 @@ class DocScene(MovingCameraScene):
     # ---------------------------------------------------------------- setup
     def setup(self):
         super().setup()
+        bound_encoder_memory()
         self.camera.background_color = S.BG
         self._beats = self._load_beats()
         self._order = [b["id"] for b in self._beats]
