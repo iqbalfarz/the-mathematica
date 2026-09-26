@@ -34,6 +34,7 @@ import bpy  # noqa: E402
 
 from enigma_model.build import build_enigma  # noqa: E402
 from lib import staging  # noqa: E402
+from lib.labels import Labels  # noqa: E402
 from lib import util as U  # noqa: E402
 
 
@@ -42,6 +43,8 @@ class Ctx:
         self.scene, self.rig, self.timeline, self.sc, self.stream, self.lights = scene, rig, timeline, sc, stream, lights
         self.fps = timeline["fps"]
         self.duration = sc["duration"]
+        self.shot = timeline["shots"].get(sc["shot"], {}) if sc.get("shot") else {}
+        self.labels = Labels(self)
 
     def beat(self, ref: str) -> float:
         import re
@@ -196,6 +199,9 @@ def main():
             f.unlink()          # placeholder of an interrupted frame
     scene.render.filepath = str(out_dir / "frame_")
 
+    if (ctx.labels.items or ctx.labels.captions) and not a.estimate:
+        ctx.labels.write(out_dir / "labels.json")
+        scene.frame_set(scene.frame_start)
     if a.save_blend:
         blend = ROOT / "build" / "blend" / f"{a.scene}.blend"
         blend.parent.mkdir(parents=True, exist_ok=True)

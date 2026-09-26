@@ -8,12 +8,13 @@
 from __future__ import annotations
 
 import argparse
+import copy
 from pathlib import Path
 
 import yaml
 
 from . import keyspace
-from .configuration import load_configs
+from .configuration import MachineConfig, load_configs
 from .events import write_stream
 from .machine import EnigmaMachine
 
@@ -23,18 +24,39 @@ SHOTS = ROOT / "config" / "shots.yaml"
 EVENTS = ROOT / "build" / "events"
 
 
-def shot_streams() -> dict[str, Path]:
+def resolve_shots() -> dict[str, tuple[MachineConfig, list]]:
+    """Run every shot in config/shots.yaml through the simulator.
+
+    A shot with `continues: <other shot>` starts with its rotors where that shot
+    left them (the machine on screen never jumps between scenes).
+    """
     configs = load_configs(MACHINES)
     shots = yaml.safe_load(SHOTS.read_text())["shots"]
-    out = {}
-    for shot_id, spec in shots.items():
-        if "machine" not in spec:
-            continue
-        cfg = configs[spec["machine"]]
-        m = EnigmaMachine(cfg)
-        presses = m.press_keys(spec.get("keys", ""))
-        out[shot_id] = write_stream(EVENTS / f"{shot_id}.json", cfg.to_dict(), presses)
-    return out
+    done: dict[str, tuple[MachineConfig, list]] = {}
+
+    def run(shot_id: str, stack=()):
+        if shot_id in done:
+            return done[shot_id]
+        if shot_id in stack:
+            raise ValueError(f"shot continuation loop: {' -> '.join(stack + (shot_id,))}")
+        spec = shots[shot_id]
+        cfg = copy.deepcopy(configs[spec["machine"]])
+        if spec.get("continues"):
+            parent_cfg, parent_presses = run(spec["continues"], stack + (shot_id,))
+            end = parent_presses[-1].positions_after if parent_presses else parent_cfg.to_dict()["positions"]
+            cfg.positions = [ord(c) - 65 for c in end]
+        presses = EnigmaMachine(cfg).press_keys(spec.get("keys", "") or "")
+        done[shot_id] = (cfg, presses)
+        return done[shot_id]
+
+    for sid in shots:
+        run(sid)
+    return done
+
+
+def shot_streams() -> dict[str, Path]:
+    return {sid: write_stream(EVENTS / f"{sid}.json", cfg.to_dict(), presses)
+            for sid, (cfg, presses) in resolve_shots().items()}
 
 
 def main(argv=None):

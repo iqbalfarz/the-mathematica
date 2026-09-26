@@ -32,3 +32,13 @@ def test_stream_roundtrip(tmp_path):
     assert [p["lamp"] for p in data["presses"]] == [p.lamp for p in presses]
     assert data["config"]["positions"] == "AFP"
     assert data["presses"][0]["positions_after"] == "AFQ"
+
+
+def test_continued_shots_start_where_their_parent_ended():
+    from enigma_core.cli import resolve_shots
+    shots = resolve_shots()
+    end_of_s0101 = shots["s0101_keys"][1][-1].positions_after
+    for sid in ("s0102_reveal", "s0301_tour", "s0302_circuit"):
+        cfg, _ = shots[sid]
+        assert "".join(chr(65 + p) for p in cfg.positions) == end_of_s0101 == "AFT"
+    assert shots["s0302_circuit"][1][0].positions_before == "AFT"

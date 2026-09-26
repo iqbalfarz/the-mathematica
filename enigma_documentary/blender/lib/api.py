@@ -37,9 +37,10 @@ def show_enigma(rig, t=0.0, fps=24):
     set_visible([o for c in rig.cols.values() for o in c.objects if "wires" not in o.name], True, t, fps)
 
 
-def hide_casing(rig, t: float, fps: int, hide=True):
-    """Hide the wooden case, front panel and decks (keeps keys, lamps, rotors)."""
-    objs = [o for o in rig.cols["casing"].objects]
+def hide_casing(rig, t: float, fps: int, hide=True, keep=("ENIGMA_case_base",)):
+    """Hide the wooden case, front panel and decks (keeps keys, lamps, rotors and,
+    by default, the base board so the parts don't float in a void)."""
+    objs = [o for o in rig.cols["casing"].objects if o.name not in keep]
     set_visible(objs, not hide, t, fps)
 
 
@@ -82,12 +83,15 @@ def show_wiring(rig, t: float, fps: int, slots=("left", "middle", "right"), on=T
         set_visible([rig.parts[f"ENIGMA_rotor_{slot}_wires"]], on, t, fps)
     if "reflector" in slots or slots == ("left", "middle", "right"):
         set_visible([rig.parts["ENIGMA_reflector_wires"]], on, t, fps)
+    # Rotor bodies and alphabet rings turn to smoked glass so the copper wiring
+    # inside is visible; ring letters stay, floating on the glass.
     glass = rig.mats["core_glass"]
     for slot in slots:
-        body = bpy.data.objects.get(f"ENIGMA_rotor_{slot}_body")
-        if body and on:
-            body.data.materials.clear()
-            body.data.materials.append(glass)
+        for part in ("body", "ring"):
+            ob = bpy.data.objects.get(f"ENIGMA_rotor_{slot}_{part}")
+            if ob and on:
+                ob.data.materials.clear()
+                ob.data.materials.append(glass)
 
 
 # ------------------------------------------------------------------ keys, lamps
@@ -145,24 +149,26 @@ def animate_pawls(rig, steps: list, t: float, fps: int):
 
 # ------------------------------------------------------------------ current
 def show_signal_path(rig, press: dict, t0: float, dur: float, fps: int, t_off: float | None = None,
-                     pulse_len=0.12):
+                     pins: dict | None = None):
     """Draw the current for one key press: a glowing trace that grows from key to
-    lamp over `dur` seconds, plus a brighter travelling pulse at its head."""
+    lamp over `dur` seconds, following layout.signal_schedule()."""
     fwd, back = L.signal_points(press)
     col = rig.cols["signal"]
     tag = f"{press['index']:03d}"
     objs = []
     for part, pts, mat in (("fwd", fwd, rig.mats["signal"]), ("ret", back, rig.mats["signal_return"])):
-        trace = U.poly_curve(f"ENIGMA_signal_{tag}_{part}", col, pts, bevel=0.0009, material=mat,
+        trace = U.poly_curve(f"ENIGMA_signal_{tag}_{part}", col, pts, bevel=0.0016, material=mat,
                              parent=rig.root)
         trace.color = (1, 1, 1, 1)
         objs.append(trace)
-    half = dur / 2
-    for ob, (a, b) in zip(objs, ((t0, t0 + half), (t0 + half, t0 + dur))):
+    # Grow each half along the shared schedule (slow in the rotors, fast on plain wires).
+    sched = L.signal_schedule(press, t0, dur, pins)
+    for ob, half in zip(objs, ("fwd", "ret")):
         cu = ob.data
         U.key(cu, "bevel_factor_end", _f(0, fps), 0.0, interp="CONSTANT")
-        U.key(cu, "bevel_factor_end", _f(a, fps), 0.0, interp="LINEAR")
-        U.key(cu, "bevel_factor_end", _f(b, fps), 1.0, interp="LINEAR")
+        for a in sched:
+            if a["half"] == half:
+                U.key(cu, "bevel_factor_end", _f(a["t"], fps), a["f"], interp="LINEAR")
         if t_off is not None:
             U.key(ob, "color", _f(t_off - 0.2, fps), (1, 1, 1, 1))
             U.key(ob, "color", _f(t_off, fps), (0, 0, 0, 1))

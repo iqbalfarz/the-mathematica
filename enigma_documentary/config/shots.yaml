@@ -1,11 +1,16 @@
 # Every shot that needs machine state lists its machine and the keys pressed.
 # `python -m enigma_core shots` writes build/events/<shot>.json for each.
 #
+# continues: start with the rotors where another shot left them, so the machine
+#   on screen never jumps between scenes.
 # press_at: when each key press happens, as beat references of the scene
 #   ("b2+0.55" = 0.55 s after beat b2 starts). Blender animates the presses at
 #   these times and Remotion places the click/clack sounds at the same times.
 # hold: seconds each key stays down. On a real Enigma the lamp is lit only
 #   while the key is held, so hold long enough for the narrator to say the letter.
+#   A beat reference ("b7") means: hold until that beat starts.
+# signal: draw the current from key to lamp, over `dur` seconds, `until` a beat,
+#   or with `pins` that fix when it reaches chosen parts (the lamp pin ends it).
 shots:
   s0101_keys:
     machine: hero_opening
@@ -17,4 +22,25 @@ shots:
     machine: hero_opening
     keys: ""
     scene: s0102
-    continues: s0101_keys      # rotor windows show the state after s0101's presses
+    continues: s0101_keys
+  s0301_tour:
+    machine: hero_opening
+    keys: ""
+    scene: s0301
+    continues: s0101_keys
+  s0302_circuit:
+    machine: hero_opening
+    keys: A
+    scene: s0302
+    continues: s0301_tour
+    press_at: ["b2+0.3"]
+    hold: ["b7.end"]                   # key held (lamp lit) to the end of the last beat
+    signal:
+      show: true
+      pins:                            # land each part of the journey on its words
+        plugboard_in: "b3+0.4"
+        entry_in: "b3+1.9"
+        rotor_right_in: "b3+3.4"
+        reflector: "b4+1.2"
+        rotor_left_out: "b5+0.9"
+        lamp: "b6+1.2"                 # lamp N lights just before the narrator says "N"

@@ -51,7 +51,7 @@ Scenes that aren't rendered yet show up as labelled storyboard slates, so the st
 python run.py estimate --profile final     # renders 1 frame per Blender shot, prints projected hours
 python run.py all --profile final          # 1080p24; resumable
 ```
-Measured on a 4-core CPU with no GPU: about **20 hours** of Blender time for Acts I–II. Manim and Remotion take minutes.
+Measured on a 4-core CPU with no GPU: about **45 hours** of Blender time for Acts I–III (about 20 h for Acts I–II alone). Manim and Remotion take minutes. Render one scene per night if you like: `python run.py blender --profile final --scene s0301`.
 
 - **Stop any time** (Ctrl+C, close the lid, reboot). Run the same command again and it continues. Finished frames are kept; the frame that was interrupted is redone.
 - **Keep the laptop usable** while it renders: `BLENDER_THREADS=3 python run.py blender --profile final` (Windows PowerShell: `$env:BLENDER_THREADS=3`).

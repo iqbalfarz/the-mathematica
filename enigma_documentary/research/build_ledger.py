@@ -80,6 +80,15 @@ R = [
 ("HIS-CAESAR", "Suetonius reports Julius Caesar used a shift of three letters.",
  "SUETONIUS (Life of Julius Caesar, 56)", "ancient secondary", "c. 121 AD", "n/a", "medium", "VERIFIED_SECONDARY",
  "Julius Caesar is said to have used exactly this.", "Caesar invented cryptography."),
+("MACH-BATTERY", "Enigma I machines were powered by a 4.5 V battery (a common flat 'lantern'/torch battery type).",
+ "CHIFFRIERMASCHINE_C0009", "museum collection record", "1930s-1945", "Enigma I", "high", "VERIFIED_SECONDARY",
+ "A small battery, four and a half volts.", "A specific battery brand or capacity."),
+("MACH-PATH", "Current path: key, plugboard, entry wheel, rotors right-to-left, reflector, rotors left-to-right, entry wheel, plugboard, lamp.",
+ "CHIFFRIERMASCHINE_C0009; enigma_core (test_path_is_a_continuous_chain_ending_at_the_lamp)", "secondary+simulation", "n/a",
+ "Enigma I", "high", "SIMULATED", "Through the plugboard, the entry wheel and the rotors to the reflector, and back.", ""),
+("MACH-ETW", "On military Enigmas the entry wheel is wired straight through (A to A).",
+ "CRYPTOMUSEUM", "secondary", "n/a", "Enigma I", "high", "VERIFIED_SECONDARY",
+ "The entry wheel just passes the current on.", "The entry wheel scrambles letters (true only of commercial machines)."),
 ("LANG-E", "E is the most frequent letter in German text.", "standard letter-frequency tables", "secondary", "n/a", "n/a", "high", "VERIFIED_SECONDARY", "", ""),
 ]
 

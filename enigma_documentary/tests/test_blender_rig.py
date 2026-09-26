@@ -65,3 +65,39 @@ def test_rotor_never_unwinds_backwards():
         if prev is not None:
             assert a <= prev + 1e-6          # right rotor angle only ever decreases (turns forward)
         prev = a
+
+
+def test_signal_curve_runs_from_key_to_simulated_lamp():
+    rig, s, times = _rig_for("hero_opening", "A")
+    press = s["presses"][0]
+    curves = [o for o in bpy.data.objects if o.name.startswith("ENIGMA_signal_")]
+    assert len(curves) == 2
+    fwd = next(o for o in curves if o.name.endswith("_fwd")).data.splines[0].points
+    ret = next(o for o in curves if o.name.endswith("_ret")).data.splines[0].points
+    kx, ky, _ = L.key_pos(press["key"])
+    lx, ly, _ = L.lamp_pos(press["lamp"])
+    assert abs(fwd[0].co.x - kx) < 1e-6 and abs(fwd[0].co.y - ky) < 1e-6
+    assert abs(ret[-1].co.x - lx) < 1e-6 and abs(ret[-1].co.y - ly) < 1e-6
+
+
+def test_tracked_labels_project_into_the_frame():
+    from lib import staging as S
+    from lib.labels import Labels
+
+    rig, s, times = _rig_for("hero_opening", "")
+    scene = bpy.context.scene
+    cam, tgt = S.camera("CAM_test", lens=40)
+    S.move(cam, tgt, 0.0, FPS, loc=(0.3, -0.5, 0.4), look=(0.0, -0.02, 0.1))
+    S.cut(scene, cam, 0.0, FPS)
+
+    class Ctx:
+        fps = FPS
+    ctx = Ctx()
+    ctx.scene = scene
+    lab = Labels(ctx)
+    lab.track("KEYBOARD", "ENIGMA_keycap_G", 0.0, 0.5)
+    lab.track("BEHIND", (0.3, -2.0, 0.4), 0.0, 0.5)       # behind the camera
+    data = lab.compute()
+    kb, behind = data["labels"]
+    assert all(p is not None and 0 <= p[0] <= 1 and 0 <= p[1] <= 1 for p in kb["track"])
+    assert all(p is None for p in behind["track"])

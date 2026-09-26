@@ -17,13 +17,13 @@ python run.py all --profile draft        # then: estimate / all --profile final
 | Design package A–J (`design/`) | complete: thesis, 23-min structure, all scenes planned, first 5 in full detail |
 | Enigma I simulator (`src/enigma_core/`) | complete, 50+ tests incl. published vectors and the 1941 Barbarossa message |
 | Research ledger (`research/`) | claims for Acts I–II plus the numbers and history used later |
-| Script (`story/acts/`) | Acts I–II (scenes s0101–s0203) fully written |
-| Blender rig (`blender/`) | procedural Enigma I, named parts, helper API, event player, shots s0101–s0102 |
+| Script (`story/acts/`) | Acts I–III (scenes s0101–s0302) fully written |
+| Blender rig (`blender/`) | procedural Enigma I, named parts, helper API, event player, tracked labels, shots s0101, s0102, s0301 (parts tour), s0302 (current traced key → lamp) |
 | Manim (`manim_scenes/`) | Act II scenes s0201–s0203 |
 | Narration, SFX, music (`src/enigma_doc/`) | Kokoro per beat; synthesised mechanical SFX |
-| Remotion (`remotion/`) | full-film composition, overlays for s0101–s0102, slates for unrendered scenes |
+| Remotion (`remotion/`) | full-film composition, overlays for s0101–s0302 (tracked part labels, live current caption), slates for unrendered scenes |
 
-Acts III–XXIV are specified in `design/B_structure.md` and `design/C_scene_breakdown.md` and are added act by act with the same pipeline.
+Acts IV–XXIV are specified in `design/B_structure.md` and `design/C_scene_breakdown.md` and are added act by act with the same pipeline.
 
 ## How it fits together
 

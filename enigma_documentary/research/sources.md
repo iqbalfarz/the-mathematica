@@ -17,6 +17,7 @@ and should be re-read before final lock (see accuracy_checklist.md).
 | MACTUTOR_REJEWSKI | MacTutor, *Marian Rejewski* | Rejewski biography |
 | TNMOC_BOMBE | The National Museum of Computing, *The Turing-Welchman Bombe* — tnmoc.org/bombe | 36 scramblers, diagonal board |
 | BOMBE_ORG | bombe.org.uk, *Enter Turing and Welchman* | Victory / Agnus dates |
+| CHIFFRIERMASCHINE_C0009 | Chiffriermaschine collection, *Enigma 4.5V battery (Object C0009)* — chiffriermaschine.com/explore/enigma-battery-62c70660d27fe2b3064f4b2a-c0009 | 4.5 V battery, current path |
 | HISTORYHUB | historyhub.info, *British Signals Intelligence and the Shortening of World War Two* | Hinsley estimate and critics |
 | WIKI_HINSLEY | Wikipedia, *Harry Hinsley* | Hinsley quote |
 

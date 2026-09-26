@@ -29,12 +29,16 @@ export type SceneEntry = {
   duration: number;
   frames: number;
   beats: Beat[];
-  press_times: number[];
   sfx: {t: number; sfx: string}[];
   visuals: string[];
   media: null | {type: 'frames'; dir: string; pad: number} | {type: 'video'; src: string};
   events?: {presses: Press[]} | null;
+  labels?: LabelData | null;
+  press_times: number[];
 };
+
+export type LabelTrack = {text: string; t0: number; t1: number; frame0: number; track: ([number, number] | null)[]};
+export type LabelData = {fps: number; labels: LabelTrack[]; captions: {t: number; text: string; until: number | null}[]};
 
 export type Timeline = {
   profile: string;

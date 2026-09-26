@@ -13,7 +13,7 @@ def build(ctx):
     fps, scene, rig = ctx.fps, ctx.scene, ctx.rig
     times = ctx.sc["press_times"]          # from config/shots.yaml press_at, resolved by the timeline
     holds = ctx.sc["press_holds"]
-    player.play(rig, ctx.stream, times, fps, show_signal=False, hold=holds)
+    player.play_shot(ctx)
 
     kx, ky, kz = L.key_pos("L")
     key_cam, key_tgt = S.camera("CAM_key_macro", lens=100, fstop=2.2)

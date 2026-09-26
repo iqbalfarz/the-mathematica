@@ -12,7 +12,7 @@ import os
 import re
 from pathlib import Path
 
-from manim import Scene
+from manim import Scene, config
 
 from manim_scenes import style as S
 
@@ -41,14 +41,14 @@ class EnigmaScene(Scene):
     def until(self, ref: str):
         target = self.beat_time(ref)
         gap = target - self.now
-        if gap > 1e-3:
+        if gap >= 1.0 / config.frame_rate:     # never wait less than one frame
             self.wait(gap)
         elif gap < -0.05:
             self.overruns.append({"beat": ref, "late_by": round(-gap, 3)})
 
     def until_end(self):
         gap = self.spec["duration"] - self.now
-        if gap > 1e-3:
+        if gap >= 1.0 / config.frame_rate:
             self.wait(gap)
         elif gap < -0.05:
             self.overruns.append({"beat": "end", "late_by": round(-gap, 3)})

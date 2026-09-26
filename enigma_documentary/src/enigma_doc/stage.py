@@ -69,6 +69,8 @@ def stage(profile: str | None = None) -> dict:
         sc["media"] = None
         if sc["tool"] == "blender":
             d = RENDERS / "blender" / prof / sc["id"]
+            # Tracked labels / captions exported by the shot (blender/lib/labels.py).
+            sc["labels"] = json.loads((d / "labels.json").read_text()) if (d / "labels.json").exists() else None
             frames = sorted(d.glob("frame_*.png")) if d.exists() else []
             frames = [f for f in frames if f.stat().st_size > 0]
             if len(frames) == sc["frames"]:

@@ -1,6 +1,6 @@
 # C. Scene-by-scene breakdown
 
-Acts I–II are fully scripted in `story/acts/act01.yaml` and `act02.yaml` (narration, visuals, SFX, claim tags) and implemented. The rest are specified here at production-planning depth; each becomes a YAML scene with beats when its act is built.
+Acts I–III are fully scripted in `story/acts/act01.yaml`–`act03.yaml` (narration, visuals, SFX, claim tags) and implemented. The rest are specified here at production-planning depth; each becomes a YAML scene with beats when its act is built.
 
 | Scene | Purpose (what the viewer learns) | Visual | Tool | Sim data | Accuracy notes |
 |---|---|---|---|---|---|
@@ -9,8 +9,8 @@ Acts I–II are fully scripted in `story/acts/act01.yaml` and `act02.yaml` (narr
 | s0201 | Substitution = a rule on letters | two alphabets, shift 3, HELLO→KHOOR | Manim | — | Caesar attributed (HIS-CAESAR) |
 | s0202 | A fixed rule leaks patterns | repeated letters, frequency bars | Manim | rotor I wiring used as a fixed substitution | chart labelled illustrative |
 | s0203 | Moving the rule hides patterns | wheel with 26 chords turning; H→Q,U,X,K | Manim | enigma_core Rotor I, ring A | asserted in code and tests |
-| s0301 | Name the parts | lid open, parts labelled in turn | Blender | hero state | layout per accuracy checklist |
-| s0302 | A key press closes a circuit | battery→key→…→lamp simplified path | Blender | one press | ETW is identity on Enigma I |
+| s0301 ✅ | Name the parts | lid open, camera tour, labels tracked onto the 3D parts (projected in Blender, drawn by Remotion) | Blender + Remotion | `s0301_tour` continues s0101 (AFT) | MACH-ROTORS |
+| s0302 ✅ | A key press closes a circuit | cutaway, glass rotors, current traced key→rotors→reflector→lamp; camera follows the current; caption names each part and letter | Blender + Remotion | `s0302_circuit`: A at AFT → N (A→Q→T→P, reflector P→I, I→V→V→N) | MACH-BATTERY (4.5 V), MACH-PATH, MACH-ETW |
 | s0401 | A rotor is 26 wires in a wheel | exploded rotor: ring, core, contacts | Blender (Cycles hero) | rotor I | — |
 | s0402 | Each wire maps a letter | wires reveal one by one A→E… | Blender | wiring table | rotor I wiring from CRYPTOMUSEUM |
 | s0403 | Turning changes the mapping | same entry contact, rotor steps | Blender + Manim | Rotor.forward per position | — |
