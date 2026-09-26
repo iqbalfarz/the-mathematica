@@ -225,3 +225,17 @@ def test_pawls_drop_only_into_real_notches_through_the_double_step():
             r = math.hypot(fc[1].evaluate(f), fc[2].evaluate(f))
             assert (r < L.RATCHET_TIP_R) == (pawl in want), (pawl, r)
     assert [p["positions_after"] for p in s["presses"]] == ["ADV", "AEW", "BFX", "BFY"]
+
+
+def test_hiding_later_keeps_the_object_visible_until_then():
+    """Blender holds a first key backwards: an object hidden at t must still render before t."""
+    U.reset_scene()
+    cfg = load_configs(ROOT / "config" / "machines.yaml")["hero_opening"]
+    rig = build_enigma(stream(cfg.to_dict(), [])["config"])
+    lid = bpy.data.objects["ENIGMA_front_panel"]
+    api.isolate(rig, [rig.rotors["left"]], 2.0, FPS)
+    scene = bpy.context.scene
+    scene.frame_set(int(U.sec(1.0, FPS)))
+    assert not lid.hide_render
+    scene.frame_set(int(U.sec(3.0, FPS)))
+    assert lid.hide_render

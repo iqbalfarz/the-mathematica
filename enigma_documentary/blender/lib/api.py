@@ -29,8 +29,18 @@ def _objs(rig, prefix):
 # ------------------------------------------------------------------ visibility
 def set_visible(objs, visible: bool, t: float, fps: int):
     for o in objs:
+        # Blender holds an object's first key backwards to frame 1, so an object first
+        # keyed "hidden" at t would vanish from the start of the shot. Key its current
+        # state at the start first.
+        if t > 0 and not _has_fcurve(o, "hide_render"):
+            U.key(o, "hide_render", _f(0.0, fps), o.hide_render, interp="CONSTANT")
+            U.key(o, "hide_viewport", _f(0.0, fps), o.hide_viewport, interp="CONSTANT")
         U.key(o, "hide_render", _f(t, fps), not visible, interp="CONSTANT")
         U.key(o, "hide_viewport", _f(t, fps), not visible, interp="CONSTANT")
+
+
+def _has_fcurve(o, path):
+    return any(fc.data_path == path for fc in U._fcurves(o))
 
 
 def show_enigma(rig, t=0.0, fps=24):

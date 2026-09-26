@@ -83,9 +83,6 @@ def cut_away(ctx, pawl: int, t: float, show_again: float | None = None):
     for n, pivot in rig.pawls.items():
         if n < pawl:
             gone += [c for c in pivot.children_recursive if c.type != "EMPTY"]
-    for o in gone:          # a first key would otherwise hold "hidden" backwards to frame 1
-        if o.animation_data is None or o.animation_data.action is None:
-            api.set_visible([o], True, 0.0, fps)
     api.set_visible(gone, False, t, fps)
     if show_again is not None:
         api.set_visible(gone, True, show_again, fps)
