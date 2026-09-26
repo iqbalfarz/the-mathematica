@@ -1,0 +1,26 @@
+# One profile drives Blender, Manim and Remotion together. Scene code never
+# changes between profiles. Everything renders LOCALLY (nothing needs a GPU).
+#
+# Measured on a 4-core CPU with no GPU (Cycles + OpenImageDenoise), per 1080p frame:
+#   16 samples: 48-68 s   |  64 samples: 160-240 s
+# so `final` uses 16 samples, which the denoiser cleans up well (see design/G).
+# Run `make estimate PROFILE=...` to get the numbers for YOUR machine first.
+#
+#   smoke        seconds: proves the pipeline runs end to end
+#   draft        about an hour for Acts I-II: check timing, framing, story
+#   review       a few hours: check look and readability at 720p
+#   final        1080p24, CPU-safe quality (about 20 h for Acts I-II on 4 cores)
+#   final_gpu    1080p24, 64 samples; use when Cycles finds a GPU (BLENDER_DEVICE=GPU)
+#   final_eevee  1080p24 with EEVEE (needs a GPU with OpenGL 4.3, even integrated); fastest
+#   final4k      2160p24 on a GPU
+profiles:
+  smoke:       {width: 320,  height: 180,  fps: 6,  blender: {engine: CYCLES, samples: 8,   bounces: 3, denoise: true},  manim_quality: l, crf: 30}
+  draft:       {width: 960,  height: 540,  fps: 12, blender: {engine: CYCLES, samples: 8,   bounces: 3, denoise: true},  manim_quality: l, crf: 26}
+  review:      {width: 1280, height: 720,  fps: 24, blender: {engine: CYCLES, samples: 12,  bounces: 4, denoise: true},  manim_quality: m, crf: 20}
+  final:       {width: 1920, height: 1080, fps: 24, blender: {engine: CYCLES, samples: 16,  bounces: 4, denoise: true},  manim_quality: h, crf: 16}
+  final_gpu:   {width: 1920, height: 1080, fps: 24, blender: {engine: CYCLES, samples: 64,  bounces: 6, denoise: true},  manim_quality: h, crf: 16}
+  final_eevee: {width: 1920, height: 1080, fps: 24, blender: {engine: EEVEE,  samples: 64,  bounces: 4, denoise: false}, manim_quality: h, crf: 16}
+  final4k:     {width: 3840, height: 2160, fps: 24, blender: {engine: CYCLES, samples: 64,  bounces: 6, denoise: true},  manim_quality: k, crf: 16}
+default: draft
+lead_in: 0.6        # seconds of picture before the first word of every scene
+tail: 0.8           # seconds held after the last beat's pause

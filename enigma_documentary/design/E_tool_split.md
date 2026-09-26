@@ -1,0 +1,25 @@
+# E. Tool split and data contracts
+
+```
+story/acts/*.yaml ──► enigma_doc.narration (Kokoro) ──► build/audio/beats/*.wav + timing.json
+config/machines.yaml + config/shots.yaml ──► enigma_core ──► build/events/<shot>.json
+                           │
+          enigma_doc.timeline (audio-first) ──► build/timeline.json  ◄── the one clock everyone reads
+                 │                    │                     │
+      blender/render.py      enigma_doc.render_manim    enigma_doc.stage ──► remotion/public/
+   renders/blender/<p>/<scene>/  renders/manim/<p>/<scene>.mp4        │
+                 └──────────────────────┴────────────► Remotion EnigmaFilm ──► output/enigma_<p>.mp4 (+ .srt)
+```
+
+| Tool | Owns | Never does |
+|---|---|---|
+| **enigma_core** (Python) | all cryptography: stepping, current path, lamps, keyspace, cribs, menus | rendering |
+| **Blender** | the physical machine: materials, mechanisms, current in wires, macro camera | decide a letter, a rotor step or a lamp |
+| **Manim** | abstraction: alphabets, wheels, permutations, counts, graphs, crib tables | physical realism |
+| **Remotion** | editorial: sequencing, narration placement, SFX, music ducking, typography overlays, slates for unrendered scenes | compute content |
+| **Kokoro** | narration per beat | — |
+
+**Contracts**
+- `build/events/<shot>.json` — schema in `src/enigma_core/events.py` (schema_version 1). Every press lists pawl events and hop-by-hop path in fixed-frame letters plus rotor core pins.
+- `build/timeline.json` — per scene: `film_start`, `duration`, `frames`, beats with `start`/`dur`, resolved `press_times`, `sfx` cues. Blender, Manim and Remotion all use it, so a press's click sound, the key motion and the lamp are on the same frame.
+- **Consistency gates** (pytest): script letters = simulator (`test_script.py`), rig geometry = simulator (`test_layout.py`), animated rig = simulator at every press (`test_blender_rig.py`), Manim wheel asserts against `Rotor.forward` while rendering.

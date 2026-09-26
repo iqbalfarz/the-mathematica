@@ -1,0 +1,60 @@
+act: 1
+title: "The Impossible Machine"
+music: tension
+scenes:
+- id: s0101
+  cls: S0101ColdOpen
+  tool: blender
+  shot: s0101_keys
+  title: "Same key, different answer"
+  allow_black: 2.0
+  loops: {open: [L1]}
+  sim_check: {shot: s0101_keys, keys: LLLL, lamps: YHXG}
+  beats:
+  - id: b1
+    say: "One key."
+    pause: 0.8
+    visual: "Black. Mechanical room tone. A single ivory key, L, rises out of darkness in extreme macro. Shallow depth of field."
+    sfx: hum
+  - id: b2
+    say: "Press it... and a lamp lights up. Y."
+    pause: 0.6
+    visual: "A finger-shadow presses L (key travel 6 mm, 0.18 s). Cut on the click to the lampboard: lamp Y glows warm amber, then fades."
+  - id: b3
+    say: "Press the same key again. H."
+    pause: 0.5
+    visual: "Same macro framing, same key. Lamp H lights. Tiny rotor-click heard off screen, not seen."
+  - id: b4
+    say: "Again. X. And again. G."
+    pause: 0.9
+    visual: "Two faster presses. X, then G. Four lamp glows stack as a strip in the lower third: L→Y  L→H  L→X  L→G (Remotion overlay)."
+  - id: b5
+    say: "Same machine. Same finger. Same key. Four different answers. [[SIM-SAMEKEY]]"
+    pause: 1.2
+    visual: "Silence. Camera pulls back slowly from the key into darkness; the strip of four letters holds."
+- id: s0102
+  cls: S0102TheQuestion
+  tool: blender
+  shot: s0102_reveal
+  title: "Open the machine"
+  loops: {open: [L2]}
+  beats:
+  - id: b1
+    say: "This is an Enigma machine. The German armed forces used thousands of them to hide their radio messages in the Second World War. [[HIS-SCALE]]"
+    pause: 0.5
+    visual: "Slow 30-degree orbit reveals the full Enigma I in its wooden case: keyboard, lampboard, three rotor windows showing A F T, plugboard on the front."
+    sfx: whoosh
+  - id: b2
+    say: "It has twenty-six keys, twenty-six lamps, and no screen, no chip, no software."
+    pause: 0.4
+    visual: "Rack focus keyboard → lampboard. Thin labels (Remotion): 26 KEYS · 26 LAMPS."
+  - id: b3
+    say: "So how can a box of wires answer the same question differently every time?"
+    pause: 0.8
+    visual: "Title card over the machine: HOW CAN THE SAME KEY HAVE A DIFFERENT ANSWER?"
+    sfx: impact
+  - id: b4
+    say: "To understand that, we are going to take it apart. But first, let's forget Enigma for a moment."
+    pause: 1.0
+    visual: "The lid hinge swings open (0.9 s ease), camera begins to dive toward the rotors, then cuts to clean white-on-dark abstraction."
+    sfx: clack

@@ -9,3 +9,14 @@ deepseek_documentary/assets/audio/
 deepseek_documentary/assets/music/*.wav
 deepseek_documentary/models
 media/
+enigma_documentary/build/
+enigma_documentary/renders/
+enigma_documentary/models/
+enigma_documentary/remotion/node_modules/
+enigma_documentary/remotion/public/media/
+enigma_documentary/remotion/out/
+__pycache__/
+.pytest_cache/
+enigma_documentary/output/
+enigma_documentary/remotion/public/timeline.json
+enigma_documentary/.venv/

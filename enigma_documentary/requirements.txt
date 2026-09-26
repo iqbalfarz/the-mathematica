@@ -1,0 +1,11 @@
+# Python 3.10-3.12. Blender, Node.js and Remotion are installed separately (LOCAL_SETUP.md).
+PyYAML==6.0.3
+numpy>=1.26,<3
+scipy>=1.11
+soundfile>=0.12
+manim==0.21.0
+kokoro-onnx==0.6.1
+onnxruntime>=1.18
+pytest>=8
+# Optional: lets `python run.py test` also check the animated Blender rig against the simulator.
+# Only available for Python 3.11:  pip install bpy==4.2.0

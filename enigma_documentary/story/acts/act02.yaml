@@ -1,0 +1,80 @@
+act: 2
+title: "Forget Enigma"
+music: minimal
+scenes:
+- id: s0201
+  cls: S0201Caesar
+  tool: manim
+  title: "The oldest trick"
+  loops: {open: []}
+  beats:
+  - id: b1
+    say: "Imagine a rule that replaces every letter with another one."
+    pause: 0.4
+    visual: "Two rows of the alphabet, A to Z, stacked. Nothing connected yet."
+  - id: b2
+    say: "The simplest rule: shift every letter three places. A becomes D. B becomes E."
+    pause: 0.4
+    visual: "Bottom row slides three places left, wrapping X Y Z round to the front. Arrows A→D, B→E draw in."
+  - id: b3
+    say: "Julius Caesar is said to have used exactly this. [[HIS-CAESAR]]"
+    pause: 0.3
+    visual: "Small caption 'Caesar shift, +3'."
+  - id: b4
+    say: "Now write HELLO. It becomes K H O O R."
+    pause: 0.6
+    visual: "HELLO types on; each letter drops through its arrow into KHOOR."
+- id: s0202
+  cls: S0202FixedRuleLeaks
+  tool: manim
+  title: "Why a fixed rule leaks"
+  loops: {open: []}
+  beats:
+  - id: b1
+    say: "Look at the two L's in HELLO. Both became O."
+    pause: 0.4
+    visual: "Both L's and both O's pulse amber, linked by a bracket."
+  - id: b2
+    say: "That's the weakness. Same letter in, same letter out. Every time."
+    pause: 0.4
+    visual: "H→K three times in a column, identical."
+  - id: b3
+    say: "Even if you scramble the alphabet completely, instead of shifting it, the rule never changes."
+    pause: 0.4
+    visual: "Bottom row shuffles into a random permutation. Arrows re-draw tangled."
+  - id: b4
+    say: "And in a long message, the most common letter in German, E, turns into the most common letter in the ciphertext. The pattern shows straight through. [[LANG-E]]"
+    pause: 0.8
+    visual: "Bar chart of letter counts in a German plaintext and its fixed-substitution ciphertext: same shape, bars relabelled. Label 'illustrative'."
+- id: s0203
+  cls: S0203MovingAlphabet
+  tool: manim
+  title: "What if the alphabet moved?"
+  loops: {open: [L3]}
+  sim_check: {rotor: I, key: H, positions: ABCD, outputs: QUXK}
+  beats:
+  - id: b1
+    say: "So here's the idea. What if the rule changed after every single letter?"
+    pause: 0.5
+    visual: "The scrambled alphabet bends into a wheel: 26 contacts round the rim, wires inside."
+  - id: b2
+    say: "Put the scrambled wiring on a wheel. Press H... and it comes out as Q."
+    pause: 0.4
+    visual: "Pulse enters the wheel at H, follows a wire, exits at Q."
+  - id: b3
+    say: "Now turn the wheel by one step. Press H again. This time, U."
+    pause: 0.4
+    visual: "Wheel rotates one notch (click). Same entry H, now a different wire. Exits U."
+  - id: b4
+    say: "Turn again. X. Again. K."
+    pause: 0.5
+    visual: "Two more clicks. X, then K. The four results line up: H→Q, H→U, H→X, H→K."
+  - id: b5
+    say: "Same letter in. Different letter out. Because the machine itself moved."
+    pause: 0.6
+    visual: "Split: left 'same input', right 'different wheel position' → 'different output'."
+  - id: b6
+    say: "That wheel has a name. It's called a rotor. And the Enigma has three of them."
+    pause: 1.0
+    visual: "The flat wheel tilts into 3D and becomes a brass-edged rotor silhouette; two more slide in beside it."
+    sfx: clack
