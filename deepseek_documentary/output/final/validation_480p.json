@@ -1,0 +1,28 @@
+{
+ "statuses": {
+  "technical": "PASS",
+  "layout": "PASS",
+  "sources": "PASS",
+  "story": "PASS",
+  "video": "PASS",
+  "audio": "PASS"
+ },
+ "media": {
+  "video": {
+   "codec": "h264",
+   "width": 854,
+   "height": 480,
+   "fps": 30.0,
+   "duration": 2149.266667,
+   "pix_fmt": "yuv420p"
+  },
+  "audio": {
+   "codec": "aac",
+   "sample_rate": "48000",
+   "channels": 2,
+   "lufs": -16.5,
+   "true_peak_dbfs": -0.8,
+   "duration": 2149.259
+  }
+ }
+}

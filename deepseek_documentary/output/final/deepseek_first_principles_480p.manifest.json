@@ -1,0 +1,354 @@
+[
+ {
+  "scene": "s0101",
+  "file": "scene_001.mp4",
+  "start": 0.0,
+  "duration": 19.799,
+  "act": 1,
+  "title": "Buy more GPUs"
+ },
+ {
+  "scene": "s0102",
+  "file": "scene_002.mp4",
+  "start": 19.799,
+  "duration": 45.4,
+  "act": 1,
+  "title": "Then the rules changed"
+ },
+ {
+  "scene": "s0103",
+  "file": "scene_003.mp4",
+  "start": 65.199,
+  "duration": 69.933,
+  "act": 1,
+  "title": "What if you can't buy your way out?"
+ },
+ {
+  "scene": "s0201",
+  "file": "scene_004.mp4",
+  "start": 135.132,
+  "duration": 40.933,
+  "act": 2,
+  "title": "One multiplication"
+ },
+ {
+  "scene": "s0202",
+  "file": "scene_005.mp4",
+  "start": 176.065,
+  "duration": 33.965,
+  "act": 2,
+  "title": "Multiply, add, repeat"
+ },
+ {
+  "scene": "s0203",
+  "file": "scene_006.mp4",
+  "start": 210.03,
+  "duration": 39.233,
+  "act": 2,
+  "title": "Rows meet columns"
+ },
+ {
+  "scene": "s0204",
+  "file": "scene_007.mp4",
+  "start": 249.263,
+  "duration": 61.6,
+  "act": 2,
+  "title": "From twenty-seven to billions"
+ },
+ {
+  "scene": "s0301",
+  "file": "scene_008.mp4",
+  "start": 310.863,
+  "duration": 53.067,
+  "act": 3,
+  "title": "One lane or ten thousand"
+ },
+ {
+  "scene": "s0302",
+  "file": "scene_009.mp4",
+  "start": 363.93,
+  "duration": 55.399,
+  "act": 3,
+  "title": "The pipe, not the engine"
+ },
+ {
+  "scene": "s0303",
+  "file": "scene_010.mp4",
+  "start": 419.329,
+  "duration": 59.967,
+  "act": 3,
+  "title": "Same engine, narrower pipes"
+ },
+ {
+  "scene": "s0401",
+  "file": "scene_011.mp4",
+  "start": 479.296,
+  "duration": 37.367,
+  "act": 4,
+  "title": "What does 'it' mean?"
+ },
+ {
+  "scene": "s0402",
+  "file": "scene_012.mp4",
+  "start": 516.663,
+  "duration": 37.8,
+  "act": 4,
+  "title": "Words as arrows"
+ },
+ {
+  "scene": "s0403",
+  "file": "scene_013.mp4",
+  "start": 554.463,
+  "duration": 53.232,
+  "act": 4,
+  "title": "Questions and advertisements"
+ },
+ {
+  "scene": "s0404",
+  "file": "scene_014.mp4",
+  "start": 607.695,
+  "duration": 49.033,
+  "act": 4,
+  "title": "Scores into attention"
+ },
+ {
+  "scene": "s0405",
+  "file": "scene_015.mp4",
+  "start": 656.727,
+  "duration": 41.9,
+  "act": 4,
+  "title": "Borrowing meaning"
+ },
+ {
+  "scene": "s0406",
+  "file": "scene_016.mp4",
+  "start": 698.627,
+  "duration": 50.333,
+  "act": 4,
+  "title": "Many heads, then thinking"
+ },
+ {
+  "scene": "s0407",
+  "file": "scene_017.mp4",
+  "start": 748.961,
+  "duration": 31.267,
+  "act": 4,
+  "title": "Stack, and predict"
+ },
+ {
+  "scene": "s0501",
+  "file": "scene_018.mp4",
+  "start": 780.227,
+  "duration": 36.733,
+  "act": 5,
+  "title": "Bigger, and bigger"
+ },
+ {
+  "scene": "s0502",
+  "file": "scene_019.mp4",
+  "start": 816.961,
+  "duration": 33.033,
+  "act": 5,
+  "title": "Do we need all of it?"
+ },
+ {
+  "scene": "s0601",
+  "file": "scene_020.mp4",
+  "start": 849.994,
+  "duration": 34.133,
+  "act": 6,
+  "title": "Splitting the thinker"
+ },
+ {
+  "scene": "s0602",
+  "file": "scene_021.mp4",
+  "start": 884.127,
+  "duration": 44.133,
+  "act": 6,
+  "title": "Who decides?"
+ },
+ {
+  "scene": "s0603",
+  "file": "scene_022.mp4",
+  "start": 928.261,
+  "duration": 56.7,
+  "act": 6,
+  "title": "The mathematics of choosing"
+ },
+ {
+  "scene": "s0604",
+  "file": "scene_023.mp4",
+  "start": 984.961,
+  "duration": 76.233,
+  "act": 6,
+  "title": "DeepSeek's version"
+ },
+ {
+  "scene": "s0701",
+  "file": "scene_024.mp4",
+  "start": 1061.194,
+  "duration": 45.733,
+  "act": 7,
+  "title": "Experts on islands"
+ },
+ {
+  "scene": "s0702",
+  "file": "scene_025.mp4",
+  "start": 1106.927,
+  "duration": 52.4,
+  "act": 7,
+  "title": "The cost of waiting"
+ },
+ {
+  "scene": "s0703",
+  "file": "scene_026.mp4",
+  "start": 1159.327,
+  "duration": 64.367,
+  "act": 7,
+  "title": "Hiding the wait"
+ },
+ {
+  "scene": "s0801",
+  "file": "scene_027.mp4",
+  "start": 1223.694,
+  "duration": 39.467,
+  "act": 8,
+  "title": "Writing one token at a time"
+ },
+ {
+  "scene": "s0802",
+  "file": "scene_028.mp4",
+  "start": 1263.161,
+  "duration": 56.666,
+  "act": 8,
+  "title": "How big is the shelf?"
+ },
+ {
+  "scene": "s0803",
+  "file": "scene_029.mp4",
+  "start": 1319.827,
+  "duration": 64.433,
+  "act": 8,
+  "title": "Compress the memory"
+ },
+ {
+  "scene": "s0804",
+  "file": "scene_030.mp4",
+  "start": 1384.26,
+  "duration": 29.966,
+  "act": 8,
+  "title": "Three dials"
+ },
+ {
+  "scene": "s0901",
+  "file": "scene_031.mp4",
+  "start": 1414.226,
+  "duration": 56.6,
+  "act": 9,
+  "title": "The agent problem"
+ },
+ {
+  "scene": "s0902",
+  "file": "scene_032.mp4",
+  "start": 1470.826,
+  "duration": 49.3,
+  "act": 9,
+  "title": "Don't look at everything"
+ },
+ {
+  "scene": "s0903",
+  "file": "scene_033.mp4",
+  "start": 1520.126,
+  "duration": 60.167,
+  "act": 9,
+  "title": "Layers that share a memory"
+ },
+ {
+  "scene": "s0904",
+  "file": "scene_034.mp4",
+  "start": 1580.293,
+  "duration": 45.667,
+  "act": 9,
+  "title": "Four bits"
+ },
+ {
+  "scene": "s0905",
+  "file": "scene_035.mp4",
+  "start": 1625.96,
+  "duration": 46.933,
+  "act": 9,
+  "title": "Reading half as hard"
+ },
+ {
+  "scene": "s0906",
+  "file": "scene_036.mp4",
+  "start": 1672.893,
+  "duration": 80.867,
+  "act": 9,
+  "title": "890 bytes"
+ },
+ {
+  "scene": "s1001",
+  "file": "scene_037.mp4",
+  "start": 1753.76,
+  "duration": 41.767,
+  "act": 10,
+  "title": "Measuring wrongness"
+ },
+ {
+  "scene": "s1002",
+  "file": "scene_038.mp4",
+  "start": 1795.526,
+  "duration": 51.366,
+  "act": 10,
+  "title": "Walking downhill"
+ },
+ {
+  "scene": "s1003",
+  "file": "scene_039.mp4",
+  "start": 1846.893,
+  "duration": 45.2,
+  "act": 10,
+  "title": "The loop"
+ },
+ {
+  "scene": "s1004",
+  "file": "scene_040.mp4",
+  "start": 1892.093,
+  "duration": 51.0,
+  "act": 10,
+  "title": "What V3's training took"
+ },
+ {
+  "scene": "s1101",
+  "file": "scene_041.mp4",
+  "start": 1943.093,
+  "duration": 65.366,
+  "act": 11,
+  "title": "What the famous number means"
+ },
+ {
+  "scene": "s1102",
+  "file": "scene_042.mp4",
+  "start": 2008.459,
+  "duration": 43.0,
+  "act": 11,
+  "title": "So what was surprising?"
+ },
+ {
+  "scene": "s1201",
+  "file": "scene_043.mp4",
+  "start": 2051.459,
+  "duration": 39.767,
+  "act": 12,
+  "title": "See it all at once"
+ },
+ {
+  "scene": "s1202",
+  "file": "scene_044.mp4",
+  "start": 2091.225,
+  "duration": 58.033,
+  "act": 12,
+  "title": "What you do when you can't buy your way out"
+ }
+]
