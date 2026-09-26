@@ -46,7 +46,7 @@ class S0701Islands(DocScene):
     def construct(self):
         self.beat("b1")
         gs, ex = islands()
-        self.play(LaggedStart(*[FadeIn(VGroup(g, e)) for g, e in zip(gs, ex)], lag_ratio=0.25), run_time=self.dur(0.6))
+        self.play(LaggedStart(*[FadeIn(VGroup(g, e)) for g, e in zip(gs, ex)], lag_ratio=0.12), run_time=self.dur(0.3))
         self.hold()
 
         self.beat("b2")

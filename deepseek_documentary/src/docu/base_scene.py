@@ -33,17 +33,34 @@ ENCODER_QUEUE_BUDGET = 600e6   # bytes of queued RGBA frames allowed per encode 
 
 
 def bound_encoder_memory():
-    """Keep Manim's frame queue bounded.
+    """Keep Manim's frame queue bounded while staying on its serial encoder.
 
     With Manim's default (max_inflight_encoders = 1) the per-animation frame
     queue is created with maxsize=0, i.e. unbounded. Cairo draws frames faster
     than x264 encodes them, so at 8K (~133 MB per RGBA frame) a single worker
-    grew past 12 GB and GitHub's 16 GB runners were killed. Enabling the
-    bounded-queue mode caps queued frames per job to ~ENCODER_QUEUE_BUDGET.
+    grew past 12 GB and GitHub's 16 GB runners were killed.
+
+    Manim's parallel-encoder mode bounds the queue but intermittently loses a
+    partial movie file mid-write (FileNotFoundError) under load, so instead we
+    keep serial encoding and only replace its unbounded queue with a bounded
+    one (~ENCODER_QUEUE_BUDGET of frames). The producer simply blocks until the
+    encoder catches up.
     """
-    frame_bytes = config.pixel_width * config.pixel_height * 4
-    config.max_inflight_encoders = 2
-    config.encoder_queue_size = int(min(8, max(2, ENCODER_QUEUE_BUDGET // frame_bytes)))
+    from manim.scene import scene_file_writer as sfw
+
+    job_cls = sfw._PartialMovieEncodeJob
+    if getattr(job_cls, "_docu_bounded", False):
+        return
+    original_init = job_cls.__init__
+
+    def bounded_init(self, path, animation_index, container, stream, frame_queue_size):
+        if frame_queue_size == 0:
+            frame_bytes = config.pixel_width * config.pixel_height * 4
+            frame_queue_size = int(min(8, max(2, ENCODER_QUEUE_BUDGET // frame_bytes)))
+        original_init(self, path, animation_index, container, stream, frame_queue_size)
+
+    job_cls.__init__ = bounded_init
+    job_cls._docu_bounded = True
 
 
 class DocScene(MovingCameraScene):
