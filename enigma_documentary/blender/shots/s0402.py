@@ -28,6 +28,6 @@ def build(ctx):
     S.move(cam, tgt, 0.0, fps, loc=rel((0.15, -0.26, 0.07)), look=rel((0.012, 0, 0)))
     S.move(cam, tgt, b["b4"], fps, loc=rel((0.13, -0.25, 0.06)), look=rel((0.012, 0, 0)))
     S.move(cam, tgt, b["b5"], fps, loc=rel((0.10, -0.26, 0.07)), look=rel((0.008, 0, 0)))
-    S.move(cam, tgt, ctx.duration, fps, loc=rel((-0.14, -0.22, 0.08)), look=LIFT)
+    S.move(cam, tgt, ctx.duration, fps, loc=rel((0.14, -0.20, 0.14)), look=LIFT)   # orbit up and over, on the pin side
     S.cut(scene, cam, 0.0, fps)
     return parts

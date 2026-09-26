@@ -213,7 +213,8 @@ def place_rotor(rig, slot: str, to, t: float, fps: int):
 
 def explode_rotor(rig, slot: str, t0: float, dur: float, fps: int, gap=0.028, back_at: float | None = None):
     """Slide a rotor's parts apart along its axle (thumbwheel, ring+letters+notch, core, ratchet)."""
-    offsets = {"thumbwheel": -2.0, "ring": -1.0, "ringletter": -1.0, "notch": -1.0, "ratchet": 1.2}
+    offsets = {"thumbwheel": -3.0, "ring": -1.6, "ringletter": -1.6, "notch": -1.6, "ratchet": 1.2}
+    # the thumbwheel and ring go well clear of the core so its plate face can be seen through the gap
     for ob in rig.rotors[slot].children:
         part = ob.name.replace(f"ENIGMA_rotor_{slot}_", "").split("_")[0]
         k = offsets.get(part)

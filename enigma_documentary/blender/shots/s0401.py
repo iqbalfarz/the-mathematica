@@ -16,19 +16,19 @@ def build(ctx):
     api.lift_rotor(rig, slot, LIFT, b["b1"] + 0.2, 1.8, fps)
     api.isolate(rig, [rig.rotors[slot]], b["b1"] + 2.3, fps)
     # b3: explode along the axle; b6: back together.
-    api.explode_rotor(rig, slot, b["b3"] + 0.3, 1.2, fps, back_at=b["b6"] + 2.0)
+    api.explode_rotor(rig, slot, b["b3"] + 0.3, 1.2, fps, back_at=b["b6"] + 2.0, gap=0.034)
 
     cam, tgt = S.camera("CAM_rotor", lens=50, fstop=6.3)
     axis = (L.AXIS_X[slot], L.ROTOR_AXIS_Y, L.ROTOR_AXIS_Z)
     shots = [
         (0.0, (0.03, -0.12, 0.30), axis),
         (b["b1"] + 0.2, (0.03, -0.12, 0.30), axis),
-        (b["b1"] + 2.2, rel((0.08, -0.42, 0.08)), LIFT),
-        (b["b2"] + 2.0, rel((0.04, -0.40, 0.07)), LIFT),
-        (b["b3"] + 1.6, rel((0.00, -0.44, 0.09)), LIFT),
-        (b["b4"] + 0.2, rel((0.00, -0.44, 0.09)), LIFT),
-        (b["b4"] + 2.2, rel((0.28, -0.26, 0.08)), rel((0.02, 0, 0))),     # pin face
-        (b["b4"] + 4.6, rel((-0.28, -0.26, 0.08)), rel((-0.02, 0, 0))),   # plate face
+        (b["b1"] + 2.2, rel((0.15, -0.28, 0.09)), LIFT),                  # three-quarter: letters + pin face
+        (b["b2"] + 2.0, rel((0.12, -0.29, 0.08)), LIFT),
+        (b["b3"] + 1.6, rel((0.02, -0.36, 0.09)), rel((-0.01, 0, 0))),    # side on: the parts spread out
+        (b["b4"] + 0.2, rel((0.02, -0.36, 0.09)), rel((-0.01, 0, 0))),
+        (b["b4"] + 2.2, rel((0.25, -0.29, 0.10)), rel((0.012, 0, 0))),    # pin face
+        (b["b4"] + 4.6, rel((-0.20, -0.24, 0.10)), rel((-0.01, 0, 0))),   # plate face, through the gap
         (b["b5"] + 0.4, rel((-0.06, -0.36, 0.13)), rel((-0.012, 0, 0.012))),  # ring + notch
         (b["b6"] + 0.3, rel((0.20, -0.32, 0.07)), rel((0.035, 0, 0))),    # ratchet
         (ctx.duration, rel((0.02, -0.42, 0.08)), LIFT),

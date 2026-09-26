@@ -31,7 +31,7 @@ python run.py doctor
 
 The Kokoro voice model (~350 MB) downloads automatically the first time you run the voice step.
 
-## 2. First run: a draft (about an hour)
+## 2. First run: a draft (about 8 hours for Acts I–V on 4 cores; `preview` takes about 2)
 
 ```bash
 python run.py all --profile draft
@@ -73,7 +73,8 @@ Run `estimate` with the profile first. EEVEE couldn't be tested in the build env
 | Profile | Size | fps | Blender | Use |
 |---|---|---|---|---|
 | smoke | 320×180 | 6 | 8 samples | proves the pipeline works (minutes) |
-| draft | 960×540 | 12 | 8 samples | timing & story check |
+| preview | 640×360 | 12 | 4 samples | watch the whole film (about 2 h for Acts I–V) |
+| draft | 960×540 | 12 | 8 samples | timing & story check (about 8 h for Acts I–V) |
 | review | 1280×720 | 24 | 12 samples | look check |
 | **final** | 1920×1080 | 24 | 16 samples + denoise | CPU-only master |
 | final_gpu | 1920×1080 | 24 | 64 samples | with a GPU |
