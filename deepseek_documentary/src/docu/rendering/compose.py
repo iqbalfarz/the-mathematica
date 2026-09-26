@@ -130,13 +130,16 @@ def compose(q: dict, out_path: Path | None = None) -> Path:
     dest_dir = OUTPUT / ("review" if q["name"] == "preview" else "final")
     dest_dir.mkdir(parents=True, exist_ok=True)
     out_path = out_path or dest_dir / f"{cfg['output_basename']}_{q['height']}p_{q['name']}.mp4"
+    if q.get("reencode", True):
+        vcodec = ["-c:v", "libx264", "-preset", q["preset"], "-crf", str(q["crf"]), "-pix_fmt", "yuv420p",
+                  "-r", str(q["fps"])]
+    else:
+        vcodec = ["-c:v", "copy"]   # scene files are already H.264; see config/video.yaml
     cmd = ["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(lst), "-i", str(mix_wav),
-           "-map", "0:v:0", "-map", "1:a:0",
-           "-c:v", "libx264", "-preset", q["preset"], "-crf", str(q["crf"]), "-pix_fmt", "yuv420p",
-           "-r", str(q["fps"]), "-movflags", "+faststart",
+           "-map", "0:v:0", "-map", "1:a:0", *vcodec, "-movflags", "+faststart",
            "-af", "loudnorm=I=-16:TP=-1.5:LRA=11", "-c:a", "aac", "-b:a", q["audio_bitrate"], "-ar", str(SR),
            "-t", f"{total:.3f}", str(out_path)]
-    print("[compose] encoding", out_path)
+    print("[compose] " + ("encoding" if q.get("reencode", True) else "stream-copying video to"), out_path)
     subprocess.run(cmd, check=True)
     base = out_path.with_suffix("")
     Path(str(base) + ".srt").write_text("\n".join(srt))

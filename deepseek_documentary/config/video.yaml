@@ -1,11 +1,15 @@
 # Render quality presets. Scene code never changes between presets:
 # all layout is in Manim frame units, so only pixels/fps change here.
+#
+# reencode: false -> compose stream-copies Manim's H.264 scene files (x264 CRF 23)
+#   and only encodes the audio mix. Required for 4K/8K: re-encoding a 36-minute
+#   8K film on a CI runner takes many hours. Set true to re-encode with crf/preset.
 presets:
-  preview: {width: 1280, height: 720,  fps: 30, crf: 26, preset: veryfast, audio_bitrate: 160k}
-  "1080p": {width: 1920, height: 1080, fps: 60, crf: 18, preset: slow,     audio_bitrate: 256k}
-  "1440p": {width: 2560, height: 1440, fps: 60, crf: 18, preset: slow,     audio_bitrate: 256k}
-  "4k":    {width: 3840, height: 2160, fps: 60, crf: 16, preset: slow,     audio_bitrate: 320k}
-  "8k":    {width: 7680, height: 4320, fps: 30, crf: 16, preset: medium,   audio_bitrate: 320k}
+  preview: {width: 1280, height: 720,  fps: 30, reencode: true,  crf: 26, preset: veryfast, audio_bitrate: 160k}
+  "1080p": {width: 1920, height: 1080, fps: 60, reencode: false, crf: 18, preset: slow,     audio_bitrate: 256k}
+  "1440p": {width: 2560, height: 1440, fps: 60, reencode: false, crf: 18, preset: slow,     audio_bitrate: 256k}
+  "4k":    {width: 3840, height: 2160, fps: 60, reencode: false, crf: 16, preset: slow,     audio_bitrate: 320k}
+  "8k":    {width: 7680, height: 4320, fps: 30, reencode: false, crf: 16, preset: medium,   audio_bitrate: 320k}
 default_preset: preview
 background: "#0B0E14"
 safe_margin: 0.45          # frame units kept clear on every edge

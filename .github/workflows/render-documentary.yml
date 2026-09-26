@@ -7,15 +7,19 @@ on:
   workflow_dispatch:
     inputs:
       quality:
-        description: "preview | 1080p | 1440p | 4k | 8k"
+        description: "Render preset (config/video.yaml)"
+        type: choice
+        options: [preview, "1080p", "1440p", 4k, 8k]
         default: preview
         required: true
       shards:
-        description: "parallel render jobs (8 for 1080p/4k, 16 for 8k)"
+        description: "parallel render jobs (8 for preview/1080p, 12 for 4k, 16 for 8k)"
         default: "8"
         required: true
       voice_provider:
-        description: "kokoro (default) or cloned"
+        description: "kokoro = Kokoro-82M narrator. 'cloned' needs a cloning backend that is not implemented yet (see narration/providers/cloned.py) and will fail."
+        type: choice
+        options: [kokoro, cloned]
         default: kokoro
         required: true
 

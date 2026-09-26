@@ -47,6 +47,31 @@ def _scene_hash(spec, q) -> str:
     return h.hexdigest()[:20]
 
 
+def worker_memory_mb(q) -> float:
+    """Measured peak RSS of one Manim worker: ~1.2 GB at 1080p, ~9.3 GB at 8K
+    (with the bounded encoder queue from base_scene.bound_encoder_memory)."""
+    return 700 + 260 * q["width"] * q["height"] / 1e6
+
+
+def available_memory_mb() -> float | None:
+    try:
+        for line in Path("/proc/meminfo").read_text().splitlines():
+            if line.startswith("MemAvailable:"):
+                return int(line.split()[1]) / 1024
+    except OSError:
+        pass
+    return None
+
+
+def memory_safe_workers(requested: int, q) -> int:
+    """Never start more parallel renders than RAM can hold (8K on a 16 GB CI
+    runner gets exactly one)."""
+    avail = available_memory_mb()
+    if avail is None:
+        return requested
+    return max(1, min(requested, int(avail * 0.9 // worker_memory_mb(q))))
+
+
 def out_dir(q) -> Path:
     d = SCENES_OUT / q["name"]
     d.mkdir(parents=True, exist_ok=True)
@@ -130,11 +155,12 @@ def main(argv=None):
         print("WARNING: no narration timing yet; run `python -m docu.narration.generate_voice` first.")
     state_f = out_dir(q) / "state.json"
     state = json.loads(state_f.read_text()) if state_f.exists() else {}
+    workers = memory_safe_workers(args.workers, q)
     print(f"[render] {len(scenes)} scenes at {q['width']}x{q['height']}@{q['fps']} ({q['name']}), "
-          f"{args.workers} workers")
+          f"{workers} workers" + (f" (capped from {args.workers} by available memory)" if workers < args.workers else ""))
     t0 = time.time()
     failed = []
-    with cf.ThreadPoolExecutor(max_workers=args.workers) as ex:
+    with cf.ThreadPoolExecutor(max_workers=workers) as ex:
         futs = {ex.submit(render_one, s, q, args.force, args.retries): s for s in scenes}
         for f in cf.as_completed(futs):
             res = f.result()
