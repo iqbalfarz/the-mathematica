@@ -95,7 +95,7 @@ docker logs -f doc4k        # detach any time; the job keeps running
 The queue is resumable. If the machine restarts, run the same command again: finished scenes are skipped, because their hash is stored next to each `scene_NNN.mp4`.
 
 **Memory and 8K.**
-- One render worker peaks at about 1.2 GB at 1080p, about 3 GB at 4K and about 9.3 GB at 8K (measured).
+- One render worker peaks at about 1.1 GB at 1080p, about 2.2 GB at 4K and about 6.6 GB at 8K (measured).
 - The queue caps parallel workers to what `MemAvailable` can hold, so an 8K shard on a 16 GB GitHub runner uses one worker.
 - `DocScene` also bounds Manim's frame queue (Manim's default queue is unbounded, which pushed 8K past 12 GB).
 - The 8K preset uses 30 fps to keep file size and render time sane; override with `--fps 60`.

@@ -32,3 +32,9 @@ def resolve_quality(quality: str | None = None, resolution: str | None = None, f
         p["name"] = p["name"].replace("@", "_")
     p["background"] = cfg["background"]
     return p
+
+
+def film_filename(q: dict, basename: str) -> str:
+    """e.g. deepseek_first_principles_720p_preview.mp4, ..._480p.mp4 (no '480p_480p')."""
+    tag = f"{q['height']}p"
+    return f"{basename}_{tag}.mp4" if q["name"] == tag else f"{basename}_{tag}_{q['name']}.mp4"

@@ -138,8 +138,8 @@ class S1202TheAnswer(DocScene):
         t2 = T("The First-Principles Story of How", S.BODY, S.MUTED)
         tt = VGroup(t1, t2).arrange(DOWN, buff=0.25).move_to(UP * 0.4)
         fit_width(tt)
-        srcs = T("Sources: DeepSeek-V3 Technical Report · DeepSeek-V2 · DeepSeek-V4.1-Flash (arXiv:2609.19969) · "
-                 "BIS / CSET / CSIS · NVIDIA 8-K. Full claim ledger in the project repository.", S.TINY, S.MUTED)
+        srcs = T("Sources: DeepSeek-V3 Technical Report · DeepSeek-V2 · DeepSeek-V4.1-Flash (arXiv:2609.19969)\n"
+                 "BIS / CSET / CSIS · NVIDIA 8-K · full claim ledger in the project repository", S.TINY, S.MUTED)
         fit_width(srcs)
         srcs.to_edge(DOWN, buff=0.6)
         self.play(FadeIn(tt, shift=UP * 0.2), run_time=1.0)

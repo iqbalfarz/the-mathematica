@@ -48,9 +48,9 @@ def _scene_hash(spec, q) -> str:
 
 
 def worker_memory_mb(q) -> float:
-    """Measured peak RSS of one Manim worker: ~1.2 GB at 1080p, ~9.3 GB at 8K
+    """Measured peak RSS of one Manim worker: ~1.1 GB at 1080p, ~6.6 GB at 8K
     (with the bounded encoder queue from base_scene.bound_encoder_memory)."""
-    return 700 + 260 * q["width"] * q["height"] / 1e6
+    return 700 + 180 * q["width"] * q["height"] / 1e6
 
 
 def available_memory_mb() -> float | None:

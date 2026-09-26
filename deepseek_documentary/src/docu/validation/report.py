@@ -9,7 +9,7 @@ import json
 import time
 
 from ..paths import OUTPUT, SCENES_OUT, TIMING
-from ..rendering.presets import load_video_config, resolve_quality
+from ..rendering.presets import film_filename, load_video_config, resolve_quality
 from ..script import load_script, word_count
 from . import media_validation, source_validation, story_validation, technical_validation
 
@@ -68,7 +68,7 @@ def main(argv=None):
 
     # media
     dest = OUTPUT / ("review" if q["name"] == "preview" else "final")
-    film = dest / f"{cfg['output_basename']}_{q['height']}p_{q['name']}.mp4"
+    film = dest / film_filename(q, cfg['output_basename'])
     media_info = {}
     if film.exists():
         manifest = json.loads(film.with_suffix(".manifest.json").read_text())

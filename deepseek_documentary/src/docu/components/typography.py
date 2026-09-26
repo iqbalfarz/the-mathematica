@@ -41,13 +41,24 @@ def fit_width(m, max_w: float | None = None):
     return m
 
 
+# Manim lays text out in a Pango box as wide as the output in *pixels*, so the
+# same line could wrap at 480p but not at 4K. We typeset every Text in a fixed,
+# very wide box instead, which makes line breaks independent of resolution.
+_LAYOUT_PX = (30000, 12000)
+
+
 def T(text: str, size: int = S.BODY, color=S.TEXT, weight: str = "NORMAL", mono: bool = False, **kw) -> Text:
     """Text in the house font. Keeps font_size >= TINY for legibility."""
     size = max(size, S.TINY)
     # Pango hints glyph positions at small sizes, which produces uneven gaps
     # ("20 22"). Shaping at >=120 and scaling down gives clean kerning.
     base = max(size, 120)
-    t = Text(text, font=S.MONO if mono else S.FONT, font_size=base, color=color, weight=weight, **kw)
+    saved = config.pixel_width, config.pixel_height
+    config.pixel_width, config.pixel_height = _LAYOUT_PX
+    try:
+        t = Text(text, font=S.MONO if mono else S.FONT, font_size=base, color=color, weight=weight, **kw)
+    finally:
+        config.pixel_width, config.pixel_height = saved
     if base != size:
         t.scale(size / base)
     return t

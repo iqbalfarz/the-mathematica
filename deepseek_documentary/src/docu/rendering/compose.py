@@ -18,7 +18,7 @@ from scipy.ndimage import uniform_filter1d
 from ..audio import music, sfx
 from ..paths import AUDIO, BUILD, OUTPUT, SCENES_OUT, TIMING
 from ..script import load_script
-from .presets import load_video_config, resolve_quality
+from .presets import film_filename, load_video_config, resolve_quality
 
 SR = 48000
 
@@ -129,7 +129,7 @@ def compose(q: dict, out_path: Path | None = None) -> Path:
     lst.write_text("".join(f"file '{(od / f'{s.filename}.mp4').as_posix()}'\n" for s in scenes))
     dest_dir = OUTPUT / ("review" if q["name"] == "preview" else "final")
     dest_dir.mkdir(parents=True, exist_ok=True)
-    out_path = out_path or dest_dir / f"{cfg['output_basename']}_{q['height']}p_{q['name']}.mp4"
+    out_path = out_path or dest_dir / film_filename(q, cfg['output_basename'])
     if q.get("reencode", True):
         vcodec = ["-c:v", "libx264", "-preset", q["preset"], "-crf", str(q["crf"]), "-pix_fmt", "yuv420p",
                   "-r", str(q["fps"])]
