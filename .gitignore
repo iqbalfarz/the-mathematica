@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+deepseek_documentary/build/
+deepseek_documentary/output/**/*.mp4
+deepseek_documentary/output/**/*.wav
+deepseek_documentary/output/**/frames/
+deepseek_documentary/assets/audio/
+deepseek_documentary/assets/music/*.wav
+deepseek_documentary/models
+media/

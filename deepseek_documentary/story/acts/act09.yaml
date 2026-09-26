@@ -1,0 +1,151 @@
+act: 9
+title: "DeepSeek-V4.1-Flash: Pushing the Memory Wall"
+music: discovery
+scenes:
+- id: s0901
+  cls: S0901Agents
+  title: "The agent problem"
+  loops: {}
+  beats:
+  - id: b1
+    say: "By 2026, people weren't just chatting with models. They were handing them jobs. Read this code base. Run the tests. Fix the bug. Try again."
+    pause: 0.4
+    visual: "A loop diagram: model → tool call → result → model, spinning, with the context bar growing each lap."
+  - id: b2
+    say: "Every tool call pours more text back into the context. The inputs grow enormous, the outputs stay small. DeepSeek describes these workloads as increasingly input heavy. [[V41-019]]"
+    pause: 0.4
+    visual: "Input bar balloons, output bar stays thin; label 'input-heavy'."
+  - id: b3
+    say: "In September 2026, DeepSeek published a paper about exactly this, for a model called DeepSeek V4.1 Flash. 552 billion backbone parameters, and contexts of up to a million tokens. [[V41-001]]"
+    pause: 0.4
+    visual: "Paper card: 'DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression · arXiv 2609.19969'. Stats appear."
+  - id: b4
+    say: "And the paper is candid about the bottleneck. Earlier sparse attention had already tamed much of the compute cost of long contexts, which left storage and data movement as the prominent bottlenecks. The KV cache. [[V41-020]]"
+    pause: 0.8
+    visual: "Legend: COMPUTE pillar dims (tamed); MEMORY and COMMUNICATION pillars flare."
+- id: s0902
+  cls: S0902SparseAttention
+  title: "Don't look at everything"
+  loops: {}
+  beats:
+  - id: b1
+    say: "First, the sequence dial. When a new token is written, does it really need to look at all million earlier tokens? [[V41-001]]"
+    pause: 0.4
+    visual: "A new token and a very long strip of past entries; attention lines to all of them, too dense to see."
+  - id: b2
+    say: "V4.1 Flash says no. A small, cheap scorer, called an indexer, quickly rates the past entries, and the model attends properly only to the top 512. [[V41-008]]"
+    pause: 0.4
+    visual: "A light indexer scan passes along the strip; 512 cells highlight; full attention lines only to those."
+  - id: b3
+    say: "Early layers also compress the past, merging neighbouring tokens into shared entries. [[V41-021]] And every layer keeps a short, precise window of the most recent 128 tokens, so nothing nearby gets lost. [[V41-006]]"
+    pause: 0.4
+    visual: "Pairs of cells merge into single cells (compression ratio 2); a bright window of recent tokens sits at the right end."
+  - id: b4
+    say: "Remember the grid of every token compared with every other? Double the text and that grid quadruples. Picking a fixed number of entries keeps each new token's work on a leash."
+    pause: 0.8
+    visual: "The n×n attention grid from Act 4 reappears, then thins into sparse columns."
+- id: s0903
+  cls: S0903LayerReuse
+  title: "Layers that share a memory"
+  loops: {}
+  beats:
+  - id: b1
+    say: "Now the layer dial. Traditionally, every layer keeps its own shelf of keys and values. Forty layers, forty shelves."
+    pause: 0.4
+    visual: "A stack of 40 layers, each with its own cache shelf beside it."
+  - id: b2
+    say: "V4.1 Flash introduces what it calls Compressed Sparse Attention 2. Its layers come in three modes. [[V41-008]]"
+    pause: 0.3
+    visual: "Three mode badges: FULL, REINDEX, REUSE."
+  - id: b3
+    say: "A Full layer builds the shared memory and picks which entries matter. A Reindex layer borrows that memory, but re-scores it with its own question. And a Reuse layer borrows both, the memory and the selection. It keeps only its own query."
+    pause: 0.4
+    visual: "FULL layer writes a shelf; REINDEX layer draws from that shelf with a new selection; REUSE layer draws both."
+  - id: b4
+    say: "In the encoder, layers come in groups of six. One Full, then five Reuse. In the decoder, groups of four. [[V41-022]] Most layers stop storing their own shelf entirely."
+    pause: 0.4
+    visual: "Most of the 40 shelves collapse and vanish; only a few remain."
+  - id: b5
+    say: "The trade is the same one MLA made. A little more computation, and a lot less memory. And DeepSeek is upfront that it has a cost: the shared selection can occasionally pick the wrong entries. [[V41-015]]"
+    pause: 0.8
+    visual: "A small caution marker beside the REUSE badge: 'selection can err (§6)'."
+- id: s0904
+  cls: S0904FourBits
+  title: "Four bits"
+  loops: {}
+  beats:
+  - id: b1
+    say: "Then the entry size dial again. This time not by storing fewer numbers, but by storing each number with fewer bits."
+    pause: 0.4
+    visual: "An 8-bit cell box shrinks to 4 bits."
+  - id: b2
+    say: "Four bits give you only sixteen patterns. In the format DeepSeek uses, they stand for: zero, a half, one, one and a half, two, three, four, six, and their negatives. [[V41-009]] [[MATH]]"
+    pause: 0.4
+    visual: "A number line with the FP4 (E2M1) values marked as ticks: 0, 0.5, 1, 1.5, 2, 3, 4, 6 and mirror negatives."
+  - id: b3
+    say: "That's a very coarse ruler. The trick is to give every group of 16 numbers its own shared scale, so the ruler stretches to fit whatever range that group needs. [[V41-009]]"
+    pause: 0.4
+    visual: "A group of 16 real values; a scale factor stretches the tick ruler to cover them; each value snaps to the nearest tick."
+  - id: b4
+    say: "DeepSeek stores the main cache this way, and keeps the more sensitive local window in 8 bits. Compared with the 8 bit main cache of V4, that nearly halves its storage. [[V41-009]]"
+    pause: 0.8
+    visual: "Two cache shelves side by side: FP8 vs FP4, the FP4 one half the height."
+- id: s0905
+  cls: S0905EncoderDecoder
+  title: "Reading half as hard"
+  loops: {}
+  beats:
+  - id: b1
+    say: "One more idea, aimed at the moment a long prompt first arrives. This is called prefill, reading the input, as opposed to decode, writing the output."
+    pause: 0.4
+    visual: "Two phases labelled PREFILL (a huge block of input tokens) and DECODE (tokens emitted one by one)."
+  - id: b2
+    say: "V4.1 Flash splits its 40 layers into a 20 layer encoder and a 20 layer decoder. [[V41-006]] The upper half doesn't compute its long-range memory from its own layers. It projects it directly from the encoder's final output. [[V41-010]]"
+    pause: 0.4
+    visual: "A 40-layer stack split at the middle; arrows from the layer-20 output fan up into each decoder layer's memory."
+  - id: b3
+    say: "So when a long prompt arrives, only the bottom half has to process all of it. The paper says this nearly halves prefill computation. [[V41-010]]"
+    pause: 0.4
+    visual: "Prompt block flows through the bottom 20 layers only; top half stays dim; label '≈ half the prefill compute'."
+  - id: b4
+    say: "Which is why the paper reports about 8 billion active parameters per token when reading, and about 16 billion when writing. [[V41-002]]"
+    pause: 0.8
+    visual: "Two meters: PREFILL 8B active, DECODE 16B active."
+- id: s0906
+  cls: S0906TheChart
+  title: "890 bytes"
+  loops: {close: [L7, L9]}
+  beats:
+  - id: b1
+    say: "Now put the dials together. Here's a chart from DeepSeek's own paper. The global KV cache per token, across generations of their models. [[V41-004]]"
+    pause: 0.4
+    visual: "Recreated horizontal bar chart axes appear; attribution line 'Data: DeepSeek-AI, arXiv:2609.19969, Fig. 1(b)'."
+  - id: b2
+    say: "Their first model, in 2023: about 389 thousand bytes per token. [[V41-004]]"
+    pause: 0.3
+    visual: "Bar DeepSeek-V1 (2023.11): 389,120 B."
+  - id: b3
+    say: "V3.2, at the end of 2025: about 48 thousand. [[V41-004]]"
+    pause: 0.3
+    visual: "Bar V3.2 (2025.12): 48,068 B."
+  - id: b4
+    say: "V4 Flash, in April 2026: 3,514. [[V41-004]]"
+    pause: 0.3
+    visual: "Bar V4-Flash (2026.04): 3,514 B."
+  - id: b5
+    say: "And V4.1 Flash: 890 bytes. [[V41-003]]"
+    pause: 1.0
+    visual: "Bar V4.1-Flash (2026.09): 890 B — a sliver. The '890 bytes' teaser from Act 1 flies in and lands on it."
+    sfx: impact
+  - id: b6
+    say: "That's the number from the start. About 437 times smaller than their first model, and roughly a quarter of the model just before it. [[V41-004]] [[V41-003]] Less than a kilobyte, to remember each token."
+    pause: 0.5
+    visual: "Annotations '≈ 437× smaller than V1' and '≈ 4× smaller than V4-Flash'."
+  - id: b7
+    say: "And one more result. Stretching the context 256 times, from 4 thousand tokens to a million, raises the compute for each new token by only about a quarter. [[V41-011]]"
+    pause: 0.4
+    visual: "Two markers on a context axis 4K → 1M; a cost line rising only +25%."
+  - id: b8
+    say: "The paper also reports that, despite this far smaller memory, V4.1 Flash performs substantially better than the model before it. [[V41-023]] That's DeepSeek's claim, on their own benchmarks. But it's the claim that matters. They didn't trade quality for memory."
+    pause: 1.0
+    visual: "Small card: 'better overall performance than V4-Flash (reported)'."

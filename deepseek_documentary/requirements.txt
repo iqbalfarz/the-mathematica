@@ -1,0 +1,7 @@
+manim==0.21.0
+kokoro-onnx==0.6.1
+onnxruntime==1.30.0
+numpy==2.4.6
+scipy==1.17.1
+soundfile==0.14.0
+PyYAML==6.0.3

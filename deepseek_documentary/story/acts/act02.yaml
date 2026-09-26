@@ -1,0 +1,100 @@
+act: 2
+title: "What Does Compute Even Mean?"
+music: curious
+scenes:
+- id: s0201
+  cls: S0201OneMultiplication
+  title: "One multiplication"
+  loops: {open: [L2]}
+  beats:
+  - id: b1
+    say: "Here is the most important operation in all of modern AI. [[MATH]]"
+    pause: 0.5
+    visual: "The dot becomes the expression 3 × 4."
+  - id: b2
+    say: "Three times four. Twelve. That's it. One multiplication."
+    pause: 0.6
+    visual: "3 × 4 transforms into = 12. A small counter '1 operation' appears."
+  - id: b3
+    say: "Now let's give those numbers jobs. Suppose the three is a piece of information coming in, an input. And the four is how much we care about it. A weight."
+    pause: 0.4
+    visual: "3 gets a label 'input x', 4 gets 'weight w'. Colours shift to input-blue and parameter-amber."
+  - id: b4
+    say: "A neuron, in an artificial neural network, is barely more than this. It takes several inputs, multiplies each one by its own weight, and adds everything up."
+    pause: 0.4
+    visual: "Three inputs on the left flow into a circle through three weighted edges; products appear on edges and sum into the neuron."
+  - id: b5
+    say: "Those weights are what people mean when they say a model has parameters. Every parameter is just one number, one of these weights."
+    pause: 0.8
+    visual: "The weights glow amber; label 'parameters = the weights'."
+- id: s0202
+  cls: S0202DotProduct
+  title: "Multiply, add, repeat"
+  loops: {}
+  beats:
+  - id: b1
+    say: "Line the inputs up in a column, line the weights up in a row, and this whole neuron becomes one tidy operation. [[MATH]]"
+    pause: 0.4
+    visual: "The neuron diagram morphs into a row vector w and a column vector x."
+  - id: b2
+    say: "Multiply the first pair. The second pair. The third. Then add. Mathematicians call it a dot product."
+    pause: 0.4
+    visual: "Pairs highlight one at a time; products drop into a running sum; label 'dot product'."
+  - id: b3
+    say: "Notice what it cost. Three multiplications, and a few additions. People lump a multiply and an add together and count them as floating point operations. FLOPs."
+    pause: 0.4
+    visual: "Counter ticks: 3 multiplies, 2 adds. The word FLOP is defined underneath."
+  - id: b4
+    say: "Hold on to that word. Everything in this story is going to be measured in it."
+    pause: 0.8
+    visual: "The word FLOP brightens and slides to the top-right as a persistent unit label."
+- id: s0203
+  cls: S0203MatrixMultiply
+  title: "Rows meet columns"
+  loops: {}
+  beats:
+  - id: b1
+    say: "A real layer doesn't have one neuron. It has many, all looking at the same inputs. Stack their weight rows on top of each other, and you get a matrix. [[MATH]]"
+    pause: 0.4
+    visual: "One weight row duplicates into three rows, forming a 3 by 3 matrix W beside input vector x."
+  - id: b2
+    say: "Each row meets the input, does its dot product, and produces one output. Row one, output one. Row two, output two."
+    pause: 0.3
+    visual: "Row 1 slides over x, multiplies, yields y1. Row 2 yields y2. Row 3 yields y3."
+  - id: b3
+    say: "And if we feed in three inputs at once, three tokens say, it becomes a matrix times a matrix. Every row meets every column."
+    pause: 0.3
+    visual: "x widens into a 3 by 3 matrix X. Result grid fills cell by cell as rows sweep across columns."
+  - id: b4
+    say: "Three rows, three columns, three multiplications each. Twenty-seven multiplications, for the smallest matrix you can draw. [[GEN-002]]"
+    pause: 0.8
+    visual: "Counter races to 27. Equation (m×n)·(n×p) → m·n·p multiplications appears."
+- id: s0204
+  cls: S0204ScaleExplodes
+  title: "From twenty-seven to billions"
+  loops: {close: [L2]}
+  beats:
+  - id: b1
+    say: "Now the real thing. Inside DeepSeek V3, each token is represented by 7,168 numbers. [[V3-008]]"
+    pause: 0.4
+    visual: "The 3×3 matrix zooms out; grid lines multiply until the matrix is a fine texture labelled 7168 × 7168."
+  - id: b2
+    say: "Pushing one token through a single square matrix of that size takes about 51 million multiplications. [[DER-006]] One token. One matrix."
+    pause: 0.5
+    visual: "Counter jumps from 27 to 51,380,224."
+  - id: b3
+    say: "A model is hundreds of these matrices, stacked in layers. A useful rule of thumb: running a model costs about two operations for every parameter it uses, for every token it reads or writes. [[GEN-003]]"
+    pause: 0.4
+    visual: "Matrices stack into a tall column of layers; the rule '≈ 2 FLOPs × active parameters × tokens' writes out."
+  - id: b4
+    say: "For V3, with its 37 billion active parameters, that's roughly 74 billion operations. [[DER-005]] For every single word fragment it produces."
+    pause: 0.6
+    visual: "37,000,000,000 × 2 → ≈ 74 billion FLOPs per token. A token block flashes."
+  - id: b5
+    say: "So that's what compute is. Not magic. Not thinking, exactly. Multiplication and addition, repeated an astronomical number of times."
+    pause: 0.4
+    visual: "Zoom out: the layer stack becomes a tiny glowing speck among countless others."
+  - id: b6
+    say: "Which raises an obvious question. What kind of machine can do that fast enough?"
+    pause: 1.0
+    visual: "The speck becomes a single GPU block outline."

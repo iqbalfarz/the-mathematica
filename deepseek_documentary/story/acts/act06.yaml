@@ -1,0 +1,108 @@
+act: 6
+title: "Mixture of Experts"
+music: discovery
+scenes:
+- id: s0601
+  cls: S0601SplitTheNetwork
+  title: "Splitting the thinker"
+  loops: {}
+  beats:
+  - id: b1
+    say: "Go back to the feed-forward network, the part of each block where most of the parameters live."
+    pause: 0.3
+    visual: "One Transformer block; the FFN box highlights."
+  - id: b2
+    say: "Now, instead of one huge feed-forward network, cut it into several smaller ones. Each is a complete little network on its own. We'll call them experts."
+    pause: 0.4
+    visual: "The FFN box slices into 8 smaller boxes E1..E8, each in expert-green."
+  - id: b3
+    say: "Here's the key idea. For any given token, we only run a few of them. The rest stay switched off."
+    pause: 0.4
+    visual: "Two of the 8 light up; six stay dark."
+  - id: b4
+    say: "The model can hold the knowledge of all eight experts. But each token only pays for two. This is called a Mixture of Experts."
+    pause: 0.8
+    visual: "Labels: 'stored: 8 experts' vs 'computed: 2 experts'. Title 'Mixture of Experts (MoE)'."
+- id: s0602
+  cls: S0602TheRouter
+  title: "Who decides?"
+  loops: {}
+  beats:
+  - id: b1
+    say: "Which raises an obvious question. Who decides which experts a token should visit?"
+    pause: 0.4
+    visual: "A token hovers in front of 8 experts; question mark."
+  - id: b2
+    say: "Another small learned piece of the network. A router. It looks at the token and gives every expert a score."
+    pause: 0.4
+    visual: "A router diamond appears between token and experts; score bars rise above each expert."
+  - id: b3
+    say: "Watch what happens with different tokens. The word integral lights up one pair of experts."
+    pause: 0.3
+    visual: "Token 'integral' → router → experts E2 and E5 light."
+  - id: b4
+    say: "The code word def lights up a different pair. The word mitochondria, another. Even a word like the gets its own routing."
+    pause: 0.5
+    visual: "Tokens 'def', 'mitochondria', 'the' route to different expert pairs in turn."
+  - id: b5
+    say: "Nobody hand-assigns topics. The router and the experts learn together, and the specialisation emerges from training. Real experts rarely map to tidy human subjects. We're simplifying for the picture."
+    pause: 0.8
+    visual: "Expert topic captions fade to '?'; disclaimer 'illustrative labels'."
+- id: s0603
+  cls: S0603RoutingMath
+  title: "The mathematics of choosing"
+  loops: {}
+  beats:
+  - id: b1
+    say: "In symbols, it's short. The router is just a matrix. Multiply the token's vector by it, and you get one score per expert. [[MATH]]"
+    pause: 0.4
+    visual: "s = W_r x; vector of 8 scores."
+  - id: b2
+    say: "Turn the scores into weights, keep only the top k, and throw the rest away. That's top k routing."
+    pause: 0.4
+    visual: "Scores → gate weights g_i; top-2 highlighted; the others crossed out."
+  - id: b3
+    say: "The output is the chosen experts' answers, blended by their weights. The same weighted-sum trick as attention, just applied to experts instead of words."
+    pause: 0.4
+    visual: "y = Σ_{i ∈ top-k} g_i · E_i(x); two expert outputs scale and merge."
+  - id: b4
+    say: "But there's a trap. If the router falls in love with one expert, every token piles into it, while the others sit idle. You'd have a giant model, secretly behaving like a small one."
+    pause: 0.4
+    visual: "Tokens stream toward E3; E3's load bar overflows; others empty."
+  - id: b5
+    say: "So training has to balance the load. DeepSeek does it by nudging each expert's score up or down, depending on how busy it has been. In V4.1 Flash, they even keep separate nudges for text and for images. [[V41-017]]"
+    pause: 0.8
+    visual: "Small bias arrows adjust each expert's score; load bars even out."
+- id: s0604
+  cls: S0604DeepSeekMoE
+  title: "DeepSeek's version"
+  loops: {close: [L5], open: [L6]}
+  beats:
+  - id: b1
+    say: "DeepSeek pushed this idea further than most. Two changes. First, lots of small experts instead of a few big ones, so tokens can mix and match more precisely."
+    pause: 0.3
+    visual: "8 big experts shatter into a dense grid of 64 small ones."
+  - id: b2
+    say: "Second, one shared expert that every token always visits, to hold common knowledge, so the specialists don't all have to relearn the basics."
+    pause: 0.4
+    visual: "A distinct shared expert slab appears at left, connected to every token."
+  - id: b3
+    say: "DeepSeek V2 had 236 billion parameters, but only about 21 billion active per token. [[V2-001]]"
+    pause: 0.3
+    visual: "Bar: 236B total, 21B lit."
+  - id: b4
+    say: "V3 went further. In each of its expert layers, 256 routed experts plus one shared expert. Each token visits just 8 of the 256. [[V3-008]]"
+    pause: 0.3
+    visual: "Grid of 256 small experts + 1 shared; 8 light up for a passing token."
+  - id: b5
+    say: "671 billion parameters stored. 37 billion used for any one token. [[V3-001]] About five and a half percent. [[DER-007]]"
+    pause: 0.5
+    visual: "Bar 671B with a 37B sliver lit; '≈ 5.5% active'."
+  - id: b6
+    say: "And the 2026 model, V4.1 Flash, uses 384 routed experts per layer, with 6 chosen for each token. [[V41-007]]"
+    pause: 0.4
+    visual: "Grid morphs to 384 experts; 6 lit."
+  - id: b7
+    say: "So a model can be enormous, and still cheap to run, per token. That answers our question. But it creates a brand new one. Where do all these experts actually live?"
+    pause: 1.0
+    visual: "Expert grid pulls apart into clusters, each cluster sitting on a GPU block."

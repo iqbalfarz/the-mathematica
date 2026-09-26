@@ -1,0 +1,12 @@
+00:00 The Impossible Constraint
+02:15 What Does Compute Even Mean?
+05:10 Why GPUs Matter
+07:59 Inside a Transformer
+13:00 The Computational Explosion
+14:09 Mixture of Experts
+17:41 The Communication Problem
+20:23 The Memory Wall
+23:34 DeepSeek-V4.1-Flash: Pushing the Memory Wall
+29:13 How a Model Learns
+32:23 The Numbers, Honestly
+34:11 The Whole Machine

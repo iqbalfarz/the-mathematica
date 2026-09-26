@@ -1,0 +1,96 @@
+act: 8
+title: "The Memory Wall"
+music: minimal
+scenes:
+- id: s0801
+  cls: S0801WritingOneToken
+  title: "Writing one token at a time"
+  loops: {}
+  beats:
+  - id: b1
+    say: "There's one wall left. And it's the one that shows up when you actually use these models. Memory."
+    pause: 0.5
+    visual: "The MEMORY pillar in the legend glows and moves to centre."
+  - id: b2
+    say: "Remember how a model writes. One token at a time. Each new token looks back, with attention, at every token before it."
+    pause: 0.4
+    visual: "A sequence of tokens; a new token appears at the end and draws attention arcs to all previous tokens."
+  - id: b3
+    say: "To do that, it needs every earlier token's key and value. Now, those don't change. The key for animal is the same at word ten as it was at word five."
+    pause: 0.4
+    visual: "Each earlier token shows its K and V tags, frozen."
+  - id: b4
+    say: "So instead of recomputing them for every new word, the model saves them. A shelf of keys and values that grows by one entry per token. The KV cache."
+    pause: 0.8
+    visual: "K,V tags slide off onto a shelf below; each new token adds a box to the shelf. Label 'KV cache'."
+- id: s0802
+  cls: S0802CacheGrowth
+  title: "How big is the shelf?"
+  loops: {open: [L7]}
+  beats:
+  - id: b1
+    say: "Let's measure the shelf. For ordinary attention, each token stores a key and a value, for every head, in every layer. [[MATH]]"
+    pause: 0.4
+    visual: "Formula: bytes/token = 2 × layers × heads × head_dim × bytes."
+  - id: b2
+    say: "Here's a hypothetical. If a model with V3's shape had used ordinary attention, with 128 heads of 128 numbers, over 61 layers, that's about 4 megabytes, for every single token. [[DER-002]] [[V3-008]]"
+    pause: 0.4
+    visual: "Numbers plug in: 2 × 61 × 128 × 128 × 2 bytes ≈ 4.0 MB. Tag 'hypothetical, our arithmetic'."
+  - id: b3
+    say: "Now a long conversation. A hundred and twenty eight thousand tokens. That's over five hundred gigabytes. For one conversation. [[DER-002]]"
+    pause: 0.5
+    visual: "The shelf stretches far off-screen; a memory bar climbs past six stacked 80 GB GPU lines."
+  - id: b4
+    say: "The weights are shared by every user. But this cache is personal. Every conversation carries its own. That's what fills the memory of a GPU during serving, and it's what limits how many people one machine can serve at once."
+    pause: 0.4
+    visual: "Several users, each with their own shelf, all trying to fit into one GPU's memory box. It overflows."
+  - id: b5
+    say: "So the question becomes: how small can a memory of the past possibly be?"
+    pause: 1.0
+    visual: "Question types out and pins to the corner."
+- id: s0803
+  cls: S0803LatentAttention
+  title: "Compress the memory"
+  loops: {}
+  beats:
+  - id: b1
+    say: "DeepSeek's first big answer, back in V2, was called Multi-head Latent Attention. M L A."
+    pause: 0.4
+    visual: "Title 'Multi-head Latent Attention (MLA) · DeepSeek-V2'."
+  - id: b2
+    say: "Here's the intuition. All those keys and values, across all the heads, are made from the same token. They're highly redundant. So instead of storing them all, store one small compressed summary, a latent vector, and rebuild the keys and values from it when you need them."
+    pause: 0.4
+    visual: "A tall stack of 128 K/V head strips squeezes through a funnel into one thin latent bar, then expands back into heads on the other side."
+  - id: b3
+    say: "The rebuild is just another matrix multiplication. And multiplication is the thing GPUs have in abundance. You're trading cheap compute for expensive memory."
+    pause: 0.4
+    visual: "The expansion step is labelled 'W_up · c (compute)'; the latent bar labelled 'stored (memory)'."
+  - id: b4
+    say: "In V3's published configuration, each token stores a 512 number summary, plus 64 numbers for position. [[V3-009]] 576 numbers, instead of roughly 32 thousand. [[V3-010]]"
+    pause: 0.4
+    visual: "Two bars: 32,768 vs 576, scaled correctly."
+  - id: b5
+    say: "When they introduced it in V2, DeepSeek reported a 93.3 percent cut in KV cache compared with their earlier 67 billion parameter model. [[V2-002]]"
+    pause: 0.8
+    visual: "Citation card: DeepSeek-V2 · −93.3% KV cache vs DeepSeek 67B."
+- id: s0804
+  cls: S0804ThreeDials
+  title: "Three dials"
+  loops: {}
+  beats:
+  - id: b1
+    say: "Now step back. The size of the cache is really three numbers multiplied together. [[V41-018]]"
+    pause: 0.4
+    visual: "Equation: cache = (size of each entry) × (number of entries along the sequence) × (number of layers keeping one)."
+  - id: b2
+    say: "How big each entry is. How many entries you keep along the sequence. And how many layers keep their own."
+    pause: 0.4
+    visual: "Three dials appear: ENTRY SIZE, SEQUENCE, LAYERS."
+  - id: b3
+    say: "MLA turned the first dial. Make each entry smaller. But the other two dials were still there, untouched."
+    pause: 0.4
+    visual: "ENTRY SIZE dial turns down; the other two stay at max."
+  - id: b4
+    say: "And by 2026, a new kind of workload was about to make those two dials the only ones that mattered."
+    pause: 1.0
+    visual: "SEQUENCE and LAYERS dials pulse."

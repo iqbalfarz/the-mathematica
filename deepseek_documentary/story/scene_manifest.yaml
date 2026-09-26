@@ -1,0 +1,691 @@
+- index: 1
+  id: s0101
+  act: 1
+  class: S0101ColdOpen
+  module: docu.scenes.act01
+  file: scene_001.mp4
+  title: Buy more GPUs
+  start: 0.0
+  duration: 19.8
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  music: tension
+- index: 2
+  id: s0102
+  act: 1
+  class: S0102RulesChanged
+  module: docu.scenes.act01
+  file: scene_002.mp4
+  title: Then the rules changed
+  start: 19.8
+  duration: 45.4
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  - b5
+  music: tension
+- index: 3
+  id: s0103
+  act: 1
+  class: S0103TheQuestion
+  module: docu.scenes.act01
+  file: scene_003.mp4
+  title: What if you can't buy your way out?
+  start: 65.2
+  duration: 69.93
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  - b5
+  - b6
+  - b7
+  music: tension
+- index: 4
+  id: s0201
+  act: 2
+  class: S0201OneMultiplication
+  module: docu.scenes.act02
+  file: scene_004.mp4
+  title: One multiplication
+  start: 135.13
+  duration: 40.93
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  - b5
+  music: curious
+- index: 5
+  id: s0202
+  act: 2
+  class: S0202DotProduct
+  module: docu.scenes.act02
+  file: scene_005.mp4
+  title: Multiply, add, repeat
+  start: 176.07
+  duration: 33.97
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  music: curious
+- index: 6
+  id: s0203
+  act: 2
+  class: S0203MatrixMultiply
+  module: docu.scenes.act02
+  file: scene_006.mp4
+  title: Rows meet columns
+  start: 210.03
+  duration: 39.23
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  music: curious
+- index: 7
+  id: s0204
+  act: 2
+  class: S0204ScaleExplodes
+  module: docu.scenes.act02
+  file: scene_007.mp4
+  title: From twenty-seven to billions
+  start: 249.27
+  duration: 61.6
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  - b5
+  - b6
+  music: curious
+- index: 8
+  id: s0301
+  act: 3
+  class: S0301CPUvsGPU
+  module: docu.scenes.act03
+  file: scene_008.mp4
+  title: One lane or ten thousand
+  start: 310.87
+  duration: 53.07
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  - b5
+  music: pulse
+- index: 9
+  id: s0302
+  act: 3
+  class: S0302MemoryWall
+  module: docu.scenes.act03
+  file: scene_009.mp4
+  title: The pipe, not the engine
+  start: 363.93
+  duration: 55.4
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  - b5
+  music: pulse
+- index: 10
+  id: s0303
+  act: 3
+  class: S0303ManyGPUs
+  module: docu.scenes.act03
+  file: scene_010.mp4
+  title: Same engine, narrower pipes
+  start: 419.33
+  duration: 59.97
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  music: pulse
+- index: 11
+  id: s0401
+  act: 4
+  class: S0401TheSentence
+  module: docu.scenes.act04
+  file: scene_011.mp4
+  title: What does 'it' mean?
+  start: 479.3
+  duration: 37.37
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  - b5
+  music: minimal
+- index: 12
+  id: s0402
+  act: 4
+  class: S0402Embeddings
+  module: docu.scenes.act04
+  file: scene_012.mp4
+  title: Words as arrows
+  start: 516.67
+  duration: 37.8
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  music: minimal
+- index: 13
+  id: s0403
+  act: 4
+  class: S0403QueryKeyValue
+  module: docu.scenes.act04
+  file: scene_013.mp4
+  title: Questions and advertisements
+  start: 554.47
+  duration: 53.23
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  - b5
+  - b6
+  music: minimal
+- index: 14
+  id: s0404
+  act: 4
+  class: S0404Softmax
+  module: docu.scenes.act04
+  file: scene_014.mp4
+  title: Scores into attention
+  start: 607.7
+  duration: 49.03
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  - b5
+  music: minimal
+- index: 15
+  id: s0405
+  act: 4
+  class: S0405WeightedValues
+  module: docu.scenes.act04
+  file: scene_015.mp4
+  title: Borrowing meaning
+  start: 656.73
+  duration: 41.9
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  music: minimal
+- index: 16
+  id: s0406
+  act: 4
+  class: S0406HeadsAndFFN
+  module: docu.scenes.act04
+  file: scene_016.mp4
+  title: Many heads, then thinking
+  start: 698.63
+  duration: 50.33
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  music: minimal
+- index: 17
+  id: s0407
+  act: 4
+  class: S0407TheStack
+  module: docu.scenes.act04
+  file: scene_017.mp4
+  title: Stack, and predict
+  start: 748.97
+  duration: 31.27
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  music: minimal
+- index: 18
+  id: s0501
+  act: 5
+  class: S0501Scaling
+  module: docu.scenes.act05
+  file: scene_018.mp4
+  title: Bigger, and bigger
+  start: 780.23
+  duration: 36.73
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  music: rising
+- index: 19
+  id: s0502
+  act: 5
+  class: S0502DoWeNeedAll
+  module: docu.scenes.act05
+  file: scene_019.mp4
+  title: Do we need all of it?
+  start: 816.97
+  duration: 33.03
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  music: rising
+- index: 20
+  id: s0601
+  act: 6
+  class: S0601SplitTheNetwork
+  module: docu.scenes.act06
+  file: scene_020.mp4
+  title: Splitting the thinker
+  start: 850.0
+  duration: 34.13
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  music: discovery
+- index: 21
+  id: s0602
+  act: 6
+  class: S0602TheRouter
+  module: docu.scenes.act06
+  file: scene_021.mp4
+  title: Who decides?
+  start: 884.13
+  duration: 44.13
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  - b5
+  music: discovery
+- index: 22
+  id: s0603
+  act: 6
+  class: S0603RoutingMath
+  module: docu.scenes.act06
+  file: scene_022.mp4
+  title: The mathematics of choosing
+  start: 928.27
+  duration: 56.7
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  - b5
+  music: discovery
+- index: 23
+  id: s0604
+  act: 6
+  class: S0604DeepSeekMoE
+  module: docu.scenes.act06
+  file: scene_023.mp4
+  title: DeepSeek's version
+  start: 984.97
+  duration: 76.23
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  - b5
+  - b6
+  - b7
+  music: discovery
+- index: 24
+  id: s0701
+  act: 7
+  class: S0701Islands
+  module: docu.scenes.act07
+  file: scene_024.mp4
+  title: Experts on islands
+  start: 1061.2
+  duration: 45.73
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  music: tension
+- index: 25
+  id: s0702
+  act: 7
+  class: S0702WaitingGPUs
+  module: docu.scenes.act07
+  file: scene_025.mp4
+  title: The cost of waiting
+  start: 1106.93
+  duration: 52.4
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  music: tension
+- index: 26
+  id: s0703
+  act: 7
+  class: S0703Overlap
+  module: docu.scenes.act07
+  file: scene_026.mp4
+  title: Hiding the wait
+  start: 1159.33
+  duration: 64.37
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  - b5
+  - b6
+  music: tension
+- index: 27
+  id: s0801
+  act: 8
+  class: S0801WritingOneToken
+  module: docu.scenes.act08
+  file: scene_027.mp4
+  title: Writing one token at a time
+  start: 1223.7
+  duration: 39.47
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  music: minimal
+- index: 28
+  id: s0802
+  act: 8
+  class: S0802CacheGrowth
+  module: docu.scenes.act08
+  file: scene_028.mp4
+  title: How big is the shelf?
+  start: 1263.17
+  duration: 56.67
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  - b5
+  music: minimal
+- index: 29
+  id: s0803
+  act: 8
+  class: S0803LatentAttention
+  module: docu.scenes.act08
+  file: scene_029.mp4
+  title: Compress the memory
+  start: 1319.83
+  duration: 64.43
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  - b5
+  music: minimal
+- index: 30
+  id: s0804
+  act: 8
+  class: S0804ThreeDials
+  module: docu.scenes.act08
+  file: scene_030.mp4
+  title: Three dials
+  start: 1384.27
+  duration: 29.97
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  music: minimal
+- index: 31
+  id: s0901
+  act: 9
+  class: S0901Agents
+  module: docu.scenes.act09
+  file: scene_031.mp4
+  title: The agent problem
+  start: 1414.23
+  duration: 56.6
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  music: discovery
+- index: 32
+  id: s0902
+  act: 9
+  class: S0902SparseAttention
+  module: docu.scenes.act09
+  file: scene_032.mp4
+  title: Don't look at everything
+  start: 1470.83
+  duration: 49.3
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  music: discovery
+- index: 33
+  id: s0903
+  act: 9
+  class: S0903LayerReuse
+  module: docu.scenes.act09
+  file: scene_033.mp4
+  title: Layers that share a memory
+  start: 1520.13
+  duration: 60.17
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  - b5
+  music: discovery
+- index: 34
+  id: s0904
+  act: 9
+  class: S0904FourBits
+  module: docu.scenes.act09
+  file: scene_034.mp4
+  title: Four bits
+  start: 1580.3
+  duration: 45.67
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  music: discovery
+- index: 35
+  id: s0905
+  act: 9
+  class: S0905EncoderDecoder
+  module: docu.scenes.act09
+  file: scene_035.mp4
+  title: Reading half as hard
+  start: 1625.97
+  duration: 46.93
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  music: discovery
+- index: 36
+  id: s0906
+  act: 9
+  class: S0906TheChart
+  module: docu.scenes.act09
+  file: scene_036.mp4
+  title: 890 bytes
+  start: 1672.9
+  duration: 80.87
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  - b5
+  - b6
+  - b7
+  - b8
+  music: discovery
+- index: 37
+  id: s1001
+  act: 10
+  class: S1001Loss
+  module: docu.scenes.act10
+  file: scene_037.mp4
+  title: Measuring wrongness
+  start: 1753.77
+  duration: 41.77
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  music: minimal
+- index: 38
+  id: s1002
+  act: 10
+  class: S1002GradientDescent
+  module: docu.scenes.act10
+  file: scene_038.mp4
+  title: Walking downhill
+  start: 1795.53
+  duration: 51.37
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  - b5
+  music: minimal
+- index: 39
+  id: s1003
+  act: 10
+  class: S1003TheLoop
+  module: docu.scenes.act10
+  file: scene_039.mp4
+  title: The loop
+  start: 1846.9
+  duration: 45.2
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  music: minimal
+- index: 40
+  id: s1004
+  act: 10
+  class: S1004TrainingV3
+  module: docu.scenes.act10
+  file: scene_040.mp4
+  title: What V3's training took
+  start: 1892.1
+  duration: 51.0
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  music: minimal
+- index: 41
+  id: s1101
+  act: 11
+  class: S1101TheLedger
+  module: docu.scenes.act11
+  file: scene_041.mp4
+  title: What the famous number means
+  start: 1943.1
+  duration: 65.37
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  - b5
+  music: minimal
+- index: 42
+  id: s1102
+  act: 11
+  class: S1102WhatWasSurprising
+  module: docu.scenes.act11
+  file: scene_042.mp4
+  title: So what was surprising?
+  start: 2008.47
+  duration: 43.0
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  music: minimal
+- index: 43
+  id: s1201
+  act: 12
+  class: S1201WholeMachine
+  module: docu.scenes.act12
+  file: scene_043.mp4
+  title: See it all at once
+  start: 2051.47
+  duration: 39.77
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  music: resolution
+- index: 44
+  id: s1202
+  act: 12
+  class: S1202TheAnswer
+  module: docu.scenes.act12
+  file: scene_044.mp4
+  title: What you do when you can't buy your way out
+  start: 2091.23
+  duration: 58.03
+  beats:
+  - b1
+  - b2
+  - b3
+  - b4
+  - b5
+  - b6
+  music: resolution

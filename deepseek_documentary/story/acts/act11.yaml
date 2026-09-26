@@ -1,0 +1,50 @@
+act: 11
+title: "The Numbers, Honestly"
+music: minimal
+scenes:
+- id: s1101
+  cls: S1101TheLedger
+  title: "What the famous number means"
+  loops: {}
+  beats:
+  - id: b1
+    say: "Which brings us to the most quoted number in this whole story. About 5.6 million dollars. [[V3-005]]"
+    pause: 0.4
+    visual: "'$5.576M' large in the centre."
+  - id: b2
+    say: "Here's where it comes from. DeepSeek took those 2.788 million GPU hours and assumed a rental price of two dollars per GPU hour. [[V3-005]] [[V3-003]] That's it. Hours times a price."
+    pause: 0.4
+    visual: "2.788M × $2 = $5.576M written out."
+  - id: b3
+    say: "And in the same report, they say plainly what it excludes. The costs of prior research and ablation experiments on architectures, algorithms and data. [[V3-005]] It also doesn't include buying the GPUs, the people, or the failed attempts that taught them what to build."
+    pause: 0.4
+    visual: "Two columns: INCLUDED (final training run GPU time) vs NOT INCLUDED (research, experiments, hardware purchase, staff)."
+  - id: b4
+    say: "So the honest headline was never that DeepSeek built a frontier model for 5.6 million dollars. [[V3-005]] It's that the final training run, by their accounting, was remarkably efficient."
+    pause: 0.5
+    visual: "Crossed-out headline 'Built for $5.6M' → corrected 'final run ≈ $5.6M of GPU time (reported)'."
+  - id: b5
+    say: "And some things are simply not public. The V4.1 Flash paper, for instance, doesn't say what hardware it was trained on, or what it cost. [[V41-014]] So we won't guess."
+    pause: 0.8
+    visual: "Ledger row: V4.1-Flash — hardware: not reported; cost: not reported."
+- id: s1102
+  cls: S1102WhatWasSurprising
+  title: "So what was surprising?"
+  loops: {}
+  beats:
+  - id: b1
+    say: "So what actually was surprising? Not a secret invention. Mixture of experts, attention, low precision numbers. Those ideas existed before DeepSeek. [[GEN-007]]"
+    pause: 0.4
+    visual: "Three idea cards (MoE, attention, low precision) each tagged 'prior art'."
+  - id: b2
+    say: "What was surprising was how far they were pushed, and how deliberately each one was aimed at a specific wall."
+    pause: 0.4
+    visual: "A table forms: WALL → IDEA."
+  - id: b3
+    say: "Compute: activate only the experts you need. Communication: overlap the waiting and shrink the numbers. Memory: compress the cache, share it across layers, store it in four bits."
+    pause: 0.4
+    visual: "Rows fill: COMPUTE → MoE (37B of 671B); COMMUNICATION → DualPipe + FP8; MEMORY → MLA → CSA2 + FP4 (890 B/token)."
+  - id: b4
+    say: "Each one, on its own, is a sensible engineering choice. Together, they add up to a system shaped around its bottlenecks. Not around its budget."
+    pause: 1.0
+    visual: "The table glows; a caption 'shaped around the bottlenecks'."

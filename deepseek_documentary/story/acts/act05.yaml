@@ -1,0 +1,46 @@
+act: 5
+title: "The Computational Explosion"
+music: rising
+scenes:
+- id: s0501
+  cls: S0501Scaling
+  title: "Bigger, and bigger"
+  loops: {}
+  beats:
+  - id: b1
+    say: "Researchers kept discovering the same thing. Make the model bigger, train it on more text, and it gets better. Smoothly, predictably, better."
+    pause: 0.4
+    visual: "A rising curve 'capability vs. scale' draws itself (schematic, no numbers)."
+  - id: b2
+    say: "So they made them bigger. More layers. Wider matrices. More heads. And every one of those multiplies the parameter count."
+    pause: 0.3
+    visual: "The tower grows taller; each layer grows wider; a parameter counter spins upward."
+  - id: b3
+    say: "But remember our rule of thumb. Two operations per parameter, per token. [[GEN-003]] In an ordinary, dense model, every single token has to pass through every single weight."
+    pause: 0.4
+    visual: "A token block travels up the tower; every matrix it passes lights up. All of them."
+  - id: b4
+    say: "Double the model, double the cost of every word. Forever. For every user."
+    pause: 0.8
+    visual: "Two towers, the second twice as big; cost meter under each, the second twice as high."
+- id: s0502
+  cls: S0502DoWeNeedAll
+  title: "Do we need all of it?"
+  loops: {open: [L5]}
+  beats:
+  - id: b1
+    say: "Now think about what that means in practice. You ask a giant model, what's two plus two."
+    pause: 0.4
+    visual: "Token stream '2 + 2 =' enters the tower."
+  - id: b2
+    say: "And to answer, it fires every weight it has. Including the ones that learned French poetry, and medieval history, and how to write a SQL query."
+    pause: 0.4
+    visual: "Regions inside the tower are faintly labelled: poetry, history, code, biology, maths; all light up."
+  - id: b3
+    say: "That seems wasteful. When you do arithmetic, you don't consult everything you know about poetry."
+    pause: 0.5
+    visual: "Only the maths region stays bright; the others dim."
+  - id: b4
+    say: "So here's the question that changes everything. What if a model didn't need to use all of itself, every single time?"
+    pause: 1.2
+    visual: "The question types out; the tower splits into faint separate blocks behind it."

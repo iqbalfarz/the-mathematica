@@ -1,0 +1,14 @@
+primary:
+  V41_PAPER: {title: "DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression", org: DeepSeek-AI, id: "arXiv:2609.19969v1", date: 2026-09-17, local: "supplied PDF (51 pp.)"}
+  V3_REPORT: {title: "DeepSeek-V3 Technical Report", org: DeepSeek-AI, id: "arXiv:2412.19437", date: 2024-12-27}
+  V3_README: {title: "DeepSeek-V3 official GitHub README", org: DeepSeek-AI, url: "https://github.com/deepseek-ai/DeepSeek-V3"}
+  V2_REPORT: {title: "DeepSeek-V2: A Strong, Economical, and Efficient Mixture-of-Experts Language Model", org: DeepSeek-AI, id: "arXiv:2405.04434", date: 2024-05}
+  NVDA_8K_2025_04: {title: "NVIDIA Form 8-K (H20 licence requirement)", org: NVIDIA / SEC, url: "https://www.sec.gov/Archives/edgar/data/1045810/000104581025000082/nvda-20250409.htm", date: 2025-04-09}
+  BIS_2023: {title: "BIS updated public information page on advanced-computing export controls", org: US Dept. of Commerce BIS, url: "https://www.bis.gov/press-release/bis-updated-public-information-page-export-controls-imposed-advanced-computing-semiconductor"}
+  VASWANI_2017: {title: "Attention Is All You Need", id: "arXiv:1706.03762", date: 2017}
+secondary:
+  CSET_2023: {title: "Explainer: The Commerce Department's October 2023 Export Control Update", org: CSET Georgetown, url: "https://cset.georgetown.edu/article/bis-2023-update-explainer/"}
+  CSIS_2023: {title: "Insight into the U.S. Semiconductor Export Controls Update", org: CSIS, url: "https://www.csis.org/analysis/insight-us-semiconductor-export-controls-update"}
+  CRS_R48642: {title: "U.S. Export Controls and China: Advanced Semiconductors", org: Congressional Research Service, url: "https://www.congress.gov/crs-product/R48642"}
+  EPOCH_EXPORT: {title: "What did US export controls mean for China's AI capabilities?", org: Epoch AI, url: "https://epoch.ai/gradient-updates/us-export-controls-china-ai"}
+  COVINGTON_2022: {title: "U.S. Imposes Additional Export Controls ... (Oct 2022)", org: Covington & Burling, url: "https://www.cov.com/en/news-and-insights/insights/2022/10/us-imposes-additional-export-controls-restrictions-on-advanced-computing-and-semiconductor-manufacturing-items"}

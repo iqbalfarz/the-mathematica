@@ -1,0 +1,76 @@
+act: 3
+title: "Why GPUs Matter"
+music: pulse
+scenes:
+- id: s0301
+  cls: S0301CPUvsGPU
+  title: "One lane or ten thousand"
+  loops: {}
+  beats:
+  - id: b1
+    say: "A normal processor, a CPU, is built like a few brilliant specialists. Each one is fast and clever, but there are only a handful of them."
+    pause: 0.3
+    visual: "Left: a CPU with 8 large cores. Multiplication tasks queue up and pass through in sequence."
+  - id: b2
+    say: "Give them a matrix multiplication, and they mostly work through it a chunk at a time."
+    pause: 0.3
+    visual: "A 16x16 result grid fills slowly, cell groups lighting in order."
+  - id: b3
+    say: "But look at what a matrix multiplication actually is. Every output cell is its own little dot product. None of them needs to wait for any other. [[MATH]]"
+    pause: 0.4
+    visual: "Grid cells separate slightly; each shows a tiny independent row·column icon."
+  - id: b4
+    say: "A graphics processor, a GPU, bets everything on that fact. Instead of a few clever cores, it has thousands of simple ones, all doing multiply and add at the same time."
+    pause: 0.3
+    visual: "Right: GPU block with a dense grid of tiny cores. The same 16x16 grid fills almost at once."
+    sfx: pulse
+  - id: b5
+    say: "That's why GPUs, originally built to colour in pixels for video games, became the engines of AI. The mathematics of neural networks is, almost perfectly, parallel."
+    pause: 0.8
+    visual: "Side-by-side race: CPU grid is still 10% full when GPU grid finishes."
+- id: s0302
+  cls: S0302MemoryWall
+  title: "The pipe, not the engine"
+  loops: {open: [L3]}
+  beats:
+  - id: b1
+    say: "But here's the thing most people miss. Doing the arithmetic is only half the job. The numbers have to get to the cores first."
+    pause: 0.4
+    visual: "GPU core grid on the right; on the left a large memory bank labelled HBM; a pipe connects them."
+  - id: b2
+    say: "The weights live in memory. Every time you use them, they have to travel through a pipe into the compute units. And that pipe has a width. Bandwidth. How many bytes per second can flow."
+    pause: 0.4
+    visual: "Number-particles flow along the pipe. Pipe width is annotated 'bandwidth (bytes / s)'."
+  - id: b3
+    say: "If the cores can eat numbers faster than the pipe can deliver them, the cores sit idle. Waiting. And a waiting GPU is the most expensive way to do nothing ever invented."
+    pause: 0.5
+    visual: "Pipe narrows; particles trickle; cores dim one by one; label 'idle'."
+  - id: b4
+    say: "So there are really three walls. Compute: how fast you can multiply. Memory: how much you can hold, and how fast you can read it. And communication: how fast separate chips can talk to each other."
+    pause: 0.4
+    visual: "Three tall pillars rise, colour-coded: COMPUTE (orange), MEMORY (teal), COMMUNICATION (violet)."
+  - id: b5
+    say: "Keep these three walls in mind. Every clever idea in the rest of this story is an attack on one of them."
+    pause: 0.8
+    visual: "The three pillars shrink into a small persistent legend at the bottom-left."
+- id: s0303
+  cls: S0303ManyGPUs
+  title: "Same engine, narrower pipes"
+  loops: {}
+  beats:
+  - id: b1
+    say: "Now, a model the size of V3 doesn't fit on one GPU. Even stored at just one byte per parameter, its weights would need more than eight GPUs' worth of fast memory, before you've done anything at all. [[DER-004]] [[EXP-006]]"
+    pause: 0.4
+    visual: "A long bar '671 GB of weights' next to a single GPU's '80 GB' bar; the weights bar is split across 9 GPU blocks."
+  - id: b2
+    say: "So the model gets split across many GPUs, and those GPUs have to constantly exchange numbers. The connections between them become part of the computer."
+    pause: 0.4
+    visual: "Nine GPUs arranged in a ring; links draw between them; numbers flow along the links."
+  - id: b3
+    say: "And this is exactly where the export rules bit. The H800 kept essentially the same engine as the H100. What got cut was the pipe between chips. Widely reported as about 400 gigabytes per second, instead of 900. [[EXP-005]]"
+    pause: 0.5
+    visual: "Two GPU pairs side by side: H100 pair with a thick link '≈900 GB/s', H800 pair with a thinner link '≈400 GB/s'. Label 'widely reported'."
+  - id: b4
+    say: "Same engine. Narrower pipes. Remember that, because it's going to matter much more than it seems right now. And it raises a question we'll come back to. If you can just add more chips, why isn't that enough?"
+    pause: 1.0
+    visual: "The thinner H800 link pulses. The question 'Why aren't more GPUs enough?' appears and pins to the corner."
