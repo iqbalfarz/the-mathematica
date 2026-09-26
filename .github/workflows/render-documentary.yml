@@ -9,7 +9,7 @@ on:
       quality:
         description: "Render preset (config/video.yaml)"
         type: choice
-        options: [preview, "1080p", "1440p", 4k, 8k]
+        options: ["480p", preview, "1080p", "1440p", 4k, 8k]
         default: preview
         required: true
       shards:

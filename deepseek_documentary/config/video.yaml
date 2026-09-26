@@ -5,6 +5,7 @@
 #   and only encodes the audio mix. Required for 4K/8K: re-encoding a 36-minute
 #   8K film on a CI runner takes many hours. Set true to re-encode with crf/preset.
 presets:
+  "480p":  {width: 854,  height: 480,  fps: 30, reencode: true,  crf: 27, preset: medium,   audio_bitrate: 128k}
   preview: {width: 1280, height: 720,  fps: 30, reencode: true,  crf: 26, preset: veryfast, audio_bitrate: 160k}
   "1080p": {width: 1920, height: 1080, fps: 60, reencode: false, crf: 18, preset: slow,     audio_bitrate: 256k}
   "1440p": {width: 2560, height: 1440, fps: 60, reencode: false, crf: 18, preset: slow,     audio_bitrate: 256k}
