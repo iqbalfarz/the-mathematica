@@ -1,0 +1,41 @@
+# Named machine settings used by shots. Rotor order, rings and positions are
+# written left -> right, exactly as on a key sheet. The simulator is the only
+# thing allowed to turn these into letters.
+machines:
+  hero_opening:
+    variant: Enigma I
+    rotors: I II III
+    reflector: B
+    rings: AAA
+    positions: AFP
+    plugboard: ""
+    note: >
+      Illustrative setting for the cold open (film acts I-VIII). No plugboard
+      cables yet: the plugboard is introduced in Act IX. Chosen so that four
+      presses of L light four different lamps.
+  textbook_aaa:
+    variant: Enigma I
+    rotors: I II III
+    reflector: B
+    rings: AAA
+    positions: AAA
+    plugboard: ""
+    note: Standard test vector; AAAAA encrypts to BDZGO.
+  double_step_demo:
+    variant: Enigma I
+    rotors: I II III
+    reflector: B
+    rings: AAA
+    positions: ADU
+    plugboard: ""
+    note: Rotor II notch at E, rotor III at V -> ADU, ADV, AEW, BFX shows the double step.
+  barbarossa_1941:
+    variant: Enigma I
+    rotors: II IV V
+    reflector: B
+    rings: "02 21 12"
+    positions: BLA
+    plugboard: AV BS CG DL FU HZ IN KM OW RX
+    note: >
+      Real German Army settings for a message of 7 July 1941 (Operation
+      Barbarossa), message key BLA. Used as a historical test vector.

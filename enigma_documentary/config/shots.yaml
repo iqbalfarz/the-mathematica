@@ -1,0 +1,5 @@
+# Every shot that needs machine state lists its machine and the keys pressed.
+# `python -m enigma_core shots` writes build/events/<shot>.json for each.
+shots:
+  s0101_keys:    {machine: hero_opening, keys: LLLL, tool: blender, scene: s0101}
+  s0102_reveal:  {machine: hero_opening, keys: "",   tool: blender, scene: s0102}
