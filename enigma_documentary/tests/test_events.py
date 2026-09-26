@@ -42,3 +42,17 @@ def test_continued_shots_start_where_their_parent_ended():
         cfg, _ = shots[sid]
         assert "".join(chr(65 + p) for p in cfg.positions) == end_of_s0101 == "AFT"
     assert shots["s0302_circuit"][1][0].positions_before == "AFT"
+
+
+def test_rotor_demo_follows_one_contact_through_the_turning_rotor():
+    from enigma_core.cli import rotor_demo, rotor_wire_pairs
+    from enigma_core.rotor import Rotor
+    steps = rotor_demo({"rotor": "I", "ring": "A", "positions": "ABCD", "key": "A"})
+    assert [s["position"] for s in steps] == list("ABCD")
+    assert [s["in_pin"] for s in steps] == list("ABCD")        # contact A meets pin A, B, C, D
+    wires = {w["pin"]: w["plate"] for w in rotor_wire_pairs("I")}
+    for s in steps:
+        assert wires[s["in_pin"]] == s["out_pin"]             # it rides that pin's own wire
+        r = Rotor.from_name("I", position=ord(s["position"]) - 65)
+        assert chr(65 + r.forward(0)[0]) == s["out"]
+    assert "".join(s["out"] for s in steps) == "EJKC"

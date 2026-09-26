@@ -54,6 +54,12 @@ def commercial_factors() -> list[Factor]:
             Factor("starting positions", 26 ** 3, "26×26×26", "KEY-POS")]
 
 
+def rotor_wirings(contacts: int = 26) -> int:
+    """How many different ways one rotor could be wired: every wiring is a
+    permutation of the alphabet, so 26! (ledger KEY-WIRINGS)."""
+    return factorial(contacts)
+
+
 def fmt(n: int) -> str:
     return f"{n:,}"
 
@@ -68,4 +74,5 @@ def summary() -> dict[str, int]:
         "plugboard_max": max(plugboard_settings(n) for n in range(14)),
         "plugboard_argmax": max(range(14), key=plugboard_settings),
         "pairs_of_letters": comb(26, 2),
+        "rotor_wirings": rotor_wirings(),
     }

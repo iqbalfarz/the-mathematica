@@ -220,4 +220,7 @@ def all_materials() -> dict:
             "lamp": driven_emission("MAT_lamp_letter", LAMP_GLOW, 14.0, dim=(0.012, 0.011, 0.010, 1)),
             "lamp_glass": driven_emission("MAT_lamp_glass", LAMP_GLOW, 1.2, dim=(0.16, 0.15, 0.13, 1)),
             "signal": signal_material(), "signal_return": signal_material("MAT_signal_return", SIGNAL_RETURN),
-            "core_glass": translucent_core()}
+            "core_glass": translucent_core(),
+            "wire_glow": driven_emission("MAT_wire_glow", SIGNAL, 6.0, dim=(0.55, 0.30, 0.18, 1)),
+            "contact_glow": driven_emission("MAT_contact_glow", SIGNAL, 8.0, dim=(0.60, 0.45, 0.20, 1)),
+            "label_glow": driven_emission("MAT_label_glow", SIGNAL, 8.0, dim=(0.55, 0.53, 0.48, 1))}

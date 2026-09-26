@@ -89,6 +89,15 @@ R = [
 ("MACH-ETW", "On military Enigmas the entry wheel is wired straight through (A to A).",
  "CRYPTOMUSEUM", "secondary", "n/a", "Enigma I", "high", "VERIFIED_SECONDARY",
  "The entry wheel just passes the current on.", "The entry wheel scrambles letters (true only of commercial machines)."),
+("MACH-ROTOR-PARTS", "An Enigma rotor has 26 spring-loaded pin contacts on one face, 26 flat plate contacts on the other, one wire joining each pin to a plate, an alphabet ring with a turnover notch, and a ratchet wheel.",
+ "CODESANDCIPHERS; CIPHERMACHINES_TECH", "secondary", "n/a", "Enigma I", "high", "VERIFIED_SECONDARY",
+ "Twenty-six spring-loaded pins on one face, twenty-six flat plates on the other.", ""),
+("SIM-ROTOR26", "One rotor gives a different substitution at each of its 26 positions (tested for rotors I-V).",
+ "enigma_core (test_rotor_positions_give_26_distinct_substitutions)", "simulation", "n/a", "Enigma I", "high", "SIMULATED",
+ "Twenty-six positions, twenty-six different substitutions.", ""),
+("KEY-WIRINGS", "A rotor wiring is a permutation of 26 letters: 26! = 403,291,461,126,605,635,584,000,000 possible wirings.",
+ "enigma_core.keyspace.rotor_wirings", "arithmetic", "n/a", "any 26-contact rotor", "high", "DERIVED",
+ "About four hundred septillion possible wirings.", "The Germans chose from 26! wirings every day (they used a handful of fixed rotors)."),
 ("LANG-E", "E is the most frequent letter in German text.", "standard letter-frequency tables", "secondary", "n/a", "n/a", "high", "VERIFIED_SECONDARY", "", ""),
 ]
 

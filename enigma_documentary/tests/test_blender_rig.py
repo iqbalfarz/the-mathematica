@@ -101,3 +101,38 @@ def test_tracked_labels_project_into_the_frame():
     kb, behind = data["labels"]
     assert all(p is not None and 0 <= p[0] <= 1 and 0 <= p[1] <= 1 for p in kb["track"])
     assert all(p is None for p in behind["track"])
+
+
+def test_rotor_demo_wires_and_lit_exit_follow_the_simulator():
+    """Per-wire objects match the wiring table, and at each s0403-style step the pin
+    under fixed contact A is the one the simulator names."""
+    from enigma_core.cli import rotor_demo
+    from enigma_model.build import rotor_wire_objects
+    from lib import api
+
+    U.reset_scene()
+    cfg = load_configs(ROOT / "config" / "machines.yaml")["hero_opening"]
+    rig = build_enigma(stream(cfg.to_dict(), [])["config"])
+    wires = rotor_wire_objects(rig, "left")               # left rotor = rotor I, ring A
+    w = L.ROTOR_W
+    for pin, ob in wires.items():
+        pts = ob.data.splines[0].points
+        j, o = ord(pin) - 65, ord(ob["plate"]) - 65
+        a, b = j * L.STEP, o * L.STEP
+        assert abs(pts[0].co.x - w / 2) < 1e-6 and abs(pts[0].co.z - L.CONTACT_R * math.cos(a)) < 1e-6
+        assert abs(pts[-1].co.x + w / 2) < 1e-6 and abs(pts[-1].co.z - L.CONTACT_R * math.cos(b)) < 1e-6
+
+    api.set_rotor_positions(rig, "AAA", 0.0, FPS)
+    steps = rotor_demo({"rotor": "I", "ring": "A", "positions": "ABCD", "key": "A"})
+    scene = bpy.context.scene
+    t = 1.0
+    for prev, step in zip(steps, steps[1:]):
+        api.rotate_rotor(rig, "left", prev["position"], t, 0.2, FPS)
+        t += 1.0
+    for i, step in enumerate(steps):
+        scene.frame_set(int(U.sec(0.5 + i * 1.0, FPS)))
+        core = rig.cores["left"]
+        pin_ob = bpy.data.objects[f"ENIGMA_rotor_left_pin_{ord(step['in_pin']) - 65:02d}"]
+        world = core.matrix_world @ pin_ob.location
+        want = L.ring_point(0, 0.0, L.CONTACT_R)            # fixed contact A = angle 0
+        assert abs(world.y - want[1]) < 1e-5 and abs(world.z - want[2]) < 1e-5, step

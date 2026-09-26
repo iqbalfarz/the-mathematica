@@ -17,3 +17,8 @@ def test_enigma_i_total_is_the_widely_quoted_figure():
 
 def test_commercial_total():
     assert K.total(K.commercial_factors()) == 6 * 17_576 == 105_456
+
+
+def test_rotor_wirings_is_26_factorial():
+    from math import factorial
+    assert K.rotor_wirings() == factorial(26) == 403_291_461_126_605_635_584_000_000

@@ -9,6 +9,9 @@
 # hold: seconds each key stays down. On a real Enigma the lamp is lit only
 #   while the key is held, so hold long enough for the narrator to say the letter.
 #   A beat reference ("b7") means: hold until that beat starts.
+# rotor_demo: a lone rotor (Act IV): {rotor, ring, positions, key} follows one
+#   fixed contact through the rotor at each position; `reveal` lists the pins
+#   whose wires are lit one by one.
 # signal: draw the current from key to lamp, over `dur` seconds, `until` a beat,
 #   or with `pins` that fix when it reaches chosen parts (the lamp pin ends it).
 shots:
@@ -44,3 +47,18 @@ shots:
         reflector: "b4+1.2"
         rotor_left_out: "b5+0.9"
         lamp: "b6+1.2"                 # lamp N lights just before the narrator says "N"
+  s0401_rotor:                       # the left rotor of the hero machine is rotor I, ring A
+    machine: hero_opening
+    continues: s0302_circuit
+    scene: s0401
+    rotor_demo: {rotor: I, ring: A, slot: left}
+  s0402_wires:
+    machine: hero_opening
+    continues: s0302_circuit
+    scene: s0402
+    rotor_demo: {rotor: I, ring: A, slot: left, reveal: ABC}
+  s0403_turn:
+    machine: hero_opening
+    continues: s0302_circuit
+    scene: s0403
+    rotor_demo: {rotor: I, ring: A, slot: left, positions: ABCD, key: A}

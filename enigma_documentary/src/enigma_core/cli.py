@@ -15,7 +15,10 @@ import yaml
 
 from . import keyspace
 from .configuration import MachineConfig, load_configs
+from .alphabet import ch, idx
 from .events import write_stream
+from .rotor import Rotor
+from .wiring import ROTORS
 from .machine import EnigmaMachine
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -54,9 +57,41 @@ def resolve_shots() -> dict[str, tuple[MachineConfig, list]]:
     return done
 
 
+def rotor_demo(spec: dict) -> list[dict]:
+    """Follow one contact through a lone rotor at several positions.
+
+    spec: {rotor: I, ring: A, positions: "ABCD", key: A}. For each position the
+    fixed contact `key` meets core pin `in_pin`, whose wire leads to core plate
+    `out_pin`, leaving at fixed contact `out`. Pins are named by the ring letter
+    engraved next to them, as in the machine event stream.
+    """
+    r = Rotor.from_name(spec["rotor"], ring=idx(spec.get("ring", "A")))
+    out = []
+    for p in spec["positions"]:
+        r.position = idx(p)
+        o, pin, opin = r.forward(idx(spec["key"]))
+        out.append({"position": p, "in": spec["key"], "in_pin": ch(pin + r.ring),
+                    "out_pin": ch(opin + r.ring), "out": ch(o)})
+    return out
+
+
+def rotor_wire_pairs(name: str) -> list[dict]:
+    """The 26 wires of a rotor in its own (core) frame: pin X -> plate wiring[X]."""
+    w = ROTORS[name]["wiring"]
+    return [{"pin": ch(i), "plate": w[i]} for i in range(26)]
+
+
 def shot_streams() -> dict[str, Path]:
-    return {sid: write_stream(EVENTS / f"{sid}.json", cfg.to_dict(), presses)
-            for sid, (cfg, presses) in resolve_shots().items()}
+    out = {}
+    shots = yaml.safe_load(SHOTS.read_text())["shots"]
+    for sid, (cfg, presses) in resolve_shots().items():
+        extra = None
+        d = shots[sid].get("rotor_demo")
+        if d:
+            extra = {"rotor_demo_spec": dict(d, wires=rotor_wire_pairs(d["rotor"])),
+                     "rotor_demo": rotor_demo(d) if d.get("positions") else []}
+        out[sid] = write_stream(EVENTS / f"{sid}.json", cfg.to_dict(), presses, extra)
+    return out
 
 
 def main(argv=None):

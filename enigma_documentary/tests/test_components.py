@@ -54,3 +54,13 @@ def test_ring_setting_shifts_wiring_by_one():
     # Classic check: rotor I with ring B, position A maps A -> K (ring A gives E).
     assert Rotor.from_name("I", ring=0).forward(0)[0] == ord("E") - 65
     assert Rotor.from_name("I", ring=1).forward(0)[0] == ord("K") - 65
+
+
+@pytest.mark.parametrize("name", ["I", "II", "III", "IV", "V"])
+def test_rotor_positions_give_26_distinct_substitutions(name):
+    r = Rotor.from_name(name)
+    tables = set()
+    for p in range(26):
+        r.position = p
+        tables.add(tuple(r.forward(c)[0] for c in range(26)))
+    assert len(tables) == 26
