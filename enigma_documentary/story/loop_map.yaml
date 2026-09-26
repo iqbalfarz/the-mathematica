@@ -1,0 +1,8 @@
+# Open loops: genuine questions the viewer carries. Each must be paid off, in order.
+L1: {question: "How can the same key give a different answer?", opened: s0101, payoff: s0701}
+L2: {question: "What is inside the box?", opened: s0102, payoff: s0503}
+L3: {question: "Why don't all three rotors turn every time?", opened: s0203, payoff: s0603}
+L4: {question: "How big is the key, really?", opened: s0802, payoff: s1003}
+L5: {question: "If the Germans trusted it, how did anyone break it?", opened: s1103, payoff: s2202}
+L6: {question: "How do you beat 150 trillion plugboard settings?", opened: s1802, payoff: s1804}
+L7: {question: "Is the Bombe's answer the right answer?", opened: s2101, payoff: s2202}

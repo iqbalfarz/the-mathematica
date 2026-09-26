@@ -1,0 +1,15 @@
+# VOICE_PROVIDER env var overrides `provider`.
+provider: kokoro
+kokoro:
+  model_url:  https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/kokoro-v1.0.onnx
+  voices_url: https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/voices-v1.0.bin
+  model_dir: models            # relative to project root; override with KOKORO_MODEL_DIR
+  voice: am_michael            # Kokoro-82M male voice
+  speed: 0.95
+  lang: en-us
+cloned:
+  # Optional. Provide a reference recording and a backend that supports cloning.
+  reference_audio: assets/voice/reference.wav
+  backend: none                # e.g. "xtts" once installed; see narration/providers/cloned.py
+sample_rate: 24000
+default_pause: 0.35            # seconds of air after each beat unless the script says otherwise

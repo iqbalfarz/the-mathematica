@@ -1,0 +1,16 @@
+# One profile drives Blender, Manim and Remotion together. Scene code never
+# changes between profiles. Everything renders LOCALLY; nothing here assumes a GPU.
+#
+#   draft   minutes on a laptop: check timing and framing
+#   review  an hour or two: check look and readability
+#   final   overnight on a low-spec CPU laptop (resumable; stop/restart any time)
+#   final4k only if you have a GPU or a lot of patience
+profiles:
+  smoke:   {width: 640,  height: 360,  fps: 6,  blender: {engine: CYCLES, samples: 24,  bounces: 4, denoise: true}, manim_quality: l, crf: 30}
+  draft:   {width: 960,  height: 540,  fps: 12, blender: {engine: CYCLES, samples: 16,  bounces: 3, denoise: true},  manim_quality: l, crf: 26}
+  review:  {width: 1920, height: 1080, fps: 24, blender: {engine: CYCLES, samples: 64,  bounces: 4, denoise: true},  manim_quality: h, crf: 20}
+  final:   {width: 1920, height: 1080, fps: 24, blender: {engine: CYCLES, samples: 256, bounces: 6, denoise: true},  manim_quality: h, crf: 16}
+  final4k: {width: 3840, height: 2160, fps: 24, blender: {engine: CYCLES, samples: 256, bounces: 6, denoise: true},  manim_quality: k, crf: 16}
+default: draft
+lead_in: 0.6        # seconds of picture before the first word of every scene
+tail: 0.8           # seconds held after the last beat's pause
