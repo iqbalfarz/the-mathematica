@@ -139,15 +139,16 @@ def _lampboard(rig: Rig):
     c, m = rig.cols["lampboard"], rig.mats
     for letter in L.ALPHA:
         x, y, z = L.lamp_pos(letter)
-        U.mesh_object(f"ENIGMA_lampwindow_{letter}", c, U.bm_cylinder(0.0095, 0.0012, 40), m["lamp_window"],
-                      rig.root, (x, y, z + 0.0006), smooth=True)
+        window = U.mesh_object(f"ENIGMA_lampwindow_{letter}", c, U.bm_cylinder(0.0095, 0.0012, 40),
+                               m["lamp_glass"], rig.root, (x, y, z + 0.0006), smooth=True)
+        window.color = (0, 0, 0, 1)
         glow = U.text(f"ENIGMA_lamp_{letter}", c, letter, 0.011, m["lamp"], (x, y, z + 0.0014), extrude=0.0002,
                       parent=rig.root)
         glow.color = (0, 0, 0, 1)
         bulb = U.mesh_object(f"ENIGMA_bulb_{letter}", c, U.bm_uv_sphere(0.004), m["lamp"], rig.root,
                              (x, y, z - 0.008), smooth=True)
         bulb.color = (0, 0, 0, 1)
-        rig.lamps[letter] = (glow, bulb)
+        rig.lamps[letter] = (glow, bulb, window)   # all three light up together
 
 
 # ------------------------------------------------------------------ plugboard

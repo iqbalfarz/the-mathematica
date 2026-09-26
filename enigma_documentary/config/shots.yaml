@@ -1,5 +1,20 @@
 # Every shot that needs machine state lists its machine and the keys pressed.
 # `python -m enigma_core shots` writes build/events/<shot>.json for each.
+#
+# press_at: when each key press happens, as beat references of the scene
+#   ("b2+0.55" = 0.55 s after beat b2 starts). Blender animates the presses at
+#   these times and Remotion places the click/clack sounds at the same times.
+# hold: seconds each key stays down. On a real Enigma the lamp is lit only
+#   while the key is held, so hold long enough for the narrator to say the letter.
 shots:
-  s0101_keys:    {machine: hero_opening, keys: LLLL, tool: blender, scene: s0101}
-  s0102_reveal:  {machine: hero_opening, keys: "",   tool: blender, scene: s0102}
+  s0101_keys:
+    machine: hero_opening
+    keys: LLLL
+    scene: s0101
+    press_at: ["b2+0.8", "b3+1.0", "b4+0.05", "b4+1.1"]
+    hold: [1.9, 1.5, 0.85, 1.8]
+  s0102_reveal:
+    machine: hero_opening
+    keys: ""
+    scene: s0102
+    continues: s0101_keys      # rotor windows show the state after s0101's presses

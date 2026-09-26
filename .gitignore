@@ -17,3 +17,6 @@ enigma_documentary/remotion/public/media/
 enigma_documentary/remotion/out/
 __pycache__/
 .pytest_cache/
+enigma_documentary/output/
+enigma_documentary/remotion/public/timeline.json
+enigma_documentary/.venv/

@@ -49,10 +49,18 @@ def build(profile: dict) -> dict:
             t += dur + b.pause
         duration = t + profile["tail"]
         frames = int(round(duration * fps))
+        entry = {"beats": beats}
+        cues = [{"t": b["start"], "sfx": b["sfx"]} for b in beats if b["sfx"]]
+        shot = shots.get(sc.shot) if sc.shot else None
+        press_times = [round(beat_time(entry, r), 3) for r in (shot or {}).get("press_at", [])]
+        for pt in press_times:       # mechanical sounds of every key press (see blender/lib/api.py timing)
+            cues += [{"t": round(pt + 0.03, 3), "sfx": "clack"}, {"t": round(pt + 0.10, 3), "sfx": "click"}]
         scenes.append({"id": sc.id, "title": sc.title, "act": sc.act, "act_title": sc.act_title,
                        "tool": sc.tool, "shot": sc.shot, "music": sc.music,
                        "film_start": round(t_film, 3), "duration": round(duration, 3), "frames": frames,
-                       "beats": beats, "estimated": not real})
+                       "beats": beats, "press_times": press_times,
+                       "press_holds": list((shot or {}).get("hold", [0.5] * len(press_times))), "sfx": sorted(cues, key=lambda c: c["t"]),
+                       "estimated": not real})
         t_film += frames / fps
     return {"profile": profile["name"], "fps": fps, "width": profile["width"], "height": profile["height"],
             "render": profile["blender"], "manim_quality": profile["manim_quality"], "crf": profile["crf"],

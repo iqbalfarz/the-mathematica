@@ -6,9 +6,10 @@ First-principles explainers that make computer science, mathematics and AI easie
 
 | Project | What it is |
 |---|---|
+| [`enigma_documentary/`](enigma_documentary/README.md) | *The Insane Real Engineering of the Nazi Enigma Machine*. A first-principles documentary where a tested Enigma I simulator drives Blender (the physical machine), Manim (the maths) and Remotion (the edit), with Kokoro narration. Renders entirely on your own computer; see [`LOCAL_SETUP.md`](enigma_documentary/LOCAL_SETUP.md). |
 | [`deepseek_documentary/`](deepseek_documentary/README.md) | *DeepSeek Did the Impossible — The First-Principles Story of How*. A ~36-minute research-backed technical documentary with a sourced claim ledger, Kokoro-82M narration, Manim animation, and a validated render pipeline for 720p through 8K. |
 
-## Cloud rendering (no laptop needed)
+## Cloud rendering (DeepSeek film only; no laptop needed)
 
 Renders run on GitHub Actions: **Actions → Render documentary → Run workflow**.
 

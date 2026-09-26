@@ -9,7 +9,7 @@ import bpy
 
 SIGNAL = (1.0, 0.62, 0.22, 1.0)       # warm amber: electricity
 SIGNAL_RETURN = (1.0, 0.42, 0.16, 1.0)
-LAMP_GLOW = (1.0, 0.78, 0.45, 1.0)
+LAMP_GLOW = (1.0, 0.50, 0.12, 1.0)      # saturated so AgX keeps it amber, not white
 CORRECT = (0.30, 0.85, 0.45, 1.0)
 REJECT = (0.95, 0.25, 0.22, 1.0)
 
@@ -217,6 +217,7 @@ def all_materials() -> dict:
     return {"crinkle": crinkle_paint(), "bakelite": bakelite(), "brass": brass(), "steel": steel(),
             "copper": copper(), "ivory": ivory(), "ink": ink(), "white": engraved_white(), "oak": oak(),
             "lamp_window": glass_dark(),
-            "lamp": driven_emission("MAT_lamp_letter", LAMP_GLOW, 18.0),
+            "lamp": driven_emission("MAT_lamp_letter", LAMP_GLOW, 14.0, dim=(0.012, 0.011, 0.010, 1)),
+            "lamp_glass": driven_emission("MAT_lamp_glass", LAMP_GLOW, 1.2, dim=(0.16, 0.15, 0.13, 1)),
             "signal": signal_material(), "signal_return": signal_material("MAT_signal_return", SIGNAL_RETURN),
             "core_glass": translucent_core()}

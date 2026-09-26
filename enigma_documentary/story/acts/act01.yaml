@@ -20,17 +20,14 @@ scenes:
     say: "Press it... and a lamp lights up. Y."
     pause: 0.6
     visual: "A finger-shadow presses L (key travel 6 mm, 0.18 s). Cut on the click to the lampboard: lamp Y glows warm amber, then fades."
-    sfx: click
   - id: b3
     say: "Press the same key again. H."
     pause: 0.5
     visual: "Same macro framing, same key. Lamp H lights. Tiny rotor-click heard off screen, not seen."
-    sfx: click
   - id: b4
     say: "Again. X. And again. G."
     pause: 0.9
     visual: "Two faster presses. X, then G. Four lamp glows stack as a strip in the lower third: L→Y  L→H  L→X  L→G (Remotion overlay)."
-    sfx: click
   - id: b5
     say: "Same machine. Same finger. Same key. Four different answers. [[SIM-SAMEKEY]]"
     pause: 1.2

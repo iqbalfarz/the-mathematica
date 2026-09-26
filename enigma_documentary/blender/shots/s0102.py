@@ -10,7 +10,7 @@ from lib import staging as S
 
 def build(ctx):
     fps, scene, rig = ctx.fps, ctx.scene, ctx.rig
-    s0101 = ctx.load_stream("s0101_keys")
+    s0101 = ctx.load_stream(ctx.timeline["shots"][ctx.sc["shot"]]["continues"])
     api.set_rotor_positions(rig, s0101["presses"][-1]["positions_after"], 0.0, fps)
 
     cam, tgt = S.camera("CAM_reveal", lens=50, fstop=5.6)

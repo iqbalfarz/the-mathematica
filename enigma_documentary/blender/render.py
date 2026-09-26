@@ -62,6 +62,7 @@ def _args():
     ap.add_argument("--save-blend", action="store_true", help="also save build/blend/<scene>.blend to inspect")
     ap.add_argument("--frames", help="subset, e.g. 1-120 (for running several processes)")
     ap.add_argument("--no-render", action="store_true")
+    ap.add_argument("--timeline", default=str(ROOT / "build" / "timeline.json"))
     return ap.parse_args(argv)
 
 
@@ -90,19 +91,33 @@ def setup_device(scene):
 
 
 def configure(scene, tl):
-    r = tl["render"]
-    scene.render.engine = "CYCLES"
+    r = dict(tl["render"])
+    if os.environ.get("SAMPLES"):
+        r["samples"] = int(os.environ["SAMPLES"])
     scene.render.resolution_x, scene.render.resolution_y = tl["width"], tl["height"]
     scene.render.resolution_percentage = 100
     scene.render.fps = tl["fps"]
-    scene.cycles.samples = r["samples"]
-    scene.cycles.use_adaptive_sampling = True
-    scene.cycles.adaptive_threshold = 0.02
-    scene.cycles.max_bounces = r["bounces"]
-    scene.cycles.use_denoising = bool(r["denoise"])
-    if r["denoise"]:
-        scene.cycles.denoiser = "OPENIMAGEDENOISE"
-    scene.render.use_persistent_data = False
+    if r.get("engine", "CYCLES").upper() == "EEVEE":
+        _eevee(scene, r)
+    else:
+        scene.render.engine = "CYCLES"
+        scene.cycles.samples = r["samples"]
+        scene.cycles.use_adaptive_sampling = True
+        scene.cycles.adaptive_threshold = 0.05
+        scene.cycles.max_bounces = r["bounces"]
+        scene.cycles.transparent_max_bounces = 4
+        scene.cycles.caustics_reflective = False
+        scene.cycles.caustics_refractive = False
+        scene.cycles.use_denoising = bool(r["denoise"])
+        if r["denoise"]:
+            scene.cycles.denoiser = "OPENIMAGEDENOISE"
+            try:
+                scene.cycles.denoising_input_passes = "RGB_ALBEDO_NORMAL"
+                scene.cycles.denoising_prefilter = "ACCURATE"
+            except (AttributeError, TypeError):
+                pass
+    # Keep the built scene between frames: much faster, and this scene is small.
+    scene.render.use_persistent_data = True
     scene.render.film_transparent = False
     try:
         scene.view_settings.view_transform = "AgX"
@@ -120,9 +135,29 @@ def configure(scene, tl):
         scene.render.threads = int(threads)
 
 
+def _eevee(scene, r):
+    """EEVEE (Blender 4.2+ 'EEVEE Next'). Needs a GPU/OpenGL 4.3 context, even integrated."""
+    for name in ("BLENDER_EEVEE_NEXT", "BLENDER_EEVEE"):
+        try:
+            scene.render.engine = name
+            break
+        except TypeError:
+            continue
+    ev = scene.eevee
+    ev.taa_render_samples = r["samples"]
+    for attr, val in (("use_raytracing", True), ("use_shadows", True), ("use_gtao", True),
+                      ("shadow_ray_count", 2), ("shadow_step_count", 8)):
+        if hasattr(ev, attr):
+            setattr(ev, attr, val)
+    if hasattr(ev, "ray_tracing_options"):
+        ev.ray_tracing_options.resolution_scale = "1"
+        if hasattr(ev.ray_tracing_options, "use_denoise"):
+            ev.ray_tracing_options.use_denoise = True
+
+
 def main():
     a = _args()
-    tl = json.loads((ROOT / "build" / "timeline.json").read_text())
+    tl = json.loads(Path(a.timeline).read_text())
     sc = next(s for s in tl["scenes"] if s["id"] == a.scene)
     if sc["tool"] != "blender":
         raise SystemExit(f"{a.scene} is a {sc['tool']} scene")

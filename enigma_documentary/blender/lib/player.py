@@ -10,11 +10,13 @@ from . import api
 
 def play(rig, stream: dict, press_times: list[float], fps: int, show_signal=False, signal_dur=1.6,
          hold=0.55):
+    """`hold` is seconds the key stays down (lamp lit): one number or one per press."""
     presses = stream["presses"]
     if len(press_times) != len(presses):
         raise ValueError(f"{len(presses)} presses in stream but {len(press_times)} times given")
     api.set_rotor_positions(rig, stream["config"]["positions"], 0.0, fps)
-    for press, t in zip(presses, press_times):
+    holds = hold if isinstance(hold, (list, tuple)) else [hold] * len(presses)
+    for press, t, h in zip(presses, press_times, holds):
         before = dict(zip(("left", "middle", "right"), press["positions_before"]))
         moved = {s["rotor"] for s in press["steps"]}
         api.animate_pawls(rig, press["steps"], t, fps)
@@ -22,7 +24,7 @@ def play(rig, stream: dict, press_times: list[float], fps: int, show_signal=Fals
             if slot in moved:
                 api.rotate_rotor(rig, slot, before[slot], t + api.STEP_START, api.STEP_END - api.STEP_START, fps)
         on = t + api.CURRENT_ON
-        key_hold = max(hold, (signal_dur + 0.4) if show_signal else hold)
+        key_hold = max(h, (signal_dur + 0.4) if show_signal else h)
         api.animate_key(rig, press["key"], t, fps, hold=key_hold)
         lamp_on = on + (signal_dur if show_signal else 0.0)
         api.animate_lamp(rig, press["lamp"], lamp_on, t + key_hold + 0.05, fps)

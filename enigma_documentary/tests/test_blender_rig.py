@@ -51,7 +51,7 @@ def test_rotor_angles_and_lamps_follow_the_simulator(name, text):
             want = L.rotor_angle(ord(letter) - 65)
             d = (got - want + math.pi) % (2 * math.pi) - math.pi
             assert abs(d) < 1e-4, f"{slot} rotor shows wrong letter at press {press['index']}"
-        lit = [c for c, (glow, _) in rig.lamps.items() if glow.color[0] > 0.5]
+        lit = [c for c, parts in rig.lamps.items() if parts[0].color[0] > 0.5]
         assert lit == [press["lamp"]], f"press {press['index']}: lit {lit}, simulator says {press['lamp']}"
 
 

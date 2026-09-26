@@ -129,7 +129,7 @@ def text(name, col, body, size, material=None, loc=(0, 0, 0), rot=(0, 0, 0), ext
     cu.align_x = "CENTER"
     cu.align_y = "CENTER"
     cu.extrude = extrude
-    cu.offset = size * 0.06          # thicken strokes: the built-in font is thin at small sizes
+    # Note: don't thicken strokes with cu.offset: it corrupts glyphs with holes (B renders as P).
     if font:
         cu.font = font
     ob = bpy.data.objects.new(name, cu)
